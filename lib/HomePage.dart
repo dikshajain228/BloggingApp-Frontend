@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:bloggingapp/Posts.dart';
 
+class MyHomePage extends StatefulWidget {
+  @override
+  MyHomePageState createState() => new MyHomePageState();
+}
+
 List getPosts() {
   //API Call to the backend. Static data
   List<Posts> postsList = [];
@@ -44,11 +49,6 @@ List getQuestions() {
   return questions;
 }
 
-class MyHomePage extends StatefulWidget {
-  @override
-  MyHomePageState createState() => new MyHomePageState();
-}
-
 class MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
   TabController controller;
@@ -86,7 +86,7 @@ Widget pageHeader(BuildContext context, TabController controller, final myTabs,
     body: new ListView(
       children: <Widget>[
         new Container(
-          //decoration: new BoxDecoration(color: Theme.of(context).primaryColor),
+          decoration: new BoxDecoration(color: Theme.of(context).primaryColor),
           child: new TabBar(
             controller: controller,
             tabs: myTabs,
@@ -104,7 +104,7 @@ Widget pageHeader(BuildContext context, TabController controller, final myTabs,
                       : new ListView.builder(
                           itemCount: postsList.length,
                           itemBuilder: (_, index) {
-                            return postsUI(
+                            return makePostsUI(
                                 //List Tile cards
                                 context,
                                 postsList[index].image,
@@ -119,7 +119,7 @@ Widget pageHeader(BuildContext context, TabController controller, final myTabs,
                       : new ListView.builder(
                           itemCount: questions.length,
                           itemBuilder: (_, index) {
-                            return postsUI(
+                            return makePostsUI(
                                 context,
                                 questions[index].image,
                                 questions[index].title,
@@ -157,13 +157,14 @@ Widget makeListTile(BuildContext context, String image, String title,
 }
 
 //Cards
-Widget postsUI(BuildContext context, String image, String title, String date,
-    String time) {
+Widget makePostsUI(BuildContext context, String image, String title,
+    String date, String time) {
   //Post card
   return new Card(
     elevation: 8.0,
     margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
     child: Container(
+      decoration: BoxDecoration(),
       child: makeListTile(context, image, title, date, time),
     ),
   );
