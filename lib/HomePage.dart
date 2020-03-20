@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bloggingapp/Posts.dart';
 
-class MyHomePage extends StatefulWidget {
-  @override
-  MyHomePageState createState() => new MyHomePageState();
-}
-
 List getPosts() {
   //API Call to the backend. Static data
   List<Posts> postsList = [];
@@ -49,6 +44,11 @@ List getQuestions() {
   return questions;
 }
 
+class MyHomePage extends StatefulWidget {
+  @override
+  MyHomePageState createState() => new MyHomePageState();
+}
+
 class MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
   TabController controller;
@@ -72,21 +72,21 @@ class MyHomePageState extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
-    return header(context, controller, myTabs, postsList, questions);
+    return pageHeader(context, controller, myTabs, postsList, questions);
   }
 }
 
-Widget header(BuildContext context, TabController controller, final myTabs,
+Widget pageHeader(BuildContext context, TabController controller, final myTabs,
     List<Posts> postsList, List<Posts> questions) {
   //Header(appbar) with the tabs
   return new Scaffold(
     appBar: new AppBar(
-      title: new Text("BloggingApp"),
+      title: new Text("Blogging App"),
     ),
     body: new ListView(
       children: <Widget>[
         new Container(
-          decoration: new BoxDecoration(color: Theme.of(context).primaryColor),
+          //decoration: new BoxDecoration(color: Theme.of(context).primaryColor),
           child: new TabBar(
             controller: controller,
             tabs: myTabs,
@@ -138,31 +138,22 @@ Widget header(BuildContext context, TabController controller, final myTabs,
 Widget makeListTile(BuildContext context, String image, String title,
     String date, String time) {
   return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-      leading: Container(
-        padding: EdgeInsets.only(right: 12.0),
-        decoration: new BoxDecoration(
-            border: new Border(
-                right: new BorderSide(width: 1.0, color: Colors.grey))),
-        child: new Image.network(image),
-      ),
-      title: Text(
-        title,
-        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-      ),
-      subtitle: Row(
-        children: <Widget>[
-          //Icon(Icons.access_alarm, color: Colors.black),
-          Text(date + " | " + time, style: TextStyle(color: Colors.black))
-        ],
-      ),
-      trailing:
-          Icon(Icons.keyboard_arrow_right, color: Colors.black, size: 30.0),
-      onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ArticlePage()));
-      },
+    contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+    leading: Container(
+      padding: EdgeInsets.only(right: 12.0),
+      child: new Image.network(image),
+    ),
+    title: Text(
+      title,
+      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+    ),
+    subtitle: Text(date + " | " + time, style: TextStyle(color: Colors.black)),
+    trailing: Icon(Icons.keyboard_arrow_right, color: Colors.black, size: 30.0),
+    onTap: () {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => ArticlePage()));
+    },
   );
-      
 }
 
 //Cards
@@ -173,13 +164,12 @@ Widget postsUI(BuildContext context, String image, String title, String date,
     elevation: 8.0,
     margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
     child: Container(
-      decoration: BoxDecoration(),
       child: makeListTile(context, image, title, date, time),
     ),
   );
 }
 
-class ArticlePage extends StatelessWidget{
+class ArticlePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -187,8 +177,8 @@ class ArticlePage extends StatelessWidget{
         title: Text("Article Page"),
       ),
       body: Center(
-          child: Text('Page still under construction'),
-        ),
-      );
+        child: Text('Page still under construction'),
+      ),
+    );
   }
 }
