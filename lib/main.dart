@@ -1,3 +1,4 @@
+import 'package:bloggingapp/HomePage.dart';
 import 'package:bloggingapp/LoginRegisterPage.dart';
 import 'package:flutter/material.dart';
 void main() => runApp(MyApp());
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget{
       theme: new ThemeData(
         primarySwatch: Colors.purple,
       ),
-      home: LoginRegisterPage(),
+      home: MyHomePage(),
     );
   }
 }
