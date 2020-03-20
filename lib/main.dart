@@ -1,4 +1,4 @@
-import 'package:bloggingapp/screens/HomePage.dart';
+import 'package:bloggingapp/screens/home_screen.dart';
 import 'package:bloggingapp/screens/LoginRegisterPage.dart';
 import 'package:flutter/material.dart';
 
@@ -8,9 +8,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return new MaterialApp(
+    return MaterialApp(
       title: "Blogging App",
-      theme: new ThemeData(
+      theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
       home: MyHomePage(),

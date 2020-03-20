@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:bloggingapp/screens/HomePage.dart';
+import 'package:bloggingapp/screens/home_screen.dart';
 
 Widget makeListTile(BuildContext context, String image, String title,
     DateTime date) {
