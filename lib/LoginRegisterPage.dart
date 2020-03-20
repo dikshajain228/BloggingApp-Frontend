@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class LoginRegisterState extends State<LoginRegisterPage> {
   final formKey = new GlobalKey<FormState>();
 
-  String formType= "login";
+  String formType = "login";
   String email = "";
   String password = "";
   String username = "";
@@ -23,7 +23,6 @@ class LoginRegisterState extends State<LoginRegisterPage> {
 
     setState(() {
       formType = "register";
-
     });
   }
 
@@ -32,7 +31,6 @@ class LoginRegisterState extends State<LoginRegisterPage> {
 
     setState(() {
       formType = "login";
-
     });
   }
 
@@ -45,7 +43,7 @@ class LoginRegisterState extends State<LoginRegisterPage> {
           title: new Text("Flutter Blog App"),
         ),
         body: SingleChildScrollView(
-        child : new Container(
+            child: new Container(
           margin: EdgeInsets.all(25.0),
           child: new Form(
             key: formKey,
@@ -138,7 +136,7 @@ class LoginRegisterState extends State<LoginRegisterPage> {
     return new CircleAvatar(
       radius: 110.0,
       backgroundColor: Colors.transparent,
-      child: Image.asset('images/logo.png'),
+      child: Image.asset('assests/images/logo.png'),
     );
   }
 }
