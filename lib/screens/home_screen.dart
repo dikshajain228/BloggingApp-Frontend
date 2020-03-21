@@ -1,7 +1,7 @@
 import 'package:bloggingapp/widgets/header.dart';
 import 'package:flutter/material.dart';
 import 'package:bloggingapp/providers/articles.dart';
-import 'package:bloggingapp/widgets/article_preview_card.dart';
+import '../widgets/articles_list.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -61,18 +61,7 @@ Widget pageHeader(BuildContext context, TabController controller, final myTabs,
               new Container(
                   child: articles.length == 0
                       ? new Text("No Blog Post availabale")
-                      : ListView.builder(
-                      itemCount: articles.length,
-                      itemBuilder: (_, index) {
-                        return ArticlePreviewCard(
-                          //List Tile cards
-                            articles[index].article_id,
-                            articles[index].image_path,
-                            articles[index].title,
-                            articles[index].date_updated,
-                            articles[index].bookmarked
-                        );
-                      })),
+                      : ArticlesList()),
               //QUESTIONS
               new Container(
                 child: Text("HEllo"),),
@@ -83,5 +72,7 @@ Widget pageHeader(BuildContext context, TabController controller, final myTabs,
     ),
   );
 }
+
+
 
 
