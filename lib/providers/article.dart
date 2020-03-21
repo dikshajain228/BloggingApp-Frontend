@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
-class Article {
+class Article with ChangeNotifier {
   final String article_id;
   final String collection_id;
   final int user_id;
@@ -27,4 +28,9 @@ class Article {
       @required this.date_created,
       @required this.date_updated,
       this.bookmarked});
+
+  void setUnsetbookmark(){
+    bookmarked = !bookmarked;
+    notifyListeners();
+  }
 }
