@@ -12,6 +12,7 @@ class Article {
   int kudos_count;
   final DateTime date_created;
   DateTime date_updated;
+  bool bookmarked;
 
   Article(
       {@required this.article_id,
@@ -24,5 +25,6 @@ class Article {
       @required this.views_count,
       @required this.kudos_count,
       @required this.date_created,
-      @required this.date_updated});
+      @required this.date_updated,
+      this.bookmarked});
 }

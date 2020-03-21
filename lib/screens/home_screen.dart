@@ -1,6 +1,5 @@
 import 'package:bloggingapp/widgets/header.dart';
 import 'package:flutter/material.dart';
-import 'package:bloggingapp/Posts.dart';
 import 'package:bloggingapp/providers/articles.dart';
 import 'package:bloggingapp/widgets/article_preview_card.dart';
 
@@ -13,7 +12,6 @@ class MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
   TabController controller;
   List articles = [];
-  List<Posts> questions = [];
   final myTabs = [
     new Tab(
       text: 'Articles',
@@ -42,6 +40,7 @@ class MyHomePageState extends State<MyHomePage>
 Widget pageHeader(BuildContext context, TabController controller, final myTabs,
     List articles) {
   //Header(appbar) with the tabs
+
   return new Scaffold(
     appBar: header("Blogging App"),
     body: new ListView(
@@ -62,15 +61,17 @@ Widget pageHeader(BuildContext context, TabController controller, final myTabs,
               new Container(
                   child: articles.length == 0
                       ? new Text("No Blog Post availabale")
-                      : new ListView.builder(
+                      : ListView.builder(
                       itemCount: articles.length,
                       itemBuilder: (_, index) {
-                        return article_preview_card(
+                        return ArticlePreviewCard(
                           //List Tile cards
-                            context,
+                            articles[index].article_id,
                             articles[index].image_path,
                             articles[index].title,
-                            articles[index].date_updated);
+                            articles[index].date_updated,
+                            articles[index].bookmarked
+                        );
                       })),
               //QUESTIONS
               new Container(
@@ -84,16 +85,3 @@ Widget pageHeader(BuildContext context, TabController controller, final myTabs,
 }
 
 
-class ArticlePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Article Page"),
-      ),
-      body: Center(
-        child: Text('Page still under construction'),
-      ),
-    );
-  }
-}
