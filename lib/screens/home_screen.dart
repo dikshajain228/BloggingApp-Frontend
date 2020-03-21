@@ -35,7 +35,6 @@ class MyHomePageState extends State<MyHomePage>
   }
 }
 
-
 //Cant shift to new page because tab bar is a part of page screen
 Widget pageHeader(BuildContext context, TabController controller, final myTabs,
     List articles) {
@@ -64,7 +63,8 @@ Widget pageHeader(BuildContext context, TabController controller, final myTabs,
                       : ArticlesList()),
               //QUESTIONS
               new Container(
-                child: Text("HEllo"),),
+                child: Text("HEllo"),
+              ),
             ],
           ),
         ),
@@ -72,7 +72,3 @@ Widget pageHeader(BuildContext context, TabController controller, final myTabs,
     ),
   );
 }
-
-
-
-

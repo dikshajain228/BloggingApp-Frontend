@@ -38,21 +38,21 @@ class LoginRegisterState extends State<LoginRegisterPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      //resizeToAvoidBottomPadding: false,
+        //resizeToAvoidBottomPadding: false,
         appBar: new AppBar(
           title: new Text("Flutter Blog App"),
         ),
         body: SingleChildScrollView(
             child: new Container(
-              margin: EdgeInsets.all(25.0),
-              child: new Form(
-                key: formKey,
-                child: new Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: createInputs() + createButtons(),
-                ),
-              ),
-            )));
+          margin: EdgeInsets.all(25.0),
+          child: new Form(
+            key: formKey,
+            child: new Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: createInputs() + createButtons(),
+            ),
+          ),
+        )));
   }
 
   List<Widget> createInputs() {

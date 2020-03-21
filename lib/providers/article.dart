@@ -29,7 +29,7 @@ class Article with ChangeNotifier {
       @required this.date_updated,
       this.bookmarked});
 
-  void setUnsetbookmark(){
+  void setUnsetbookmark() {
     bookmarked = !bookmarked;
     notifyListeners();
   }

@@ -31,20 +31,20 @@ class ArticlePreviewCard extends StatelessWidget {
             article.title,
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
-          subtitle:
-              Text(article.date_updated.toString(), style: TextStyle(color: Colors.black)),
+          subtitle: Text(article.date_updated.toString(),
+              style: TextStyle(color: Colors.black)),
           trailing: IconButton(
-                  icon: Icon(article.bookmarked?
-                    Icons.bookmark: Icons.bookmark_border,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    article.setUnsetbookmark();
-                  },
-                ),
+            icon: Icon(
+              article.bookmarked ? Icons.bookmark : Icons.bookmark_border,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              article.setUnsetbookmark();
+            },
+          ),
           onTap: () {
-            Navigator.of(context)
-                .pushNamed(ArticlePage.routeName, arguments: article.article_id);
+            Navigator.of(context).pushNamed(ArticlePage.routeName,
+                arguments: article.article_id);
           },
         ),
       ),

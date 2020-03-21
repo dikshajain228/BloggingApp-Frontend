@@ -9,7 +9,8 @@ class ArticlePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final article_id = ModalRoute.of(context).settings.arguments as String;
-    final article = Provider.of<Articles>(context, listen: false).findById(article_id);
+    final article =
+        Provider.of<Articles>(context, listen: false).findById(article_id);
     return Scaffold(
       appBar: AppBar(
         title: Text(article.title),

@@ -12,15 +12,14 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       builder: (context) => Articles(),
       child: MaterialApp(
-        title: "Blogging App",
-        theme: ThemeData(
-          primarySwatch: Colors.purple,
-        ),
-        home: MyHomePage(),
-        routes : {
-          ArticlePage.routeName: (context) => ArticlePage(),
-        }
-      ),
+          title: "Blogging App",
+          theme: ThemeData(
+            primarySwatch: Colors.purple,
+          ),
+          home: MyHomePage(),
+          routes: {
+            ArticlePage.routeName: (context) => ArticlePage(),
+          }),
     );
   }
 }
