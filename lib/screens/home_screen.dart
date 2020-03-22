@@ -1,11 +1,12 @@
 import 'package:bloggingapp/widgets/header.dart';
 import 'package:flutter/material.dart';
 import 'package:bloggingapp/providers/articles.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../widgets/articles_list.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
-  MyHomePageState createState() =>  MyHomePageState();
+  MyHomePageState createState() => MyHomePageState();
 }
 
 class MyHomePageState extends State<MyHomePage>
@@ -13,10 +14,10 @@ class MyHomePageState extends State<MyHomePage>
   TabController controller;
   List articles = [];
   final myTabs = [
-     Tab(
+    Tab(
       text: 'Articles',
     ),
-     Tab(
+    Tab(
       text: 'Questions',
     ),
   ];
@@ -24,7 +25,7 @@ class MyHomePageState extends State<MyHomePage>
   @override
   void initState() {
     super.initState();
-    Articles a =  Articles();
+    Articles a = Articles();
     articles = a.articles;
     controller = new TabController(length: 2, vsync: this);
   }
@@ -40,29 +41,31 @@ Widget pageHeader(BuildContext context, TabController controller, final myTabs,
     List articles) {
   //Header(appbar) with the tabs
 
-  return  Scaffold(
+  final storage = FlutterSecureStorage();
+
+  return Scaffold(
     appBar: header("Blogging App"),
-    body:  ListView(
+    body: ListView(
       children: <Widget>[
         new Container(
-          decoration:  BoxDecoration(color: Theme.of(context).primaryColor),
-          child:  TabBar(
+          decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+          child: TabBar(
             controller: controller,
             tabs: myTabs,
           ),
         ),
-         Container(
+        Container(
           height: 542,
-          child:  TabBarView(
+          child: TabBarView(
             controller: controller,
             children: <Widget>[
               //POSTS
-               Container(
+              Container(
                   child: articles.length == 0
-                      ?  Text("No Blog Post availabale")
+                      ? Text("No Blog Post availabale")
                       : ArticlesList()),
               //QUESTIONS
-               Container(
+              Container(
                 child: Text("HEllo"),
               ),
             ],
