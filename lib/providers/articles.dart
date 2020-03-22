@@ -16,14 +16,14 @@ class Articles with ChangeNotifier {
         kudos_count: 0,
         date_created: DateTime.parse("1969-07-20 20:18:04Z"),
         date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
-        bookmarked: true),
+        bookmarked: false),
     new Article(
         article_id: "2",
         collection_id: "2",
         user_id: 1,
         title: "I am sad",
         content: "bjhcbjhgfhgdfhvds",
-        published: true,
+        published: false,
         image_path:
             "https://images.pexels.com/photos/321470/pexels-photo-321470.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
         views_count: 0,
@@ -44,7 +44,7 @@ class Articles with ChangeNotifier {
         kudos_count: 0,
         date_created: DateTime.parse("1969-07-20 20:18:04Z"),
         date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
-        bookmarked: true),
+        bookmarked: false),
   ];
 
   Article findById(String article_id) {

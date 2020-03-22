@@ -5,7 +5,7 @@ import '../widgets/articles_list.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
-  MyHomePageState createState() => new MyHomePageState();
+  MyHomePageState createState() =>  MyHomePageState();
 }
 
 class MyHomePageState extends State<MyHomePage>
@@ -13,10 +13,10 @@ class MyHomePageState extends State<MyHomePage>
   TabController controller;
   List articles = [];
   final myTabs = [
-    new Tab(
+     Tab(
       text: 'Articles',
     ),
-    new Tab(
+     Tab(
       text: 'Questions',
     ),
   ];
@@ -24,7 +24,7 @@ class MyHomePageState extends State<MyHomePage>
   @override
   void initState() {
     super.initState();
-    Articles a = new Articles();
+    Articles a =  Articles();
     articles = a.articles;
     controller = new TabController(length: 2, vsync: this);
   }
@@ -40,29 +40,29 @@ Widget pageHeader(BuildContext context, TabController controller, final myTabs,
     List articles) {
   //Header(appbar) with the tabs
 
-  return new Scaffold(
+  return  Scaffold(
     appBar: header("Blogging App"),
-    body: new ListView(
+    body:  ListView(
       children: <Widget>[
         new Container(
-          decoration: new BoxDecoration(color: Theme.of(context).primaryColor),
-          child: new TabBar(
+          decoration:  BoxDecoration(color: Theme.of(context).primaryColor),
+          child:  TabBar(
             controller: controller,
             tabs: myTabs,
           ),
         ),
-        new Container(
+         Container(
           height: 542,
-          child: new TabBarView(
+          child:  TabBarView(
             controller: controller,
             children: <Widget>[
               //POSTS
-              new Container(
+               Container(
                   child: articles.length == 0
-                      ? new Text("No Blog Post availabale")
+                      ?  Text("No Blog Post availabale")
                       : ArticlesList()),
               //QUESTIONS
-              new Container(
+               Container(
                 child: Text("HEllo"),
               ),
             ],

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import './screens/article_page.dart';
 import './providers/articles.dart';
 import 'package:provider/provider.dart';
+import './screens/tabs_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.purple,
           ),
-          home: MyHomePage(),
+          home: TabScreen(),
           routes: {
             ArticlePage.routeName: (context) => ArticlePage(),
           }),
