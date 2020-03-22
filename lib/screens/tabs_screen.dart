@@ -1,7 +1,6 @@
-import 'package:bloggingapp/widgets/articles_list.dart';
-import 'package:bloggingapp/widgets/drawer.dart';
+import '../widgets/articles_list.dart';
+import '../widgets/drawer.dart';
 import 'package:flutter/material.dart';
-import '../screens/home_screen.dart';
 class TabScreen extends StatefulWidget {
   @override
   _TabScreenState createState() => _TabScreenState();
