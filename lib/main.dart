@@ -1,4 +1,3 @@
-import './screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import './screens/article_page.dart';
 import './providers/articles.dart';
