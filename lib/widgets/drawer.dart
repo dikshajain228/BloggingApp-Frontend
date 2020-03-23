@@ -1,3 +1,5 @@
+import 'package:bloggingapp/screens/bookmarks_screen.dart';
+import 'package:bloggingapp/screens/tabs_screen.dart';
 import 'package:flutter/material.dart';
 import '../screens/profile_page.dart';
 class MainDrawer extends StatelessWidget {
@@ -26,10 +28,7 @@ class MainDrawer extends StatelessWidget {
               leading: Icon(Icons.person),
               title: new Text("Profile"),
               onTap: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ProfilePage()));
+                Navigator.of(context).pushNamed(ProfilePage.routeName);
               }
           ),
 
@@ -37,10 +36,7 @@ class MainDrawer extends StatelessWidget {
               leading: Icon(Icons.home),
               title: new Text("Home Page"),
               onTap: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ProfilePage()));//change to home page from profile page
+                Navigator.of(context).pushNamed(TabScreen.routeName);
               }
           ),
 
@@ -48,33 +44,23 @@ class MainDrawer extends StatelessWidget {
               leading: Icon(Icons.bookmark),
               title: new Text("Bookmarks"),
               onTap: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ProfilePage()));//change to bookmarks page from profile page
-              }
+                Navigator.of(context).pushNamed(ProfilePage.routeName);
+                  }
           ),
 
           new ListTile(
               leading: Icon(Icons.collections),
               title: new Text("Collections"),
               onTap: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ProfilePage()));//change to collections page from profile page
-              }
+                Navigator.of(context).pushNamed(ProfilePage.routeName);
+                 }
           ),
 
           new ListTile(
               leading: Icon(Icons.explore),
               title: new Text("Explore"),
               onTap: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ProfilePage()));//change to articles page from profile page
-              }
+                Navigator.of(context).pushNamed(ProfilePage.routeName);  }
 
           ),
 
@@ -84,10 +70,7 @@ class MainDrawer extends StatelessWidget {
               title: new Text("Your Articles"),
               onTap: () {
                 Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ProfilePage()));//change to articles page from explore page
-              }
+                Navigator.of(context).pushNamed(ProfilePage.routeName); }
 
           ),
 
@@ -97,11 +80,7 @@ class MainDrawer extends StatelessWidget {
               title: new Text("Logout"),
               trailing: new Icon(Icons.cancel),
               onTap: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ProfilePage()));//change to login page from profile page
-              }
+                Navigator.of(context).pushNamed(ProfilePage.routeName); }
           ),
 
         ],

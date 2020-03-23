@@ -1,19 +1,17 @@
-import 'package:bloggingapp/widgets/header.dart';
 import 'package:flutter/material.dart';
+import '../widgets/articles_list.dart';
+import '../widgets/drawer.dart';
 
-class BookmarkArticles extends StatefulWidget{
+class BookmarkScreen extends StatelessWidget {
+  static const routeName = "/bookmark-page";
   @override
-  BookmarkArticlesState createState() => BookmarkArticlesState();
-}
-
-class BookmarkArticlesState extends State<BookmarkArticles>
-{
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: header("Bookmarked Articles"),
-      body : ListView.builder(
-
-      )
+      appBar: AppBar(
+        title: Text('Bookmarks'),
+      ),
+      body: ArticlesList(),
+      drawer: MainDrawer(),
     );
   }
 }

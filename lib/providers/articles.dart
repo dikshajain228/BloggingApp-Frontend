@@ -54,4 +54,9 @@ class Articles with ChangeNotifier {
   List<Article> get articles {
     return [..._articles];
   }
+
+  void editArticles(){
+    notifyListeners();
+  }
+
 }

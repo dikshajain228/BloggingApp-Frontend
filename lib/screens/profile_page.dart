@@ -1,7 +1,10 @@
+import 'package:bloggingapp/screens/edit_profile_screen.dart';
+import 'package:bloggingapp/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 import '../widgets/mycollection_card.dart';
 
 class ProfilePage extends StatelessWidget {
+  static const routeName = "/profile-page";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,6 +14,7 @@ class ProfilePage extends StatelessWidget {
       ),
 
       body: UserProfilePage(),
+      drawer: MainDrawer(),
     );
   }
 }
@@ -168,12 +172,22 @@ class UserProfilePage extends StatelessWidget{
   }
 
   Widget _editprofile(BuildContext context) {
-    return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      padding: EdgeInsets.only(top: 8.0),
-      child: Text(
-        "Edit Profile",
-        style: TextStyle(fontFamily: 'Roboto', fontSize: 16.0),
+    return InkWell(
+      onTap: (){
+        Navigator.of(context).pushNamed(EditProfile.routeName);
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(40.0),
+        child: Container(
+          color: Colors.black45,
+          width: 150,
+          padding: EdgeInsets.only(top: 8.0),
+          child: Text(
+            "Edit Profile",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontFamily: 'Roboto', fontSize: 18.0),
+          ),
+        ),
       ),
     );
   }
@@ -216,6 +230,7 @@ class UserProfilePage extends StatelessWidget{
               ),
             ],
           ),
+          drawer: MainDrawer(),
         );
       }
     }
