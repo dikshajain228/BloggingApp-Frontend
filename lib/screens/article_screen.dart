@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 var now = new DateTime.now();
-final dateFormat = DateFormat("EEEE, MMMM d, yyyy 'at' h:mma");
 DateTime date;
-
 
 class ArticleScreen extends StatelessWidget {
 
