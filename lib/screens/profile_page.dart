@@ -3,8 +3,17 @@ import 'package:bloggingapp/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 import '../widgets/mycollection_card.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   static const routeName = "/profile-page";
+
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+   void initState(){
+     print("HEllo I am in profile page");
+   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

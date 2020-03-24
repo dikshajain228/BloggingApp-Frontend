@@ -10,6 +10,9 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
+  void initState(){
+    print("Hello I am in editProfile Page");
+  }
   Future<String> uploadImage(filename, url) async {
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.files.add(await http.MultipartFile.fromPath('picture', filename));

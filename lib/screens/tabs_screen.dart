@@ -9,7 +9,9 @@ class TabScreen extends StatefulWidget {
 
 class _TabScreenState extends State<TabScreen> {
   @override
-
+  void initState(){
+    print("Hello I am in home page init now");
+  }
   Widget build(BuildContext context) {
       return Scaffold(
         appBar: AppBar(
