@@ -8,14 +8,23 @@ import './screens/article_page.dart';
 import './providers/articles.dart';
 import './screens/tabs_screen.dart';
 import './screens/edit_profile_screen.dart';
+import './screens/collection_test_screen.dart';
+import './providers/collections.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: Articles(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(
+          value: Articles(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Collections(),
+        )
+      ],
       child: MaterialApp(
           title: "Blogging App",
           theme: ThemeData(
@@ -30,6 +39,7 @@ class MyApp extends StatelessWidget {
             BookmarkScreen.routeName: (context) => BookmarkScreen(),
             ExploreScreen.routeName: (context) => ExploreScreen(),
             YourArticles.routeName: (context) => YourArticles(),
+            CollectionTestScreen.routeName: (context) => CollectionTestScreen(),
           }),
     );
   }

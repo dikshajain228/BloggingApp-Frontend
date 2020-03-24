@@ -1,4 +1,5 @@
 import 'package:bloggingapp/screens/bookmarks_screen.dart';
+import 'package:bloggingapp/screens/collection_test_screen.dart';
 import 'package:bloggingapp/screens/explore_screen.dart';
 import 'package:bloggingapp/screens/tabs_screen.dart';
 import 'package:bloggingapp/screens/your_articles_screen.dart';
@@ -72,6 +73,12 @@ class MainDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).pushNamed(ProfilePage.routeName);
               }),
+          new ListTile(
+            title: new Text("Test-delete later"),
+            onTap: () {
+              Navigator.of(context).pushNamed(CollectionTestScreen.routeName);
+            },
+          )
         ],
       ),
     );
