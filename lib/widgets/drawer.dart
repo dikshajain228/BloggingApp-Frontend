@@ -44,7 +44,7 @@ class MainDrawer extends StatelessWidget {
               leading: Icon(Icons.bookmark),
               title: new Text("Bookmarks"),
               onTap: () {
-                Navigator.of(context).pushNamed(ProfilePage.routeName);
+                Navigator.of(context).pushNamed(BookmarkScreen.routeName);
                   }
           ),
 
