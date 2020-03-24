@@ -10,15 +10,17 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  void initState(){
+  void initState() {
     print("Hello I am in editProfile Page");
   }
+
   Future<String> uploadImage(filename, url) async {
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.files.add(await http.MultipartFile.fromPath('picture', filename));
     var res = await request.send();
     return res.reasonPhrase;
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,17 +45,17 @@ class _EditProfileState extends State<EditProfile> {
                   decoration: InputDecoration(labelText: 'Description'),
                 ),
                 GestureDetector(
-                  child : Text("Change profile picture"),
+                  child: Text("Change profile picture"),
                   onTap: () async {
-                    var file = await ImagePicker.pickImage(source: ImageSource.gallery);
+                    var file = await ImagePicker.pickImage(
+                        source: ImageSource.gallery);
                     print("fhjb,n.lkm/lm nkjh jh hjjkolklj ilr");
                     print(file);
-                    var ImageFormData = http.MultipartFile.fromPath('image', file.path);
+                    var ImageFormData =
+                        http.MultipartFile.fromPath('image', file.path);
                     print(ImageFormData);
-
                   },
                 ),
-
               ],
             ),
           ),

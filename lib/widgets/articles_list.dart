@@ -11,17 +11,9 @@ class ArticlesList extends StatelessWidget {
     return ListView.builder(
       itemCount: articles.length,
       itemBuilder: (ctx, index) => ChangeNotifierProvider.value(
-        value : articles[index],
+        value: articles[index],
 //        builder: (c) => articles[index],
-        child: ArticlePreviewCard(
-            //List Tile cards
-
-//            articles[index].article_id,
-//            articles[index].image_path,
-//            articles[index].title,
-//             articles[index].date_updated,
-//            articles[index].bookmarked
-            ),
+        child: ArticlePreviewCard(),
       ),
     );
   }

@@ -11,40 +11,38 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-   void initState(){
-     print("HEllo I am in profile page");
-   }
+  void initState() {
+    print("HEllo I am in profile page");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("User Profile"),
-
       ),
-
       body: UserProfilePage(),
       drawer: MainDrawer(),
     );
   }
 }
 
-class UserProfilePage extends StatelessWidget{
+class UserProfilePage extends StatelessWidget {
   final String _fullName = "User's Name";
   final String _status = "Username";
-  final String _bio =
-      "\"Description of the user.\"";
+  final String _bio = "\"Description of the user.\"";
   final String _followers = "173";
   final String _following = "124";
-  final String currentProfilePic = "https://images.pexels.com/photos/414171/pexels-photo-414171.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500";
-
-  
+  final String currentProfilePic =
+      "https://images.pexels.com/photos/414171/pexels-photo-414171.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500";
 
   Widget _buildCoverImage(Size screenSize) {
     return Container(
       height: screenSize.height / 2.6,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: NetworkImage('https://images.pexels.com/photos/414171/pexels-photo-414171.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'),
+          image: NetworkImage(
+              'https://images.pexels.com/photos/414171/pexels-photo-414171.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'),
           fit: BoxFit.cover,
         ),
       ),
@@ -145,7 +143,6 @@ class UserProfilePage extends StatelessWidget{
         children: <Widget>[
           _buildStatItem("Followers", _followers),
           _buildStatItem("Following", _following),
-         
         ],
       ),
     );
@@ -154,7 +151,7 @@ class UserProfilePage extends StatelessWidget{
   Widget _buildBio(BuildContext context) {
     TextStyle bioTextStyle = TextStyle(
       fontFamily: 'Spectral',
-      fontWeight: FontWeight.w400,//try changing weight to w500 if not thin
+      fontWeight: FontWeight.w400, //try changing weight to w500 if not thin
       fontStyle: FontStyle.italic,
       color: Color(0xFF799497),
       fontSize: 16.0,
@@ -182,7 +179,7 @@ class UserProfilePage extends StatelessWidget{
 
   Widget _editprofile(BuildContext context) {
     return InkWell(
-      onTap: (){
+      onTap: () {
         Navigator.of(context).pushNamed(EditProfile.routeName);
       },
       child: ClipRRect(
@@ -201,49 +198,43 @@ class UserProfilePage extends StatelessWidget{
     );
   }
 
- // Widget _tabs(BuildContext context) {
+  // Widget _tabs(BuildContext context) {
   //  return MaterialApp(
-   //   home:DefaultTabController(length:2,
-    //  child:Scaffold(appBar:AppBar(bottom: TabBar(tabs: <Widget>[
-     // Text("Collections"),
-     // Text("Posts")]),)))
-     // );
-  
-    
-      @override
-      Widget build(BuildContext context) {
-        Size screenSize = MediaQuery.of(context).size;
-        return Scaffold(
-          body: Stack(
-            children: <Widget>[
-              _buildCoverImage(screenSize),
-              SafeArea(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(height: screenSize.height / 6.4),
-                      _buildProfileImage(),
-                      _buildFullName(),
-                      _buildDescription(context),
-                      _buildStatContainer(),
-                      _buildBio(context),
-                      _buildSeparator(screenSize),
-                      SizedBox(height: 10.0),
-                      _editprofile(context),
-                     // _tabs(context),
-                      SizedBox(height: 8.0),
-                      
-                    ],
-                  ),
-                ),
+  //   home:DefaultTabController(length:2,
+  //  child:Scaffold(appBar:AppBar(bottom: TabBar(tabs: <Widget>[
+  // Text("Collections"),
+  // Text("Posts")]),)))
+  // );
+
+  @override
+  Widget build(BuildContext context) {
+    Size screenSize = MediaQuery.of(context).size;
+    return Scaffold(
+      body: Stack(
+        children: <Widget>[
+          _buildCoverImage(screenSize),
+          SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  SizedBox(height: screenSize.height / 6.4),
+                  _buildProfileImage(),
+                  _buildFullName(),
+                  _buildDescription(context),
+                  _buildStatContainer(),
+                  _buildBio(context),
+                  _buildSeparator(screenSize),
+                  SizedBox(height: 10.0),
+                  _editprofile(context),
+                  // _tabs(context),
+                  SizedBox(height: 8.0),
+                ],
               ),
-            ],
+            ),
           ),
-          drawer: MainDrawer(),
-        );
-      }
-    }
-
-
-    
-    
+        ],
+      ),
+      drawer: MainDrawer(),
+    );
+  }
+}

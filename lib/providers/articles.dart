@@ -17,6 +17,7 @@ class Articles with ChangeNotifier {
         date_created: DateTime.parse("1969-07-20 20:18:04Z"),
         date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
         bookmarked: false),
+
     new Article(
         article_id: "2",
         collection_id: "2",

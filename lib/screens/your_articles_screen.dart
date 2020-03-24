@@ -2,23 +2,23 @@ import 'package:flutter/material.dart';
 import '../widgets/articles_list.dart';
 import '../widgets/drawer.dart';
 
-class BookmarkScreen extends StatefulWidget {
-  static const routeName = "/bookmark-page";
+class YourArticles extends StatefulWidget {
+  static const routeName = "/my-srticles-page";
 
   @override
-  _BookmarkScreenState createState() => _BookmarkScreenState();
+  _YourArticlesState createState() => _YourArticlesState();
 }
 
-class _BookmarkScreenState extends State<BookmarkScreen> {
+class _YourArticlesState extends State<YourArticles> {
   void initState() {
-    print("HEllo I am in bookmarks init state");
+    print("HEllo I am in your srticles screen init state");
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bookmarks'),
+        title: Text('Your Articles'),
       ),
       body: ArticlesList(),
       drawer: MainDrawer(),
