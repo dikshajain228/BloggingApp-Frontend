@@ -23,9 +23,13 @@ class ArticlePreviewCard extends StatelessWidget {
         child: ListTile(
           contentPadding:
               EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-          leading: Container(
-            padding: EdgeInsets.only(right: 12.0),
-            child: new Image.network(article.image_path),
+          leading: ClipOval(
+            child: Image.network(
+              article.image_path,
+              fit: BoxFit.cover,
+              height: 50.0,
+              width: 50.0,
+            ),
           ),
           title: Text(
             article.title,
@@ -36,7 +40,7 @@ class ArticlePreviewCard extends StatelessWidget {
           trailing: IconButton(
             icon: Icon(
               article.bookmarked ? Icons.bookmark : Icons.bookmark_border,
-              color: Colors.black,
+              color: Theme.of(context).primaryColor,
             ),
             onPressed: () {
               article.setUnsetbookmark();
