@@ -8,9 +8,9 @@ class Collection with ChangeNotifier {
   String image_url;
   String description;
   bool user_only; //Will be removed
-  String is_owner;
-  String is_author;
-  String is_following;
+  bool is_owner;
+  bool is_author;
+  bool is_following;
   dynamic authors;
 
   Collection(
@@ -25,13 +25,8 @@ class Collection with ChangeNotifier {
       this.is_following,
       this.authors});
 
-  void follow() {
-    this.is_following = "True";
-    notifyListeners();
-  }
-
-  void unFollow() {
-    this.is_following = "False";
+  void followUnfollow() {
+    is_following = !is_following;
     notifyListeners();
   }
 }

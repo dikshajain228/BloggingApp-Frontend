@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/collections.dart';
 import '../widgets/drawer.dart';
+import '../widgets/collection_list.dart';
 
 class CollectionTestScreen extends StatefulWidget {
   static const routeName = "/tester";
@@ -11,9 +12,13 @@ class CollectionTestScreen extends StatefulWidget {
 }
 
 class _CollectionTestScreenState extends State<CollectionTestScreen> {
+  var _isInit = true;
+  var _isLoading = false;
+
   @override
   void initState() {
     super.initState();
+    print("Collection");
   }
 
   @override
@@ -28,7 +33,7 @@ class _CollectionTestScreenState extends State<CollectionTestScreen> {
         appBar: AppBar(
           title: Text("Collections tester"),
         ),
-        body: Text("Hello"),
+        body: CollectionList(),
         drawer: MainDrawer());
   }
 }

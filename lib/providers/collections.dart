@@ -15,7 +15,7 @@ class Collections with ChangeNotifier {
         .firstWhere((collection) => collection.collection_id == collection_id);
   }
 
-  Future<void> getCollections() async {
+  void getCollections() {
     // Get data from server
     List<Collection> fetchedData = [];
     fetchedData.add(Collection(
@@ -24,9 +24,9 @@ class Collections with ChangeNotifier {
       user_id: 1,
       image_url: "https://i.stack.imgur.com/l60Hf.png",
       description: "Stories through the eyes of a teenager",
-      is_owner: "False",
-      is_author: "False",
-      is_following: "True",
+      is_owner: false,
+      is_author: false,
+      is_following: true,
     ));
     fetchedData.add(Collection(
       collection_id: "2",
@@ -34,9 +34,9 @@ class Collections with ChangeNotifier {
       user_id: 2,
       image_url: "https://i.stack.imgur.com/l60Hf.png",
       description: "Sharing our ideas and experiences.",
-      is_owner: "True",
-      is_author: "False",
-      is_following: "False",
+      is_owner: true,
+      is_author: false,
+      is_following: false,
     ));
     fetchedData.add(Collection(
       collection_id: "3",
@@ -44,13 +44,13 @@ class Collections with ChangeNotifier {
       user_id: 3,
       image_url: "https://i.stack.imgur.com/l60Hf.png",
       description: "Haha idk ideas and experiences.",
-      is_owner: "False",
-      is_author: "True",
-      is_following: "False",
+      is_owner: false,
+      is_author: true,
+      is_following: false,
     ));
 
     _collections = fetchedData;
-    notifyListeners();
+    // notifyListeners();
   }
 
   Future<void> getUsersCollections() async {
@@ -62,9 +62,9 @@ class Collections with ChangeNotifier {
       user_id: 4,
       image_url: "https://i.stack.imgur.com/l60Hf.png",
       description: "Haha idk ideas and experiences.",
-      is_owner: "True",
-      is_author: "False",
-      is_following: "False",
+      is_owner: true,
+      is_author: false,
+      is_following: false,
     ));
 
     fetchedData.add(Collection(
@@ -73,9 +73,9 @@ class Collections with ChangeNotifier {
       user_id: 5,
       image_url: "https://i.stack.imgur.com/l60Hf.png",
       description: "all about me.",
-      is_owner: "True",
-      is_author: "False",
-      is_following: "False",
+      is_owner: true,
+      is_author: false,
+      is_following: false,
     ));
 
     _collections = fetchedData;
@@ -90,9 +90,9 @@ class Collections with ChangeNotifier {
       user_id: 4,
       image_url: "https://i.stack.imgur.com/l60Hf.png",
       description: "lalalalalala.",
-      is_owner: "False",
-      is_author: "False",
-      is_following: "True",
+      is_owner: false,
+      is_author: false,
+      is_following: true,
     ));
 
     fetchedData.add(Collection(
@@ -101,13 +101,13 @@ class Collections with ChangeNotifier {
       user_id: 4,
       image_url: "https://i.stack.imgur.com/l60Hf.png",
       description: "This that here there.",
-      is_owner: "False",
-      is_author: "False",
-      is_following: "True",
+      is_owner: false,
+      is_author: false,
+      is_following: true,
     ));
 
     _collections = fetchedData;
-    notifyListeners;
+    notifyListeners();
   }
 
   Future<void> addCollection(Collection newCollection) async {}
