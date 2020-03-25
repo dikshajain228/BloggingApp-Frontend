@@ -30,17 +30,68 @@ class CollectionPreviewCard extends StatelessWidget {
               fontSize: 17.0,
             ),
           ),
-          trailing: IconButton(
-            icon: Icon(
-              Icons.add_circle,
-              color: collection.is_following
-                  ? Theme.of(context).primaryColor
-                  : Colors.black,
-            ),
-            onPressed: () {
-              collection.followUnfollow();
-            },
+          subtitle: Text(
+            collection.description,
+            overflow: TextOverflow.ellipsis,
           ),
+          // Is owner
+          trailing: collection.is_owner
+              ? FlatButton(
+                  color: Colors.purple,
+                  disabledColor: Colors.deepOrange,
+                  disabledTextColor: Colors.white,
+                  textColor: Colors.white,
+                  padding: EdgeInsets.all(10.0),
+                  onPressed: null,
+                  child: Text("Owner"),
+                )
+              // Is author
+              : collection.is_author
+                  ? FlatButton(
+                      color: Colors.purple,
+                      disabledColor: Colors.purple,
+                      disabledTextColor: Colors.white,
+                      textColor: Colors.white,
+                      padding: EdgeInsets.all(10.0),
+                      onPressed: null,
+                      child: Text("Author"),
+                    )
+                  : collection.is_following
+                      ?
+                      // is following
+                      FlatButton(
+                          color: Colors.blue,
+                          textColor: Colors.white,
+                          padding: EdgeInsets.all(10.0),
+                          onPressed: () {
+                            collection.followUnfollow();
+                          },
+                          child: Text("Following"),
+                        )
+                      // Follower
+                      : OutlineButton(
+                          color: Colors.blue,
+                          borderSide: BorderSide(
+                            color: Colors.blue,
+                          ),
+                          textColor: Colors.blue,
+                          padding: EdgeInsets.all(10.0),
+                          onPressed: () {
+                            collection.followUnfollow();
+                          },
+                          child: Text("Follow"),
+                        ),
+          // IconButton(
+          //     icon: Icon(
+          //       Icons.add_circle,
+          //       color: collection.is_following
+          //           ? Theme.of(context).primaryColor
+          //           : Colors.black,
+          //     ),
+          //     onPressed: () {
+          //       collection.followUnfollow();
+          //     },
+          //   ),
         ),
       ),
     );
