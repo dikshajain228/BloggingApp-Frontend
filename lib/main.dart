@@ -1,3 +1,4 @@
+import './screens/collection_screen.dart';
 import './screens/bookmarks_screen.dart';
 import './screens/explore_screen.dart';
 import './screens/profile_page.dart';
@@ -26,23 +27,33 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
-          title: "Blogging App",
-          theme: ThemeData(
-            primaryColor: Colors.teal,
-            accentColor: Colors.white60,
-            primarySwatch: Colors.purple,
-          ),
-          home: TabScreen(),
-          routes: {
-            TabScreen.routeName: (context) => TabScreen(),
-            ProfilePage.routeName: (context) => ProfilePage(),
-            ArticlePage.routeName: (context) => ArticlePage(),
-            EditProfile.routeName: (context) => EditProfile(),
-            BookmarkScreen.routeName: (context) => BookmarkScreen(),
-            ExploreScreen.routeName: (context) => ExploreScreen(),
-            YourArticles.routeName: (context) => YourArticles(),
-            CollectionTestScreen.routeName: (context) => CollectionTestScreen(),
-          }),
+        title: "Blogging App",
+        theme: ThemeData(
+          primaryColor: Colors.teal,
+          accentColor: Colors.white60,
+          primarySwatch: Colors.purple,
+        ),
+        home: TabScreen(),
+        routes: {
+          TabScreen.routeName: (context) => TabScreen(),
+          ProfilePage.routeName: (context) => ProfilePage(),
+          ArticlePage.routeName: (context) => ArticlePage(),
+          EditProfile.routeName: (context) => EditProfile(),
+          BookmarkScreen.routeName: (context) => BookmarkScreen(),
+          ExploreScreen.routeName: (context) => ExploreScreen(),
+          YourArticles.routeName: (context) => YourArticles(),
+          CollectionTestScreen.routeName: (context) => CollectionTestScreen(),
+          // CollectionScreen.routeName: (context) => CollectionScreen(),
+        },
+        onGenerateRoute: (RouteSettings settings) {
+          var routes = <String, WidgetBuilder>{
+            CollectionScreen.routeName: (context) =>
+                CollectionScreen(settings.arguments),
+          };
+          WidgetBuilder builder = routes[settings.name];
+          return MaterialPageRoute(builder: (ctx) => builder(ctx));
+        },
+      ),
     );
   }
 }

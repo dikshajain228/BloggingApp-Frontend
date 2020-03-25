@@ -1,3 +1,4 @@
+import 'package:bloggingapp/screens/collection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/collection.dart';
@@ -81,17 +82,12 @@ class CollectionPreviewCard extends StatelessWidget {
                           },
                           child: Text("Follow"),
                         ),
-          // IconButton(
-          //     icon: Icon(
-          //       Icons.add_circle,
-          //       color: collection.is_following
-          //           ? Theme.of(context).primaryColor
-          //           : Colors.black,
-          //     ),
-          //     onPressed: () {
-          //       collection.followUnfollow();
-          //     },
-          //   ),
+          onTap: () {
+            Navigator.of(context).pushNamed(
+              CollectionScreen.routeName,
+              arguments: collection.collection_id,
+            );
+          },
         ),
       ),
     );
