@@ -28,6 +28,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
           title: "Blogging App",
           theme: ThemeData(
+            primaryColor: Colors.teal,
+            accentColor: Colors.purpleAccent,
             primarySwatch: Colors.purple,
           ),
           home: TabScreen(),
