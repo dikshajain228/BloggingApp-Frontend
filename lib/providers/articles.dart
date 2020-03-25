@@ -79,7 +79,7 @@ class Articles with ChangeNotifier {
       content: "bjhcbjhgfhgdfhvds",
       published: true,
       image_path:
-          "https://pixabay.com/get/52e9d0454f51af14f6d1867dda35367b1d3adfe75258754a_1920.jpg",
+          "https://pixabay.com/get/52e9d0454f51af14f6d1867dda35367b1d3adfe151547548_1920.jpg",
       views_count: 0,
       kudos_count: 0,
       date_created: DateTime.parse("1969-07-20 20:18:04Z"),
@@ -94,7 +94,7 @@ class Articles with ChangeNotifier {
       content: "bjhcbjhgfhgdfhvds",
       published: true,
       image_path:
-          "https://pixabay.com/get/52e9d0434e53a514f6d1867dda35367b1d3adfe75258794c_1920.jpg",
+          "https://pixabay.com/get/52e9d0454f51af14f6d1867dda35367b1d3adfe151547548_1920.jpg",
       views_count: 0,
       kudos_count: 0,
       date_created: DateTime.parse("1969-07-20 20:18:04Z"),
