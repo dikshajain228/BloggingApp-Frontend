@@ -66,6 +66,12 @@ class MainDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).pushNamed(YourArticles.routeName);
               }),
+          ListTile(
+            title: Text("Test-delete later"),
+            onTap: () {
+              Navigator.of(context).pushNamed(CollectionTestScreen.routeName);
+            },
+          ),
           new Divider(),
           new ListTile(
               title: new Text("Logout"),
@@ -73,12 +79,6 @@ class MainDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).pushNamed(ProfilePage.routeName);
               }),
-          new ListTile(
-            title: new Text("Test-delete later"),
-            onTap: () {
-              Navigator.of(context).pushNamed(CollectionTestScreen.routeName);
-            },
-          )
         ],
       ),
     );

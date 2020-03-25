@@ -17,7 +17,6 @@ class Articles with ChangeNotifier {
         date_created: DateTime.parse("1969-07-20 20:18:04Z"),
         date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
         bookmarked: false),
-
     new Article(
         article_id: "2",
         collection_id: "2",
@@ -56,8 +55,56 @@ class Articles with ChangeNotifier {
     return [..._articles];
   }
 
-  void editArticles(){
-    notifyListeners();
+  void getArticles() {
+    List<Article> fetchedData = [];
+    fetchedData.add(Article(
+        article_id: "4",
+        collection_id: "2",
+        user_id: 1,
+        title: "I am happy",
+        content: "bjhcbjhgfhgdfhvds",
+        published: true,
+        image_path:
+            "https://images.pexels.com/photos/531602/pexels-photo-531602.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+        views_count: 0,
+        kudos_count: 0,
+        date_created: DateTime.parse("1969-07-20 20:18:04Z"),
+        date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
+        bookmarked: false));
+    fetchedData.add(Article(
+      article_id: "4",
+      collection_id: "2",
+      user_id: 1,
+      title: "I am happy",
+      content: "bjhcbjhgfhgdfhvds",
+      published: true,
+      image_path:
+          "https://pixabay.com/get/52e9d0454f51af14f6d1867dda35367b1d3adfe75258754a_1920.jpg",
+      views_count: 0,
+      kudos_count: 0,
+      date_created: DateTime.parse("1969-07-20 20:18:04Z"),
+      date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
+      bookmarked: false,
+    ));
+    fetchedData.add(Article(
+      article_id: "10",
+      collection_id: "2",
+      user_id: 1,
+      title: "Me and everything else",
+      content: "bjhcbjhgfhgdfhvds",
+      published: true,
+      image_path:
+          "https://pixabay.com/get/52e9d0434e53a514f6d1867dda35367b1d3adfe75258794c_1920.jpg",
+      views_count: 0,
+      kudos_count: 0,
+      date_created: DateTime.parse("1969-07-20 20:18:04Z"),
+      date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
+      bookmarked: false,
+    ));
+    _articles = fetchedData;
   }
 
+  void editArticles() {
+    notifyListeners();
+  }
 }

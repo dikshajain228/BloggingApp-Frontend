@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
           title: "Blogging App",
           theme: ThemeData(
             primaryColor: Colors.teal,
-            accentColor: Colors.purpleAccent,
+            accentColor: Colors.white60,
             primarySwatch: Colors.purple,
           ),
           home: TabScreen(),

@@ -22,7 +22,8 @@ class Collections with ChangeNotifier {
       collection_id: "1",
       collection_name: "storytellers",
       user_id: 1,
-      image_url: "https://i.stack.imgur.com/l60Hf.png",
+      image_url:
+          "https://images.pexels.com/photos/531602/pexels-photo-531602.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
       description: "Stories through the eyes of a teenager",
       is_owner: false,
       is_author: false,
@@ -32,7 +33,8 @@ class Collections with ChangeNotifier {
       collection_id: "2",
       collection_name: "Personal Growth",
       user_id: 2,
-      image_url: "https://i.stack.imgur.com/l60Hf.png",
+      image_url:
+          "https://images.pexels.com/photos/321470/pexels-photo-321470.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
       description: "Sharing our ideas and experiences.",
       is_owner: true,
       is_author: false,
