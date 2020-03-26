@@ -4,11 +4,9 @@ import 'package:provider/provider.dart';
 import '../providers/collection.dart';
 
 class CollectionDetailsCard extends StatelessWidget {
-  Collection collection;
-  CollectionDetailsCard({this.collection});
-
   @override
   Widget build(BuildContext context) {
+    final collection = Provider.of<Collection>(context);
     return (Column(
       children: [
         Stack(
@@ -19,7 +17,7 @@ class CollectionDetailsCard extends StatelessWidget {
                   flex: 10,
                   child: FittedBox(
                     fit: BoxFit.fill,
-                    child: Image.network(this.collection.image_url),
+                    child: Image.network(collection.image_url),
                   ),
                 ),
               ],
@@ -32,7 +30,7 @@ class CollectionDetailsCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    this.collection.collection_name,
+                    collection.collection_name,
                     style: TextStyle(
                       color: Colors.black87,
                       fontWeight: FontWeight.bold,
@@ -53,7 +51,7 @@ class CollectionDetailsCard extends StatelessWidget {
                 color: Colors.blueGrey[100],
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: Text(this.collection.description,
+                  child: Text(collection.description,
                       style: TextStyle(
                         fontSize: 18.0,
                       )),
@@ -73,15 +71,7 @@ class CollectionDetailsCard extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       Text(
-                        "Followers",
-                        style: TextStyle(
-                          fontSize: 17.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue,
-                        ),
-                      ),
-                      Text(
-                        "1000",
+                        "10" + " followers",
                         style: TextStyle(
                           fontSize: 17.0,
                           fontWeight: FontWeight.bold,
@@ -93,7 +83,7 @@ class CollectionDetailsCard extends StatelessWidget {
                 ),
                 Expanded(
                   flex: 4,
-                  child: this.collection.is_following
+                  child: collection.is_following
                       ? FlatButton(
                           color: Colors.blue,
                           textColor: Colors.white,

@@ -4,7 +4,6 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 // Widgets
 import '../widgets/collection_details_card.dart';
-import '../widgets/collection_list.dart';
 import '../widgets/articles_list.dart';
 
 // Providers
@@ -53,8 +52,9 @@ class _CollectionScreenState extends State<CollectionScreen>
       ),
       body: Column(
         children: [
-          CollectionDetailsCard(
-            collection: collection,
+          ChangeNotifierProvider.value(
+            value: collection,
+            child: CollectionDetailsCard(),
           ),
           Flexible(child: ArticlesList()),
         ],
