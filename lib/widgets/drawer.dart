@@ -3,9 +3,11 @@ import 'package:bloggingapp/screens/collection_test_screen.dart';
 import 'package:bloggingapp/screens/explore_screen.dart';
 import 'package:bloggingapp/screens/tabs_screen.dart';
 import 'package:bloggingapp/screens/your_articles_screen.dart';
-import 'package:bloggingapp/widgets/articles_list.dart';
 import 'package:flutter/material.dart';
+
+// Screens
 import '../screens/profile_page.dart';
+import '../screens/article_insert_screen.dart';
 
 class MainDrawer extends StatelessWidget {
   @override
@@ -70,6 +72,12 @@ class MainDrawer extends StatelessWidget {
             title: Text("Test-delete later"),
             onTap: () {
               Navigator.of(context).pushNamed(CollectionTestScreen.routeName);
+            },
+          ),
+          ListTile(
+            title: Text("New aticle - delete"),
+            onTap: () {
+              Navigator.of(context).pushNamed(ArticleInsertScreen.routeName);
             },
           ),
           new Divider(),

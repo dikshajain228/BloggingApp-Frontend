@@ -1,15 +1,20 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+// Screens
+import './screens/tabs_screen.dart';
+import './screens/edit_profile_screen.dart';
+import './screens/collection_test_screen.dart';
+import './screens/article_page.dart';
 import './screens/collection_screen.dart';
 import './screens/bookmarks_screen.dart';
 import './screens/explore_screen.dart';
 import './screens/profile_page.dart';
 import './screens/your_articles_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import './screens/article_page.dart';
+import './screens/article_insert_screen.dart';
+
+// Providers
 import './providers/articles.dart';
-import './screens/tabs_screen.dart';
-import './screens/edit_profile_screen.dart';
-import './screens/collection_test_screen.dart';
 import './providers/collections.dart';
 
 void main() => runApp(MyApp());
@@ -43,6 +48,7 @@ class MyApp extends StatelessWidget {
           ExploreScreen.routeName: (context) => ExploreScreen(),
           YourArticles.routeName: (context) => YourArticles(),
           CollectionTestScreen.routeName: (context) => CollectionTestScreen(),
+          ArticleInsertScreen.routeName: (context) => ArticleInsertScreen(),
           // CollectionScreen.routeName: (context) => CollectionScreen(),
         },
         onGenerateRoute: (RouteSettings settings) {
