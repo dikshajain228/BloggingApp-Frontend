@@ -19,7 +19,7 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
   @override
   void initState() {
     super.initState();
-    // Initial content of texr editor
+    // Initial content of text editor
     final Delta delta = Delta()..insert("Enter content\n");
     final document = NotusDocument.fromDelta(delta);
     _controller = ZefyrController(document);
@@ -34,7 +34,7 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
 
     // text editor
     final editor = ZefyrField(
-      height: editorHeight, // set the editor's height
+      height: editorHeight,
       controller: _controller,
       focusNode: _focusNode,
       autofocus: false,
@@ -75,7 +75,7 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Editor page"),
+        title: Text("New Article"),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
