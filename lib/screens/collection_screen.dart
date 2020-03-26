@@ -4,6 +4,8 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 // Widgets
 import '../widgets/collection_details_card.dart';
+import '../widgets/collection_list.dart';
+import '../widgets/articles_list.dart';
 
 // Providers
 import '../providers/articles.dart';
@@ -38,9 +40,9 @@ class _CollectionScreenState extends State<CollectionScreen>
   @override
   void didChangeDependencies() {
     collection = Provider.of<Collections>(context).findById(collection_id);
+    Provider.of<Articles>(context).getCollectionArticles(collection_id);
     super.didChangeDependencies();
     print(collection.collection_name);
-    // Provider.of<Collections>(context).getCollectionById()
   }
 
   @override
@@ -51,16 +53,27 @@ class _CollectionScreenState extends State<CollectionScreen>
       ),
       body: Column(
         children: [
-          CollectionDetailsCard(collection: collection),
-          Row(
-            children: [Text("Article list ")],
+          CollectionDetailsCard(
+            collection: collection,
           ),
+          Flexible(child: ArticlesList()),
         ],
       ),
-      floatingActionButton: plusFloatingButton(),
+      floatingActionButton: this.collection.is_owner
+          ? plusFloatingButton()
+          : this.collection.is_author
+              ? FloatingActionButton(
+                  backgroundColor: Theme.of(context).primaryColor,
+                  foregroundColor: Colors.white,
+                  onPressed: () {},
+                  child: Icon(Icons.add),
+                  tooltip: "Add Articles",
+                )
+              : null,
     );
   }
 
+// Floating button for owners
   Widget plusFloatingButton() {
     return (SpeedDial(
       animatedIcon: AnimatedIcons.menu_close,

@@ -9,10 +9,6 @@ class CollectionDetailsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(collection.collection_id);
-    print(collection.collection_name);
-    String url =
-        "https://images.pexels.com/photos/531602/pexels-photo-531602.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260";
     return (Column(
       children: [
         Stack(
@@ -23,7 +19,7 @@ class CollectionDetailsCard extends StatelessWidget {
                   flex: 10,
                   child: FittedBox(
                     fit: BoxFit.fill,
-                    child: Image.network(url),
+                    child: Image.network(this.collection.image_url),
                   ),
                 ),
               ],
@@ -36,7 +32,7 @@ class CollectionDetailsCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "My stuff",
+                    this.collection.collection_name,
                     style: TextStyle(
                       color: Colors.black87,
                       fontWeight: FontWeight.bold,
@@ -48,6 +44,24 @@ class CollectionDetailsCard extends StatelessWidget {
             ),
           ],
         ),
+        Row(
+          children: <Widget>[
+            Expanded(
+              flex: 10,
+              child: Container(
+                alignment: Alignment.center,
+                color: Colors.blueGrey[100],
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(this.collection.description,
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      )),
+                ),
+              ),
+            ),
+          ],
+        ),
         Container(
           color: Colors.blueGrey[100],
           child: Padding(
@@ -55,7 +69,7 @@ class CollectionDetailsCard extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 Expanded(
-                  flex: 5,
+                  flex: 6,
                   child: Column(
                     children: <Widget>[
                       Text(
@@ -78,27 +92,29 @@ class CollectionDetailsCard extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  flex: 5,
-                  child: Column(
-                    children: <Widget>[
-                      Text(
-                        "Articles",
-                        style: TextStyle(
-                          fontSize: 17.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.green,
+                  flex: 4,
+                  child: this.collection.is_following
+                      ? FlatButton(
+                          color: Colors.blue,
+                          textColor: Colors.white,
+                          padding: EdgeInsets.all(10.0),
+                          onPressed: () {
+                            collection.followUnfollow();
+                          },
+                          child: Text("Following"),
+                        )
+                      : OutlineButton(
+                          color: Colors.blue,
+                          borderSide: BorderSide(
+                            color: Colors.blue,
+                          ),
+                          textColor: Colors.blue,
+                          padding: EdgeInsets.all(10.0),
+                          onPressed: () {
+                            collection.followUnfollow();
+                          },
+                          child: Text("Follow"),
                         ),
-                      ),
-                      Text(
-                        "1000",
-                        style: TextStyle(
-                          fontSize: 17.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.green,
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
               ],
             ),
