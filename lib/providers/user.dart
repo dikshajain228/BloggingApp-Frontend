@@ -6,6 +6,7 @@ class User with ChangeNotifier {
   String username;
   String about;
   String profile_image_url;
+  bool is_following;
 
   User(
       {@required this.user_id,
@@ -13,6 +14,13 @@ class User with ChangeNotifier {
       @required this.username,
       @required this.about,
       @required this.profile_image_url});
+  
+   void followUnfollow() {
+    is_following = !is_following;
+    notifyListeners();
+
+
+  }
 
 
 }
