@@ -1,3 +1,5 @@
+import '../screens/edit_profile_screen.dart';
+
 import '../widgets/collection_list.dart';
 import '../widgets/articles_list.dart';
 import '../providers/users.dart';
@@ -37,7 +39,9 @@ class _ProfilePageState extends State<ProfilePage>
           Scaffold(
             appBar: AppBar(
               title: Text("Profile Page"),
+
             ),
+
             body: Stack(
                 children: <Widget>[
                   Padding(
@@ -59,7 +63,7 @@ class _ProfilePageState extends State<ProfilePage>
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 18.0)),
                         Padding(
-                          padding: EdgeInsets.fromLTRB(0, 16, 0, 16),
+                          padding: EdgeInsets.fromLTRB(0, 16, 0, 6),
                           child: Container(
                             color: Colors.blueGrey[100],
                             child: Padding(
@@ -99,6 +103,18 @@ class _ProfilePageState extends State<ProfilePage>
                                 ],
                               ),
                             ),
+                          ),
+                        ),
+                        new SizedBox(
+                          width: double.infinity,
+                          child: RaisedButton(
+                            color: Colors.transparent,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0), side: BorderSide(color: Colors.black)),
+
+                            child: new Text("Edit Profile"),
+                            onPressed: (){
+                              Navigator.of(context).pushNamed(EditProfile.routeName);
+                            },
                           ),
                         ),
                         new Container(

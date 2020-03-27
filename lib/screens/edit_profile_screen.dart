@@ -89,6 +89,7 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                 ),
                 TextFormField(
+                  maxLines: 3,
                   initialValue: user.about,
                   decoration: InputDecoration(labelText: 'Description'),
                 ),
