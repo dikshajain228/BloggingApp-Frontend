@@ -13,8 +13,8 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage>
     with TickerProviderStateMixin {
-  double screenRatio;
   TabController _tabController;
+
   @override
   void initState() {
     _tabController = new TabController(vsync: this, length: 2);
@@ -32,7 +32,10 @@ class _ProfilePageState extends State<ProfilePage>
   Widget build(BuildContext context) {
     User user = Provider.of<Users>(context).getUserProfile();
     print(user.about);
-    double screenSize = MediaQuery.of(context).size.width;
+    double screenSize = MediaQuery
+        .of(context)
+        .size
+        .width;
     return Container(
       child: Stack(
         children: <Widget>[
@@ -41,100 +44,77 @@ class _ProfilePageState extends State<ProfilePage>
               title: Text("Profile Page"),
             ),
             body: Stack(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Container(
-                    child: new Container(
-                      width: screenSize,
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            child: CircleAvatar(
-                              backgroundImage:
-                                  NetworkImage(user.profile_image_url),
-                              radius: 60,
-                            ),
-                          ),
-                          Container(
-                            child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      children: <Widget>[
+                        CircleAvatar(
+                          backgroundImage:
+                          NetworkImage(user.profile_image_url),
+                          radius: 60,
+                        ),
+                        new Text(
+                          user.username,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 23.0, fontWeight: FontWeight.bold),
+                        ),
+                        new Text(user.about,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 18.0)),
+                        Container(
+                          color: Colors.blueGrey[100],
+                          child: Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: Row(
                               children: <Widget>[
-                                new Text(
-                                  user.username,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 23.0,
-                                      fontWeight: FontWeight.bold),
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(
+                                        "1011" + " followers",
+                                        style: TextStyle(
+                                          fontSize: 17.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.blue,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                new Text(user.about,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 18.0)),
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(
+                                        "1078" + " following",
+                                        style: TextStyle(
+                                          fontSize: 17.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.blue,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),
-                          Container(
-                            color: Colors.blueGrey[100],
-                            child: Padding(
-                              padding: EdgeInsets.all(16.0),
-                              child: Row(
-                                children: <Widget>[
-                                  Expanded(
-                                    flex: 1,
-                                    child: Column(
-                                      children: <Widget>[
-                                        Text(
-                                          "1011" + " followers",
-                                          style: TextStyle(
-                                            fontSize: 17.0,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.blue,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Column(
-                                      children: <Widget>[
-                                        Text(
-                                          "1078" + " following",
-                                          style: TextStyle(
-                                            fontSize: 17.0,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.blue,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                new Positioned(
-                  width: screenSize,
-                  top: 280,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: new Column(
-                      children: <Widget>[
+                        ),
                         new Container(
                           decoration: new BoxDecoration(
-                              color: Theme.of(context).primaryColor),
+                              color: Theme
+                                  .of(context)
+                                  .primaryColor),
                           child: new TabBar(controller: _tabController, tabs: [
                             Tab(text: "Articles"),
                             Tab(text: "Collections"),
                           ]),
                         ),
-                        new Container(
-                          height: 400,
-                          child: new TabBarView(
+                        new Expanded(
+                          child:TabBarView(
                               controller: _tabController,
                               children: <Widget>[
                                 ArticlesList(),
@@ -144,10 +124,10 @@ class _ProfilePageState extends State<ProfilePage>
                       ],
                     ),
                   ),
-                )
-              ],
+                ]
             ),
           ),
+
         ],
       ),
     );
