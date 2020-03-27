@@ -32,10 +32,6 @@ class _ProfilePageState extends State<ProfilePage>
   Widget build(BuildContext context) {
     User user = Provider.of<Users>(context).getUserProfile();
     print(user.about);
-    double screenSize = MediaQuery
-        .of(context)
-        .size
-        .width;
     return Container(
       child: Stack(
         children: <Widget>[
@@ -63,43 +59,46 @@ class _ProfilePageState extends State<ProfilePage>
                         new Text(user.about,
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 18.0)),
-                        Container(
-                          color: Colors.blueGrey[100],
-                          child: Padding(
-                            padding: EdgeInsets.all(16.0),
-                            child: Row(
-                              children: <Widget>[
-                                Expanded(
-                                  flex: 1,
-                                  child: Column(
-                                    children: <Widget>[
-                                      Text(
-                                        "1011" + " followers",
-                                        style: TextStyle(
-                                          fontSize: 17.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.blue,
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 16, 0, 16),
+                          child: Container(
+                            color: Colors.blueGrey[100],
+                            child: Padding(
+                              padding: EdgeInsets.all(16.0),
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    flex: 1,
+                                    child: Column(
+                                      children: <Widget>[
+                                        Text(
+                                          "1011" + " followers",
+                                          style: TextStyle(
+                                            fontSize: 17.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.blue,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Column(
-                                    children: <Widget>[
-                                      Text(
-                                        "1078" + " following",
-                                        style: TextStyle(
-                                          fontSize: 17.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.blue,
+                                  Expanded(
+                                    flex: 1,
+                                    child: Column(
+                                      children: <Widget>[
+                                        Text(
+                                          "1078" + " following",
+                                          style: TextStyle(
+                                            fontSize: 17.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.blue,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
