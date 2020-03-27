@@ -18,6 +18,34 @@ class Articles with ChangeNotifier {
         date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
         bookmarked: false),
     new Article(
+        article_id: "1",
+        collection_id: "2",
+        user_id: 1,
+        title: "HEllo there",
+        content: "bjhcbjhgfhgdfhvds",
+        published: true,
+        image_path:
+        "https://images.pexels.com/photos/818252/pexels-photo-818252.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+        views_count: 0,
+        kudos_count: 0,
+        date_created: DateTime.parse("1969-07-20 20:18:04Z"),
+        date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
+        bookmarked: false),
+    new Article(
+        article_id: "1",
+        collection_id: "2",
+        user_id: 1,
+        title: "HEllo there",
+        content: "bjhcbjhgfhgdfhvds",
+        published: true,
+        image_path:
+        "https://images.pexels.com/photos/818252/pexels-photo-818252.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+        views_count: 0,
+        kudos_count: 0,
+        date_created: DateTime.parse("1969-07-20 20:18:04Z"),
+        date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
+        bookmarked: false),
+    new Article(
         article_id: "2",
         collection_id: "2",
         user_id: 1,
@@ -45,6 +73,134 @@ class Articles with ChangeNotifier {
         date_created: DateTime.parse("1969-07-20 20:18:04Z"),
         date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
         bookmarked: false),
+    new Article(
+        article_id: "1",
+        collection_id: "2",
+        user_id: 1,
+        title: "HEllo there",
+        content: "bjhcbjhgfhgdfhvds",
+        published: true,
+        image_path:
+        "https://images.pexels.com/photos/818252/pexels-photo-818252.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+        views_count: 0,
+        kudos_count: 0,
+        date_created: DateTime.parse("1969-07-20 20:18:04Z"),
+        date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
+        bookmarked: false),
+    new Article(
+        article_id: "1",
+        collection_id: "2",
+        user_id: 1,
+        title: "HEllo there",
+        content: "bjhcbjhgfhgdfhvds",
+        published: true,
+        image_path:
+        "https://images.pexels.com/photos/818252/pexels-photo-818252.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+        views_count: 0,
+        kudos_count: 0,
+        date_created: DateTime.parse("1969-07-20 20:18:04Z"),
+        date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
+        bookmarked: false),
+    new Article(
+        article_id: "1",
+        collection_id: "2",
+        user_id: 1,
+        title: "HEllo there",
+        content: "bjhcbjhgfhgdfhvds",
+        published: true,
+        image_path:
+        "https://images.pexels.com/photos/818252/pexels-photo-818252.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+        views_count: 0,
+        kudos_count: 0,
+        date_created: DateTime.parse("1969-07-20 20:18:04Z"),
+        date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
+        bookmarked: false),
+    new Article(
+        article_id: "1",
+        collection_id: "2",
+        user_id: 1,
+        title: "HEllo there",
+        content: "bjhcbjhgfhgdfhvds",
+        published: true,
+        image_path:
+        "https://images.pexels.com/photos/818252/pexels-photo-818252.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+        views_count: 0,
+        kudos_count: 0,
+        date_created: DateTime.parse("1969-07-20 20:18:04Z"),
+        date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
+        bookmarked: false),
+    new Article(
+        article_id: "1",
+        collection_id: "2",
+        user_id: 1,
+        title: "HEllo there",
+        content: "bjhcbjhgfhgdfhvds",
+        published: true,
+        image_path:
+        "https://images.pexels.com/photos/818252/pexels-photo-818252.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+        views_count: 0,
+        kudos_count: 0,
+        date_created: DateTime.parse("1969-07-20 20:18:04Z"),
+        date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
+        bookmarked: false),
+    new Article(
+        article_id: "1",
+        collection_id: "2",
+        user_id: 1,
+        title: "HEllo there",
+        content: "bjhcbjhgfhgdfhvds",
+        published: true,
+        image_path:
+        "https://images.pexels.com/photos/818252/pexels-photo-818252.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+        views_count: 0,
+        kudos_count: 0,
+        date_created: DateTime.parse("1969-07-20 20:18:04Z"),
+        date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
+        bookmarked: false),
+    new Article(
+        article_id: "1",
+        collection_id: "2",
+        user_id: 1,
+        title: "HEllo there",
+        content: "bjhcbjhgfhgdfhvds",
+        published: true,
+        image_path:
+        "https://images.pexels.com/photos/818252/pexels-photo-818252.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+        views_count: 0,
+        kudos_count: 0,
+        date_created: DateTime.parse("1969-07-20 20:18:04Z"),
+        date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
+        bookmarked: false),
+    new Article(
+        article_id: "1",
+        collection_id: "2",
+        user_id: 1,
+        title: "HEllo there",
+        content: "bjhcbjhgfhgdfhvds",
+        published: true,
+        image_path:
+        "https://images.pexels.com/photos/818252/pexels-photo-818252.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+        views_count: 0,
+        kudos_count: 0,
+        date_created: DateTime.parse("1969-07-20 20:18:04Z"),
+        date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
+        bookmarked: false),
+    new Article(
+        article_id: "1",
+        collection_id: "2",
+        user_id: 1,
+        title: "HEllo there",
+        content: "bjhcbjhgfhgdfhvds",
+        published: true,
+        image_path:
+        "https://images.pexels.com/photos/818252/pexels-photo-818252.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+        views_count: 0,
+        kudos_count: 0,
+        date_created: DateTime.parse("1969-07-20 20:18:04Z"),
+        date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
+        bookmarked: false),
+
+
   ];
 
   Article findById(String article_id) {
@@ -149,7 +305,60 @@ class Articles with ChangeNotifier {
       date_created: DateTime.parse("1969-07-20 20:18:04Z"),
       date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
       bookmarked: false,
-    ));
+    ),
+
+    );
+    fetchedData.add(Article(
+      article_id: "10",
+      collection_id: "2",
+      user_id: 1,
+      title: "Me and Collection 1",
+      content: "bjhcbjhgfhgdfhvds",
+      published: true,
+      image_path:
+      "https://images.pexels.com/photos/531602/pexels-photo-531602.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+      views_count: 0,
+      kudos_count: 0,
+      date_created: DateTime.parse("1969-07-20 20:18:04Z"),
+      date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
+      bookmarked: false,
+    ),
+
+    );
+    fetchedData.add(Article(
+      article_id: "10",
+      collection_id: "2",
+      user_id: 1,
+      title: "Me and Collection 1",
+      content: "bjhcbjhgfhgdfhvds",
+      published: true,
+      image_path:
+      "https://images.pexels.com/photos/531602/pexels-photo-531602.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+      views_count: 0,
+      kudos_count: 0,
+      date_created: DateTime.parse("1969-07-20 20:18:04Z"),
+      date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
+      bookmarked: false,
+    ),
+
+    );
+    fetchedData.add(Article(
+      article_id: "10",
+      collection_id: "2",
+      user_id: 1,
+      title: "Me and Collection 1",
+      content: "bjhcbjhgfhgdfhvds",
+      published: true,
+      image_path:
+      "https://images.pexels.com/photos/531602/pexels-photo-531602.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+      views_count: 0,
+      kudos_count: 0,
+      date_created: DateTime.parse("1969-07-20 20:18:04Z"),
+      date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
+      bookmarked: false,
+    ),
+
+    );
     _articles = fetchedData;
   }
 

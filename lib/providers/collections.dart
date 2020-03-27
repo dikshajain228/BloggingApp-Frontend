@@ -4,7 +4,19 @@ import 'package:flutter/material.dart';
 import './collection.dart';
 
 class Collections with ChangeNotifier {
-  List<Collection> _collections = [];
+  List<Collection> _collections = [
+    Collection(
+      collection_id: "1",
+      collection_name: "storytellers",
+      user_id: 1,
+      image_url:
+      "https://images.pexels.com/photos/531602/pexels-photo-531602.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+      description: "Stories through the eyes of a teenager",
+      is_owner: true,
+      is_author: false,
+      is_following: false,
+    )
+  ];
 
   List<Collection> get collections {
     return [..._collections];

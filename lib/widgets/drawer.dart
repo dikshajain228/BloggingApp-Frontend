@@ -1,9 +1,10 @@
-import 'package:bloggingapp/screens/bookmarks_screen.dart';
-import 'package:bloggingapp/screens/collection_test_screen.dart';
-import 'package:bloggingapp/screens/explore_screen.dart';
-import 'package:bloggingapp/screens/tabs_screen.dart';
-import 'package:bloggingapp/screens/your_articles_screen.dart';
+import '../screens/bookmarks_screen.dart';
+import '../screens/collection_test_screen.dart';
+import '../screens/explore_screen.dart';
+import '../screens/tabs_screen.dart';
+import '../screens/your_articles_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 // Screens
 import '../screens/profile_page.dart';

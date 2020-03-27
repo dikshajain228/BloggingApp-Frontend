@@ -81,6 +81,7 @@ class CollectionDetailsCard extends StatelessWidget {
                     ],
                   ),
                 ),
+
                 Expanded(
                   flex: 4,
                   child: collection.is_following

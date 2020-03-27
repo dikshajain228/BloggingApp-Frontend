@@ -1,240 +1,155 @@
-import 'package:bloggingapp/screens/edit_profile_screen.dart';
-import 'package:bloggingapp/widgets/drawer.dart';
+import '../widgets/collection_list.dart';
+import '../widgets/articles_list.dart';
+import '../providers/users.dart';
+import '../providers/user.dart';
 import 'package:flutter/material.dart';
-import '../widgets/mycollection_card.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   static const routeName = "/profile-page";
-
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends State<ProfilePage>
+    with TickerProviderStateMixin {
+  double screenRatio;
+  TabController _tabController;
+  @override
   void initState() {
-    print("HEllo I am in profile page");
+    _tabController = new TabController(vsync: this, length: 2);
+    super.initState();
+    print("I am in profile page");
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("User Profile"),
-      ),
-      body: UserProfilePage(),
-      drawer: MainDrawer(),
-    );
-  }
-}
-
-class UserProfilePage extends StatelessWidget {
-  final String _fullName = "User's Name";
-  final String _status = "Username";
-  final String _bio = "\"Description of the user.\"";
-  final String _followers = "173";
-  final String _following = "124";
-  final String currentProfilePic =
-      "https://images.pexels.com/photos/414171/pexels-photo-414171.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500";
-
-  Widget _buildCoverImage(Size screenSize) {
+    User user = Provider.of<Users>(context).getUserProfile();
+    print(user.about);
+    double screenSize = MediaQuery.of(context).size.width;
     return Container(
-      height: screenSize.height / 2.6,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: NetworkImage(
-              'https://images.pexels.com/photos/414171/pexels-photo-414171.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'),
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildProfileImage() {
-    return Center(
-      child: Container(
-        width: 140.0,
-        height: 140.0,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(currentProfilePic),
-            fit: BoxFit.cover,
-          ),
-          borderRadius: BorderRadius.circular(80.0),
-          border: Border.all(
-            color: Colors.white,
-            width: 10.0,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFullName() {
-    TextStyle _nameTextStyle = TextStyle(
-      fontFamily: 'Roboto',
-      color: Colors.black,
-      fontSize: 28.0,
-      fontWeight: FontWeight.w700,
-    );
-
-    return Text(
-      _fullName,
-      style: _nameTextStyle,
-    );
-  }
-
-  Widget _buildDescription(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 6.0),
-      decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
-        borderRadius: BorderRadius.circular(4.0),
-      ),
-      child: Text(
-        _status,
-        style: TextStyle(
-          fontFamily: 'Spectral',
-          color: Colors.black,
-          fontSize: 20.0,
-          fontWeight: FontWeight.w300,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStatItem(String label, String count) {
-    TextStyle _statLabelTextStyle = TextStyle(
-      fontFamily: 'Roboto',
-      color: Colors.black,
-      fontSize: 16.0,
-      fontWeight: FontWeight.w200,
-    );
-
-    TextStyle _statCountTextStyle = TextStyle(
-      color: Colors.black54,
-      fontSize: 24.0,
-      fontWeight: FontWeight.bold,
-    );
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(
-          count,
-          style: _statCountTextStyle,
-        ),
-        Text(
-          label,
-          style: _statLabelTextStyle,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildStatContainer() {
-    return Container(
-      height: 60.0,
-      margin: EdgeInsets.only(top: 8.0),
-      decoration: BoxDecoration(
-        color: Color(0xFFEFF4F7),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+      child: Stack(
         children: <Widget>[
-          _buildStatItem("Followers", _followers),
-          _buildStatItem("Following", _following),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBio(BuildContext context) {
-    TextStyle bioTextStyle = TextStyle(
-      fontFamily: 'Spectral',
-      fontWeight: FontWeight.w400, //try changing weight to w500 if not thin
-      fontStyle: FontStyle.italic,
-      color: Color(0xFF799497),
-      fontSize: 16.0,
-    );
-
-    return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      padding: EdgeInsets.all(8.0),
-      child: Text(
-        _bio,
-        textAlign: TextAlign.center,
-        style: bioTextStyle,
-      ),
-    );
-  }
-
-  Widget _buildSeparator(Size screenSize) {
-    return Container(
-      width: screenSize.width / 1.6,
-      height: 2.0,
-      color: Colors.black54,
-      margin: EdgeInsets.only(top: 4.0),
-    );
-  }
-
-  Widget _editprofile(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.of(context).pushNamed(EditProfile.routeName);
-      },
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(40.0),
-        child: Container(
-          color: Colors.black45,
-          width: 150,
-          padding: EdgeInsets.only(top: 8.0),
-          child: Text(
-            "Edit Profile",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontFamily: 'Roboto', fontSize: 18.0),
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Widget _tabs(BuildContext context) {
-  //  return MaterialApp(
-  //   home:DefaultTabController(length:2,
-  //  child:Scaffold(appBar:AppBar(bottom: TabBar(tabs: <Widget>[
-  // Text("Collections"),
-  // Text("Posts")]),)))
-  // );
-
-  @override
-  Widget build(BuildContext context) {
-    Size screenSize = MediaQuery.of(context).size;
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          _buildCoverImage(screenSize),
-          SafeArea(
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  SizedBox(height: screenSize.height / 6.4),
-                  _buildProfileImage(),
-                  _buildFullName(),
-                  _buildDescription(context),
-                  _buildStatContainer(),
-                  _buildBio(context),
-                  _buildSeparator(screenSize),
-                  SizedBox(height: 10.0),
-                  _editprofile(context),
-                  // _tabs(context),
-                  SizedBox(height: 8.0),
-                ],
-              ),
+          Scaffold(
+            appBar: AppBar(
+              title: Text("Profile Page"),
+            ),
+            body: Stack(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Container(
+                    child: new Container(
+                      width: screenSize,
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            child: CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(user.profile_image_url),
+                              radius: 60,
+                            ),
+                          ),
+                          Container(
+                            child: Column(
+                              children: <Widget>[
+                                new Text(
+                                  user.username,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 23.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                new Text(user.about,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 18.0)),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            color: Colors.blueGrey[100],
+                            child: Padding(
+                              padding: EdgeInsets.all(16.0),
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    flex: 1,
+                                    child: Column(
+                                      children: <Widget>[
+                                        Text(
+                                          "1011" + " followers",
+                                          style: TextStyle(
+                                            fontSize: 17.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.blue,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Column(
+                                      children: <Widget>[
+                                        Text(
+                                          "1078" + " following",
+                                          style: TextStyle(
+                                            fontSize: 17.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.blue,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                new Positioned(
+                  width: screenSize,
+                  top: 280,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: new Column(
+                      children: <Widget>[
+                        new Container(
+                          decoration: new BoxDecoration(
+                              color: Theme.of(context).primaryColor),
+                          child: new TabBar(controller: _tabController, tabs: [
+                            Tab(text: "Articles"),
+                            Tab(text: "Collections"),
+                          ]),
+                        ),
+                        new Container(
+                          height: 400,
+                          child: new TabBarView(
+                              controller: _tabController,
+                              children: <Widget>[
+                                ArticlesList(),
+                                CollectionList(),
+                              ]),
+                        )
+                      ],
+                    ),
+                  ),
+                )
+              ],
             ),
           ),
         ],
       ),
-      drawer: MainDrawer(),
     );
   }
 }

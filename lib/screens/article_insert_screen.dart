@@ -109,6 +109,7 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
     final content = jsonEncode(_controller.document);
     String contentString = content.toString();
     final String title = _titleController.text;
+    print(contentString);
     // print("Title " + title);
     // print(contentString);
     // print("lala");

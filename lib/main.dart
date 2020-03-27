@@ -16,6 +16,8 @@ import './screens/article_insert_screen.dart';
 // Providers
 import './providers/articles.dart';
 import './providers/collections.dart';
+import './providers/user.dart';
+import './providers/users.dart';
 
 void main() => runApp(MyApp());
 
@@ -24,6 +26,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider.value(
+          value : Users(),
+        ),
         ChangeNotifierProvider.value(
           value: Articles(),
         ),
