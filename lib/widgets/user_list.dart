@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/users.dart';
 import '../widgets/user_preview_card.dart';
 
-class CollectionList extends StatelessWidget {
+class UserList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final usersData = Provider.of<Users>(context);

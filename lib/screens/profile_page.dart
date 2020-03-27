@@ -32,8 +32,7 @@ class _ProfilePageState extends State<ProfilePage>
   Widget build(BuildContext context) {
     User user = Provider.of<Users>(context).getUserProfile();
     print(user.about);
-    return Container(
-      child: Stack(
+    return Stack(
         children: <Widget>[
           Scaffold(
             appBar: AppBar(
@@ -128,7 +127,7 @@ class _ProfilePageState extends State<ProfilePage>
           ),
 
         ],
-      ),
-    );
+      );
+
   }
 }

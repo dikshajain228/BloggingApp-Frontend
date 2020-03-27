@@ -1,57 +1,68 @@
-import 'package:bloggingapp/screens/explore_collection_list.dart';
-import 'package:bloggingapp/widgets/drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/collections.dart';
+import '../providers/articles.dart';
+
+import '../widgets/drawer.dart';
+import '../widgets/collection_list.dart';
+import '../widgets/user_list.dart';
 import '../widgets/articles_list.dart';
 
 class ExploreScreen extends StatefulWidget {
-  static const routeName = "/explore-screen";
+  static const routeName = "/explore";
   @override
   _ExploreScreenState createState() => _ExploreScreenState();
 }
 
-class _ExploreScreenState extends State<ExploreScreen> {
+class _ExploreScreenState extends State<ExploreScreen>
+    with SingleTickerProviderStateMixin {
+  var _isInit = true;
+  var _isLoading = false;
+  TabController tabController;
+
+  @override
   void initState() {
-    print("I am in explore screen");
+    super.initState();
+    tabController = TabController(
+      vsync: this,
+      length: 3,
+      initialIndex: 0,
+    );
+    print("Collection");
   }
 
-  void populateData() {}
+  @override
+  void didChangeDependencies() {
+    Provider.of<Collections>(context).getCollections();
+    Provider.of<Articles>(context).getArticles();
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
-          title: Text('Explore'),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {
-                populateData;
-              },
-            ),
-          ],
-          bottom: TabBar(
-            tabs: <Widget>[
-              Tab(
-                text: "Users",
-              ),
-              Tab(
-                text: "Collections",
-              ),
+            title: Text("Explore"),
+            bottom: TabBar(controller: tabController, tabs: [
+              Tab(text: "Collections"),
               Tab(text: "Articles"),
-            ],
-          ),
-        ),
+              Tab(text: "People"),
+            ])),
         body: TabBarView(
+          controller: tabController,
           children: <Widget>[
-            Text("yo"),
             CollectionList(),
             ArticlesList(),
+            UserList(),
           ],
         ),
-        drawer: MainDrawer(),
-      ),
-    );
+        drawer: MainDrawer());
   }
 }

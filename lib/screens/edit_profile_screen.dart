@@ -1,8 +1,10 @@
-import 'package:bloggingapp/screens/profile_page.dart';
+import '../screens/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:dio/dio.dart';
+import 'package:provider/provider.dart';
+import '../providers/user.dart';
+import '../providers/users.dart';
 
 class EditProfile extends StatefulWidget {
   static const routeName = '/edit-profile';
@@ -33,6 +35,8 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
+    User user = Provider.of<Users>(context).getUserProfile();
+    print(user.about);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -76,21 +80,16 @@ class _EditProfileState extends State<EditProfile> {
                     print(ImageFormData);
                   },
                 ),
-                TextFormField(
-                  initialValue: "Anjali",
-                  decoration: InputDecoration(labelText: 'Name'),
-                  //textInputAction: TextInputAction.next,
-                ),
                 Padding(
                   padding: EdgeInsets.fromLTRB(0.0, 16.0, 16.0, 16.0),
                   child: TextFormField(
-                    initialValue: "anjaallaayyy",
+                    initialValue: user.username,
                     decoration: InputDecoration(labelText: 'Username'),
                     //textInputAction: TextInputAction.next,
                   ),
                 ),
                 TextFormField(
-                  initialValue: "Life is a rat race but i'm a cat meow",
+                  initialValue: user.about,
                   decoration: InputDecoration(labelText: 'Description'),
                 ),
 

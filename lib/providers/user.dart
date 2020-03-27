@@ -12,6 +12,7 @@ class User with ChangeNotifier {
     @required this.username,
     @required this.about,
     @required this.profile_image_url,
+    this.is_following,
   });
   
    void followUnfollow() {
