@@ -6,6 +6,9 @@ import 'package:quill_delta/quill_delta.dart';
 import 'package:zefyr/zefyr.dart';
 import 'package:image_picker/image_picker.dart';
 
+// widgets
+import '../widgets/tags_input.dart';
+
 class ArticleInsertScreen extends StatefulWidget {
   static const routeName = "/article/insert";
   @override
@@ -16,7 +19,7 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
   ZefyrController _controller;
   TextEditingController _titleController;
   FocusNode _focusNode;
-  List<String> tags;
+  List<String> tags = [];
 
   // Image input
   Future<File> file;
@@ -42,6 +45,12 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
     });
     print("Choose image");
     print(file.toString());
+  }
+
+  void setTags(List<dynamic> tagsData) {
+    setState(() {
+      tags = [...tagsData];
+    });
   }
 
   @override
@@ -127,7 +136,7 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
     String contentString = content.toString();
     final String title = _titleController.text;
     print(contentString);
-    print(uploadedFile.path);
+    // print(uploadedFile.path);
   }
 
   // Save alert dialog
@@ -152,33 +161,7 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
                   padding: const EdgeInsets.only(bottom: 5.0),
                   child: Text("Add tags"),
                 ),
-                ChipsInput(
-                  decoration: InputDecoration(
-                    labelText: "Add tag",
-                  ),
-                  maxChips: 3,
-                  onChanged: (data) {
-                    // print(data);
-                    setState(() {
-                      tags = [...data];
-                    });
-                  },
-                  chipBuilder: (context, state, tag) {
-                    return InputChip(
-                      label: Text(tag),
-                      onDeleted: () => state.deleteChip(tag),
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    );
-                  },
-                  findSuggestions: (String tag) {
-                    return [tag];
-                  },
-                  suggestionBuilder: (context, state, tag) {
-                    return ListTile(
-                        title: Text(tag),
-                        onTap: () => {state.selectSuggestion(tag)});
-                  },
-                ),
+                TagsInput(tags, setTags),
                 OutlineButton(
                   onPressed: chooseImage,
                   child: Text('Choose Image'),

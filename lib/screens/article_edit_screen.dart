@@ -20,7 +20,7 @@ class ArticleEditScreenState extends State<ArticleEditScreen> {
   TextEditingController _titleController;
   FocusNode _focusNode;
 
-  List<String> tags = ["haha", "tag1", "tag2"];
+  List<dynamic> tags = ["haha", "tag1", "tag2"];
   String content = "Article content\n";
   String title = "Article Title\n";
 
