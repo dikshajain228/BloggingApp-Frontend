@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_chips_input/flutter_chips_input.dart';
 import 'package:quill_delta/quill_delta.dart';
 import 'package:zefyr/zefyr.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ArticleInsertScreen extends StatefulWidget {
   static const routeName = "/article/insert";
@@ -16,6 +18,13 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
   FocusNode _focusNode;
   List<String> tags;
 
+  // Image input
+  Future<File> file;
+  String status = '';
+  String base64Image;
+  File uploadedFile;
+  String uploadError = 'Error Uploading Image';
+
   @override
   void initState() {
     super.initState();
@@ -25,6 +34,14 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
     _controller = ZefyrController(document);
     _focusNode = FocusNode();
     _titleController = TextEditingController();
+  }
+
+  void chooseImage() {
+    setState(() {
+      file = ImagePicker.pickImage(source: ImageSource.gallery);
+    });
+    print("Choose image");
+    print(file.toString());
   }
 
   @override
@@ -110,9 +127,7 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
     String contentString = content.toString();
     final String title = _titleController.text;
     print(contentString);
-    // print("Title " + title);
-    // print(contentString);
-    // print("lala");
+    print(uploadedFile.path);
   }
 
   // Save alert dialog
@@ -129,8 +144,8 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          content: Container(
-            height: 150,
+          content: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
             child: Column(
               children: <Widget>[
                 Padding(
@@ -164,6 +179,14 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
                         onTap: () => {state.selectSuggestion(tag)});
                   },
                 ),
+                OutlineButton(
+                  onPressed: chooseImage,
+                  child: Text('Choose Image'),
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                showImage(),
               ],
             ),
           ),
@@ -188,6 +211,35 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
             ),
           ],
         );
+      },
+    );
+  }
+
+  Widget showImage() {
+    return FutureBuilder<File>(
+      future: file,
+      builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done &&
+            null != snapshot.data) {
+          uploadedFile = snapshot.data;
+          base64Image = base64Encode(snapshot.data.readAsBytesSync());
+          return Flexible(
+            child: Image.file(
+              snapshot.data,
+              fit: BoxFit.fill,
+            ),
+          );
+        } else if (null != snapshot.error) {
+          return const Text(
+            'Error Picking Image',
+            textAlign: TextAlign.center,
+          );
+        } else {
+          return const Text(
+            'No Image Selected',
+            textAlign: TextAlign.center,
+          );
+        }
       },
     );
   }
