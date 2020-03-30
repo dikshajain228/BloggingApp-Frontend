@@ -6,46 +6,35 @@ import 'package:zefyr/zefyr.dart';
 
 class ArticleEditScreen extends StatefulWidget {
   static const routeName = "/article/edit";
- 
- //for receiving the article from the article screen.
+
+  //for receiving the article from the article screen.
   final String value;
   ArticleEditScreen({Key key, this.value}) : super(key: key);
 
   @override
   ArticleEditScreenState createState() => ArticleEditScreenState();
-  
 }
 
 class ArticleEditScreenState extends State<ArticleEditScreen> {
   ZefyrController _controller;
   TextEditingController _titleController;
   FocusNode _focusNode;
-  List<String> tags;
 
-  //Initial content of text editor
-  //Has to be received from articlescreen
-
-  String receivedcontent="Article that needs to edited\n";
-  String receivedTitle="Article Title that needs to edited\n";
+  List<String> tags = ["haha", "tag1", "tag2"];
+  String content = "Article content\n";
+  String title = "Article Title\n";
 
   @override
   void initState() {
     super.initState();
-    
 
-    //final Delta delta = Delta()..insert("${widget.value}");//this should be used to receive data from the widget.
-    final Delta delta = Delta()..insert(receivedcontent);
+    final Delta delta = Delta()..insert(content);
     final document = NotusDocument.fromDelta(delta);
-    _controller =  ZefyrController(document);
+    _controller = ZefyrController(document);
     _focusNode = FocusNode();
 
-
-    //final Delta delta1 = Delta()..insert(receivedTitle);
-    //final documentTitle = NotusDocument.fromDelta(delta1);
-    // _titleController = TextEditingController(documentTitle);
-    _titleController =TextEditingController();
-    _focusNode = FocusNode();
-  
+    _titleController = TextEditingController();
+    _titleController.text = title;
   }
 
   @override
@@ -66,15 +55,13 @@ class ArticleEditScreenState extends State<ArticleEditScreen> {
       ),
       physics: ClampingScrollPhysics(),
     );
-    
 
     // Title field
     final titleField = TextField(
       controller: _titleController,
       decoration: InputDecoration(
-        hintText: (receivedTitle),
-      border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(5.0),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5.0),
         ),
       ),
     );
@@ -113,19 +100,16 @@ class ArticleEditScreenState extends State<ArticleEditScreen> {
     );
   }
 
-  
-
   void _saveDocument(BuildContext context) {
-
-    final content = jsonEncode(_controller.document);
-    String contentString = content.toString();
+    // final content = jsonEncode(_controller.document);
+    String contentString = _controller.document.toString();
     final String title = _titleController.text;
     _showSaveDialog();
   }
 
   void _submitArticle() {
-    final content = jsonEncode(_controller.document);
-    String contentString = content.toString();
+    // final content = jsonEncode(_controller.document);
+    String contentString = _controller.document.toString();
     final String title = _titleController.text;
     print(contentString);
   }
@@ -153,6 +137,7 @@ class ArticleEditScreenState extends State<ArticleEditScreen> {
                   child: Text("Add tags"),
                 ),
                 ChipsInput(
+                  initialValue: [...tags],
                   decoration: InputDecoration(
                     labelText: "Add tag",
                   ),

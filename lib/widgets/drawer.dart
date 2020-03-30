@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 // Screens
 import '../screens/profile_page.dart';
 import '../screens/article_insert_screen.dart';
+import '../screens/article_edit_screen.dart';
 
 class MainDrawer extends StatelessWidget {
   @override
@@ -70,15 +71,21 @@ class MainDrawer extends StatelessWidget {
                 Navigator.of(context).pushNamed(YourArticles.routeName);
               }),
           ListTile(
-            title: Text("Test-delete later"),
+            title: Text("Search"),
             onTap: () {
               Navigator.of(context).pushNamed(CollectionTestScreen.routeName);
             },
           ),
           ListTile(
-            title: Text("New aticle - delete"),
+            title: Text("New article - delete"),
             onTap: () {
               Navigator.of(context).pushNamed(ArticleInsertScreen.routeName);
+            },
+          ),
+          ListTile(
+            title: Text("Edit article"),
+            onTap: () {
+              Navigator.of(context).pushNamed(ArticleEditScreen.routeName);
             },
           ),
           new Divider(),
