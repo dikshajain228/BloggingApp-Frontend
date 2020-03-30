@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_chips_input/flutter_chips_input.dart';
 import 'package:quill_delta/quill_delta.dart';
 import 'package:zefyr/zefyr.dart';
-import 'package:image_picker/image_picker.dart';
 
 // widgets
 import '../widgets/tags_input.dart';
+import '../widgets/image_input.dart';
 
 class ArticleInsertScreen extends StatefulWidget {
   static const routeName = "/article/insert";
@@ -19,14 +18,10 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
   ZefyrController _controller;
   TextEditingController _titleController;
   FocusNode _focusNode;
-  List<String> tags = [];
+  List<dynamic> tags = [];
 
-  // Image input
-  Future<File> file;
-  String status = '';
-  String base64Image;
-  File uploadedFile;
-  String uploadError = 'Error Uploading Image';
+  File uploadedImage;
+  String image_url = "https://picsum.photos/200";
 
   @override
   void initState() {
@@ -39,12 +34,10 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
     _titleController = TextEditingController();
   }
 
-  void chooseImage() {
+  void setImage(File image) {
     setState(() {
-      file = ImagePicker.pickImage(source: ImageSource.gallery);
+      uploadedImage = image;
     });
-    print("Choose image");
-    print(file.toString());
   }
 
   void setTags(List<dynamic> tagsData) {
@@ -136,7 +129,11 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
     String contentString = content.toString();
     final String title = _titleController.text;
     print(contentString);
-    // print(uploadedFile.path);
+    if (uploadedImage != null) {
+      print(uploadedImage.path);
+    } else {
+      print("no upload");
+    }
   }
 
   // Save alert dialog
@@ -162,14 +159,7 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
                   child: Text("Add tags"),
                 ),
                 TagsInput(tags, setTags),
-                OutlineButton(
-                  onPressed: chooseImage,
-                  child: Text('Choose Image'),
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                showImage(),
+                ImageInput(uploadedImage, setImage, image_url),
               ],
             ),
           ),
@@ -194,35 +184,6 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
             ),
           ],
         );
-      },
-    );
-  }
-
-  Widget showImage() {
-    return FutureBuilder<File>(
-      future: file,
-      builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
-        if (snapshot.connectionState == ConnectionState.done &&
-            null != snapshot.data) {
-          uploadedFile = snapshot.data;
-          base64Image = base64Encode(snapshot.data.readAsBytesSync());
-          return Flexible(
-            child: Image.file(
-              snapshot.data,
-              fit: BoxFit.fill,
-            ),
-          );
-        } else if (null != snapshot.error) {
-          return const Text(
-            'Error Picking Image',
-            textAlign: TextAlign.center,
-          );
-        } else {
-          return const Text(
-            'No Image Selected',
-            textAlign: TextAlign.center,
-          );
-        }
       },
     );
   }
