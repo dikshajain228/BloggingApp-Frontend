@@ -14,6 +14,7 @@ import './screens/article_insert_screen.dart';
 import './screens/article_edit_screen.dart';
 import './screens/collection_edit_screen.dart';
 import './screens/collection_insert_screen.dart';
+import './screens/article_test_screen.dart';
 
 // Providers
 import './providers/articles.dart';
@@ -64,6 +65,8 @@ class MyApp extends StatelessWidget {
           var routes = <String, WidgetBuilder>{
             CollectionScreen.routeName: (context) =>
                 CollectionScreen(settings.arguments),
+            ArticleScreenTest.routeName: (context) =>
+                ArticleScreenTest(settings.arguments),
           };
           WidgetBuilder builder = routes[settings.name];
           return MaterialPageRoute(builder: (ctx) => builder(ctx));
