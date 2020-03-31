@@ -1,6 +1,6 @@
+import 'dart:io';
 import '../screens/profile_page.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../providers/user.dart';
@@ -16,12 +16,13 @@ class _EditProfileState extends State<EditProfile> {
   void initState() {
     print("Hello I am in editProfile Page");
   }
+  File uploadedImage;
+  String image_url = "https://picsum.photos/200";
 
-  Future<String> uploadImage(filename, url) async {
-    var request = http.MultipartRequest('POST', Uri.parse(url));
-    request.files.add(await http.MultipartFile.fromPath('picture', filename));
-    var res = await request.send();
-    return res.reasonPhrase;
+  void setImage(File image) {
+    setState(() {
+      uploadedImage = image;
+    });
   }
 
   void saveChanges(){
@@ -73,11 +74,8 @@ class _EditProfileState extends State<EditProfile> {
                   onTap: () async {
                     var file = await ImagePicker.pickImage(
                         source: ImageSource.gallery);
-                    print("fhjb,n.lkm/lm nkjh jh hjjkolklj ilr");
                     print(file);
-                    var ImageFormData =
-                    http.MultipartFile.fromPath('image', file.path);
-                    print(ImageFormData);
+                    
                   },
                 ),
                 Padding(
