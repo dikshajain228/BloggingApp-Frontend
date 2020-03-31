@@ -100,6 +100,7 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
           IconButton(
             icon: Icon(Icons.save),
             color: Colors.white,
+            tooltip: "Post article",
             onPressed: () => _saveDocument(context),
           ),
         ],
@@ -144,7 +145,7 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            "Post Article",
+            "Post Article...",
             style: TextStyle(
               fontSize: 20.0,
               fontWeight: FontWeight.bold,
@@ -154,10 +155,6 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
             scrollDirection: Axis.vertical,
             child: Column(
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 5.0),
-                  child: Text("Add tags"),
-                ),
                 TagsInput(tags, setTags),
                 ImageInput(uploadedImage, setImage, image_url),
               ],
