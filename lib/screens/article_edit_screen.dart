@@ -1,16 +1,15 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_chips_input/flutter_chips_input.dart';
 import 'package:quill_delta/quill_delta.dart';
 import 'package:zefyr/zefyr.dart';
+import 'dart:io';
+import 'dart:convert';
+
+// widgets
+import '../widgets/tags_input.dart';
+import '../widgets/image_input.dart';
 
 class ArticleEditScreen extends StatefulWidget {
   static const routeName = "/article/edit";
-
-  //for receiving the article from the article screen.
-  final String value;
-  ArticleEditScreen({Key key, this.value}) : super(key: key);
-
   @override
   ArticleEditScreenState createState() => ArticleEditScreenState();
 }
@@ -19,10 +18,12 @@ class ArticleEditScreenState extends State<ArticleEditScreen> {
   ZefyrController _controller;
   TextEditingController _titleController;
   FocusNode _focusNode;
-
   List<dynamic> tags = ["haha", "tag1", "tag2"];
   String content = "Article content\n";
   String title = "Article Title\n";
+
+  File uploadedImage;
+  String image_url = "https://picsum.photos/200";
 
   @override
   void initState() {
@@ -32,9 +33,20 @@ class ArticleEditScreenState extends State<ArticleEditScreen> {
     final document = NotusDocument.fromDelta(delta);
     _controller = ZefyrController(document);
     _focusNode = FocusNode();
-
     _titleController = TextEditingController();
     _titleController.text = title;
+  }
+
+  void setImage(File image) {
+    setState(() {
+      uploadedImage = image;
+    });
+  }
+
+  void setTags(List<dynamic> tagsData) {
+    setState(() {
+      tags = [...tagsData];
+    });
   }
 
   @override
@@ -108,10 +120,15 @@ class ArticleEditScreenState extends State<ArticleEditScreen> {
   }
 
   void _submitArticle() {
-    // final content = jsonEncode(_controller.document);
-    String contentString = _controller.document.toString();
+    final content = jsonEncode(_controller.document);
+    String contentString = content.toString();
     final String title = _titleController.text;
     print(contentString);
+    if (uploadedImage != null) {
+      print(uploadedImage.path);
+    } else {
+      print("no upload");
+    }
   }
 
   // Save alert dialog
@@ -122,48 +139,18 @@ class ArticleEditScreenState extends State<ArticleEditScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            "Publish changes",
+            "Publish changes...",
             style: TextStyle(
               fontSize: 20.0,
               fontWeight: FontWeight.bold,
             ),
           ),
-          content: Container(
-            height: 150,
+          content: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
             child: Column(
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 5.0),
-                  child: Text("Add tags"),
-                ),
-                ChipsInput(
-                  initialValue: [...tags],
-                  decoration: InputDecoration(
-                    labelText: "Add tag",
-                  ),
-                  maxChips: 3,
-                  onChanged: (data) {
-                    // print(data);
-                    setState(() {
-                      tags = [...data];
-                    });
-                  },
-                  chipBuilder: (context, state, tag) {
-                    return InputChip(
-                      label: Text(tag),
-                      onDeleted: () => state.deleteChip(tag),
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    );
-                  },
-                  findSuggestions: (String tag) {
-                    return [tag];
-                  },
-                  suggestionBuilder: (context, state, tag) {
-                    return ListTile(
-                        title: Text(tag),
-                        onTap: () => {state.selectSuggestion(tag)});
-                  },
-                ),
+                TagsInput(tags, setTags),
+                ImageInput(uploadedImage, setImage, image_url),
               ],
             ),
           ),
