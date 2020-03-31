@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'dart:async';
 
 import '../providers/collections.dart';
 import '../providers/articles.dart';
@@ -55,6 +57,12 @@ class _ExploreScreenState extends State<ExploreScreen>
   void search() {
     Provider.of<Collections>(context).getCollections();
     Provider.of<Articles>(context).getArticles();
+    // to be removed
+    Timer(Duration(seconds: 2), () {
+      setState(() {
+        searchStatus = SearchStatus.Searched;
+      });
+    });
   }
 
   @override
@@ -86,6 +94,7 @@ class _ExploreScreenState extends State<ExploreScreen>
               setState(() {
                 searchText = searchController.text;
                 searchStatus = SearchStatus.Searching;
+                search();
               });
               print(text);
             },
@@ -104,7 +113,7 @@ class _ExploreScreenState extends State<ExploreScreen>
               },
             )
           ],
-          bottom: (searchText == ""
+          bottom: (searchStatus != SearchStatus.Searched
               ? null
               : TabBar(controller: tabController, tabs: [
                   Tab(text: "Collections"),
@@ -126,14 +135,18 @@ class _ExploreScreenState extends State<ExploreScreen>
                   ),
                 ),
               )
-            : TabBarView(
-                controller: tabController,
-                children: <Widget>[
-                  CollectionList(),
-                  ArticlesList(),
-                  UserList(),
-                ],
-              )),
+            : (searchStatus == SearchStatus.Searching
+                ? SpinKitWanderingCubes(
+                    color: Colors.teal,
+                  )
+                : TabBarView(
+                    controller: tabController,
+                    children: <Widget>[
+                      CollectionList(),
+                      ArticlesList(),
+                      UserList(),
+                    ],
+                  ))),
         drawer: MainDrawer());
   }
 }
