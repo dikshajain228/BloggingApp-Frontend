@@ -13,6 +13,7 @@ import './screens/profile_page.dart';
 import './screens/your_articles_screen.dart';
 import './screens/article_insert_screen.dart';
 import './screens/article_edit_screen.dart';
+import './screens/collection_edit_screen.dart';
 
 // Providers
 import './providers/articles.dart';
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
           CollectionTestScreen.routeName: (context) => CollectionTestScreen(),
           ArticleInsertScreen.routeName: (context) => ArticleInsertScreen(),
           ArticleEditScreen.routeName: (context) => ArticleEditScreen(),
+          EditCollection.routeName: (context) => EditCollection(),
           // CollectionScreen.routeName: (context) => CollectionScreen(),
         },
         onGenerateRoute: (RouteSettings settings) {
