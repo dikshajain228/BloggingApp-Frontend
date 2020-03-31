@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../providers/collection.dart';
 import '../providers/collections.dart';
+import '../widgets/image_input.dart';
 
 
 class EditCollection extends StatefulWidget {
@@ -25,53 +26,6 @@ class _EditCollectionState extends State<EditCollection> {
     setState(() {
       uploadedImage = image;
     });
-  }
-
-  void _showSaveDialog() {
-    showDialog(
-      barrierDismissible: true,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            "Publish changes",
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          actions: [
-            FlatButton(
-              child: Text("YES"),
-              onPressed: () {
-                 //Call function to edit changes
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text("NO"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-
-            FlatButton(
-              child: Text("CANCEL"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            
-          ],
-        );
-      },
-    );
-  }
-
-  void saveChanges(){
-   
-    _showSaveDialog();
-   
   }
 
 
@@ -96,26 +50,15 @@ class _EditCollectionState extends State<EditCollection> {
             child: Column(
               children: <Widget>[
                  Row(
-                    children: [
-                      Expanded(
-                        flex: 9,
-                        child: FittedBox(
-                            fit: BoxFit.fill,
-                            child: Image.network(collection.image_url),
+                  children: [
+                    Expanded(
+                      flex: 9,
+                      child: FittedBox(
+                        fit: BoxFit.fill,
+                        //child: Image.network(collection.image_url),
                       ),
-                   ),
-                ],
-            ),
-                GestureDetector(
-                  child: Text("\nChange collection image", style: TextStyle(color: Colors.blue),),
-                  onTap: () async {
-                    var file = await ImagePicker.pickImage(
-                        source: ImageSource.gallery);
-                         print(file);
-                    //var ImageFormData =
-                    //http.MultipartFile.fromPath('image', file.path);
-                   // print(ImageFormData);
-                  },
+                    ),
+                  ],
                 ),
                 Padding(
                   padding: EdgeInsets.fromLTRB(0.0, 16.0, 16.0, 16.0),
@@ -137,6 +80,63 @@ class _EditCollectionState extends State<EditCollection> {
           ),
         ),
       ),
+    );
+  }
+
+   void saveChanges() {
+    _showSaveDialog();
+  }
+
+  void _submitCollection() {
+    if (uploadedImage != null) {
+      print(uploadedImage.path);
+    } else {
+      print("no upload");
+    }
+  }
+
+  // Save alert dialog
+  void _showSaveDialog() {
+    showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            "Edit Collection",
+            style: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              children: <Widget>[
+                ImageInput(uploadedImage, setImage, image_url),
+              ],
+            ),
+          ),
+          actions: [
+            FlatButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Close"),
+              color: Colors.red,
+              splashColor: Colors.redAccent,
+            ),
+            FlatButton(
+              child: Text("Post"),
+              color: Colors.teal,
+              splashColor: Colors.tealAccent,
+              onPressed: () {
+                _submitCollection();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
