@@ -1,3 +1,5 @@
+import 'package:bloggingapp/screens/collection_insert_screen.dart';
+
 import '../screens/bookmarks_screen.dart';
 import '../screens/explore_screen.dart';
 import '../screens/tabs_screen.dart';
@@ -79,6 +81,12 @@ class MainDrawer extends StatelessWidget {
             title: Text("Edit article"),
             onTap: () {
               Navigator.of(context).pushNamed(ArticleEditScreen.routeName);
+            },
+          ),
+          ListTile(
+            title: Text("Add collection"),
+            onTap: () {
+              Navigator.of(context).pushNamed(CollectionInsertScreen.routeName);
             },
           ),
           new Divider(),
