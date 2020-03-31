@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:bloggingapp/screens/article_page.dart';
+import 'package:bloggingapp/screens/article_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/article.dart';
 
 class ArticleDeleteCard extends StatelessWidget {
-
   Widget build(BuildContext context) {
     final article = Provider.of<Article>(context);
 
@@ -31,7 +30,8 @@ class ArticleDeleteCard extends StatelessWidget {
           subtitle: Text(article.date_updated.toString(),
               style: TextStyle(color: Colors.black)),
           trailing: IconButton(
-            icon: Icon(Icons.cancel,
+            icon: Icon(
+              Icons.cancel,
               color: Theme.of(context).primaryColor,
             ),
             onPressed: () {
@@ -39,32 +39,24 @@ class ArticleDeleteCard extends StatelessWidget {
             },
           ),
           onTap: () {
-            Navigator.of(context).pushNamed(ArticlePage.routeName,
+            Navigator.of(context).pushNamed(ArticleScreen.routeName,
                 arguments: article.article_id);
           },
         ),
       ),
     );
   }
-  AlertDialog handleOnPressed(){
-    return 
-      AlertDialog(
-        title: Text("Delete"),
-        content: Text("Are you sure you want to delete this article?"),
-        actions: <Widget>[
-          FlatButton(
-            child: const Text("No"),
-            onPressed: (){
 
-            }),
-          FlatButton(
-            child: const Text("Yes"),
-            onPressed: (){
-
-            }),
-        ],
-        elevation: 24.0,
-        backgroundColor: Colors.white ,
-      );
-  }  
-}  
+  AlertDialog handleOnPressed() {
+    return AlertDialog(
+      title: Text("Delete"),
+      content: Text("Are you sure you want to delete this article?"),
+      actions: <Widget>[
+        FlatButton(child: const Text("No"), onPressed: () {}),
+        FlatButton(child: const Text("Yes"), onPressed: () {}),
+      ],
+      elevation: 24.0,
+      backgroundColor: Colors.white,
+    );
+  }
+}

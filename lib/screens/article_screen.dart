@@ -5,6 +5,7 @@ var now = new DateTime.now();
 DateTime date;
 
 class ArticleScreen extends StatelessWidget {
+  static const routeName = "/article";
   @override
   Widget build(BuildContext context) {
     Widget titleSection = Container(

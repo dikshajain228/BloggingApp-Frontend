@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 // Screens
 import './screens/tabs_screen.dart';
 import './screens/edit_profile_screen.dart';
-import './screens/article_page.dart';
+import './screens/article_screen.dart';
 import './screens/collection_screen.dart';
 import './screens/bookmarks_screen.dart';
 import './screens/explore_screen.dart';
@@ -18,7 +18,6 @@ import './screens/collection_insert_screen.dart';
 // Providers
 import './providers/articles.dart';
 import './providers/collections.dart';
-import './providers/user.dart';
 import './providers/users.dart';
 
 void main() => runApp(MyApp());
@@ -49,7 +48,7 @@ class MyApp extends StatelessWidget {
         routes: {
           TabScreen.routeName: (context) => TabScreen(),
           ProfilePage.routeName: (context) => ProfilePage(),
-          ArticlePage.routeName: (context) => ArticlePage(),
+          ArticleScreen.routeName: (context) => ArticleScreen(),
           EditProfile.routeName: (context) => EditProfile(),
           BookmarkScreen.routeName: (context) => BookmarkScreen(),
           ExploreScreen.routeName: (context) => ExploreScreen(),

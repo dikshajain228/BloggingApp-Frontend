@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:bloggingapp/screens/article_page.dart';
+import 'package:bloggingapp/screens/article_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/article.dart';
 
@@ -47,7 +47,7 @@ class ArticlePreviewCard extends StatelessWidget {
             },
           ),
           onTap: () {
-            Navigator.of(context).pushNamed(ArticlePage.routeName,
+            Navigator.of(context).pushNamed(ArticleScreen.routeName,
                 arguments: article.article_id);
           },
         ),
