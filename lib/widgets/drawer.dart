@@ -1,5 +1,4 @@
 import '../screens/bookmarks_screen.dart';
-import '../screens/collection_test_screen.dart';
 import '../screens/explore_screen.dart';
 import '../screens/tabs_screen.dart';
 import '../screens/your_articles_screen.dart';
@@ -70,12 +69,6 @@ class MainDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).pushNamed(YourArticles.routeName);
               }),
-          ListTile(
-            title: Text("Search"),
-            onTap: () {
-              Navigator.of(context).pushNamed(CollectionTestScreen.routeName);
-            },
-          ),
           ListTile(
             title: Text("New article - delete"),
             onTap: () {
