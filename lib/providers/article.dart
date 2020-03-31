@@ -13,7 +13,7 @@ class Article with ChangeNotifier {
   int kudos_count;
   final DateTime date_created;
   DateTime date_updated;
-  bool bookmarked;
+  bool is_bookmarked;
 
   Article(
       {@required this.article_id,
@@ -27,10 +27,10 @@ class Article with ChangeNotifier {
       @required this.kudos_count,
       @required this.date_created,
       @required this.date_updated,
-      this.bookmarked});
+      this.is_bookmarked});
 
   void setUnsetbookmark() {
-    bookmarked = !bookmarked;
+    is_bookmarked = !is_bookmarked;
     notifyListeners();
   }
 }

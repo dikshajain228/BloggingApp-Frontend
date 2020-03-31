@@ -8,9 +8,9 @@ class ArticlePreviewCard extends StatelessWidget {
 //  final String article_id;
 //  String title;
 //  DateTime date;
-//  bool bookmarked;
+//  bool is_bookmarked;
 //  ArticlePreviewCard(
-//      this.article_id, this.image, this.title, this.date, this.bookmarked);
+//      this.article_id, this.image, this.title, this.date, this.is_bookmarked);
 
   Widget build(BuildContext context) {
     final article = Provider.of<Article>(context);
@@ -39,7 +39,7 @@ class ArticlePreviewCard extends StatelessWidget {
               style: TextStyle(color: Colors.black)),
           trailing: IconButton(
             icon: Icon(
-              article.bookmarked ? Icons.bookmark : Icons.bookmark_border,
+              article.is_bookmarked ? Icons.bookmark : Icons.bookmark_border,
               color: Theme.of(context).primaryColor,
             ),
             onPressed: () {
