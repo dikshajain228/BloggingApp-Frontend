@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 // Screens
 import './screens/tabs_screen.dart';
 import './screens/edit_profile_screen.dart';
-import './screens/collection_test_screen.dart';
 import './screens/article_page.dart';
 import './screens/collection_screen.dart';
 import './screens/bookmarks_screen.dart';
@@ -30,7 +29,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
-          value : Users(),
+          value: Users(),
         ),
         ChangeNotifierProvider.value(
           value: Articles(),
@@ -55,11 +54,11 @@ class MyApp extends StatelessWidget {
           BookmarkScreen.routeName: (context) => BookmarkScreen(),
           ExploreScreen.routeName: (context) => ExploreScreen(),
           YourArticles.routeName: (context) => YourArticles(),
-          CollectionTestScreen.routeName: (context) => CollectionTestScreen(),
           ArticleInsertScreen.routeName: (context) => ArticleInsertScreen(),
           ArticleEditScreen.routeName: (context) => ArticleEditScreen(),
           EditCollection.routeName: (context) => EditCollection(),
-          CollectionInsertScreen.routeName:(context)=>CollectionInsertScreen(),
+          CollectionInsertScreen.routeName: (context) =>
+              CollectionInsertScreen(),
           // CollectionScreen.routeName: (context) => CollectionScreen(),
         },
         onGenerateRoute: (RouteSettings settings) {
