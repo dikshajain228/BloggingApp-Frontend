@@ -1,6 +1,6 @@
+import 'dart:io';
 import '../screens/collection_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../providers/collection.dart';
@@ -18,11 +18,13 @@ class _EditCollectionState extends State<EditCollection> {
     print("Hello I am in editCollection Page");
   }
 
-  Future<String> uploadImage(filename, url) async {
-    var request = http.MultipartRequest('POST', Uri.parse(url));
-    request.files.add(await http.MultipartFile.fromPath('picture', filename));
-    var res = await request.send();
-    return res.reasonPhrase;
+  File uploadedImage;
+  String image_url = "https://picsum.photos/200";
+
+  void setImage(File image) {
+    setState(() {
+      uploadedImage = image;
+    });
   }
 
   void _showSaveDialog() {
@@ -109,11 +111,10 @@ class _EditCollectionState extends State<EditCollection> {
                   onTap: () async {
                     var file = await ImagePicker.pickImage(
                         source: ImageSource.gallery);
-
-                    print(file);
-                    var ImageFormData =
-                    http.MultipartFile.fromPath('image', file.path);
-                    print(ImageFormData);
+                         print(file);
+                    //var ImageFormData =
+                    //http.MultipartFile.fromPath('image', file.path);
+                   // print(ImageFormData);
                   },
                 ),
                 Padding(
