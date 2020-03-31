@@ -47,16 +47,30 @@ class ArticleDeleteCard extends StatelessWidget {
     );
   }
 
-  AlertDialog handleOnPressed() {
-    return AlertDialog(
-      title: Text("Delete"),
-      content: Text("Are you sure you want to delete this article?"),
-      actions: <Widget>[
-        FlatButton(child: const Text("No"), onPressed: () {}),
-        FlatButton(child: const Text("Yes"), onPressed: () {}),
-      ],
-      elevation: 24.0,
-      backgroundColor: Colors.white,
+   Future handleOnPressed(){
+    return showDialog(
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+      return 
+        AlertDialog(
+          title: Text("Delete"),
+          content: Text("Are you sure you want to delete this article?"),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text("No"),
+              onPressed: (){
+
+            }),
+            FlatButton(
+              child: const Text("Yes"),
+              onPressed: (){
+
+            }),
+          ],
+          elevation: 24.0,
+          backgroundColor: Colors.white ,
+        );
+      } 
     );
   }
 }
