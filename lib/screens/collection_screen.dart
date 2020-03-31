@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:bloggingapp/screens/collection_edit_screen.dart';
 
 // Widgets
 import '../widgets/collection_details_card.dart';
@@ -100,7 +101,7 @@ class _CollectionScreenState extends State<CollectionScreen>
           backgroundColor: Colors.tealAccent,
           label: 'Edit Collection',
           labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () => {},
+          onTap: () => {Navigator.of(context).pushNamed(EditCollection.routeName)},
         ),
         SpeedDialChild(
           child: Icon(Icons.delete),
