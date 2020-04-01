@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import 'package:bloggingapp/screens/article_screen.dart';
 import '../screens/article_test_screen.dart';
 
 import '../providers/article.dart';
@@ -36,10 +36,20 @@ class ArticlePreviewCard extends StatelessWidget {
           ),
           title: Text(
             article.title,
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+            overflow: TextOverflow.ellipsis,
           ),
-          subtitle: Text(article.date_updated.toString(),
-              style: TextStyle(color: Colors.black)),
+          subtitle: Text(
+              "Published on " +
+                  DateFormat("dd-MM-yyyy").format(article.date_created),
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 12,
+              )),
           trailing: IconButton(
             icon: Icon(
               article.is_bookmarked ? Icons.bookmark : Icons.bookmark_border,
