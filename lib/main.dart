@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
           TabScreen.routeName: (context) => TabScreen(),
           ProfilePage.routeName: (context) => ProfilePage(),
           ArticleScreen.routeName: (context) => ArticleScreen(),
-          EditProfile.routeName: (context) => EditProfile(),
+          //EditProfile.routeName: (context) => EditProfile(),
           BookmarkScreen.routeName: (context) => BookmarkScreen(),
           ExploreScreen.routeName: (context) => ExploreScreen(),
           YourArticles.routeName: (context) => YourArticles(),
@@ -68,6 +68,8 @@ class MyApp extends StatelessWidget {
                 CollectionScreen(settings.arguments),
             ArticleScreenTest.routeName: (context) =>
                 ArticleScreenTest(article_id: settings.arguments),
+            EditProfile.routeName: (context) =>
+                EditProfile(settings.arguments),
           };
           WidgetBuilder builder = routes[settings.name];
           return MaterialPageRoute(builder: (ctx) => builder(ctx));
