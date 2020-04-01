@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
           YourArticles.routeName: (context) => YourArticles(),
           ArticleInsertScreen.routeName: (context) => ArticleInsertScreen(),
           ArticleEditScreen.routeName: (context) => ArticleEditScreen(),
-          EditCollection.routeName: (context) => EditCollection(),
+          //EditCollection.routeName: (context) => EditCollection(),
           CollectionInsertScreen.routeName: (context) =>
               CollectionInsertScreen(),
           ArticleDeleteScreen.routeName: (context) => ArticleDeleteScreen()
@@ -69,7 +69,10 @@ class MyApp extends StatelessWidget {
                 CollectionScreen(settings.arguments),
             ArticleScreenTest.routeName: (context) =>
                 ArticleScreenTest(article_id: settings.arguments),
-            EditProfile.routeName: (context) => EditProfile(settings.arguments),
+            EditProfile.routeName: (context) => 
+                EditProfile(settings.arguments),
+            EditCollection.routeName: (context) =>
+                EditCollection(settings.arguments),
           };
           WidgetBuilder builder = routes[settings.name];
           return MaterialPageRoute(builder: (ctx) => builder(ctx));
