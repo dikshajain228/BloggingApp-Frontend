@@ -155,14 +155,14 @@ class _ArticleScreenTestState extends State<ArticleScreenTest>
         SpeedDialChild(
           child: Icon(Icons.delete_sweep),
           backgroundColor: Colors.tealAccent,
-          label: 'Delete Collection',
+          label: 'Delete Article',
           labelStyle: TextStyle(fontSize: 18.0),
           onTap: () => {},
         ),
         SpeedDialChild(
           child: Icon(Icons.edit),
           backgroundColor: Colors.tealAccent,
-          label: 'Edit Collection',
+          label: 'Edit Article',
           labelStyle: TextStyle(fontSize: 18.0),
           onTap: () =>
               {Navigator.of(context).pushNamed(ArticleEditScreen.routeName)},
