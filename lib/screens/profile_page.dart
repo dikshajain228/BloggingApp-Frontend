@@ -1,3 +1,5 @@
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+
 import '../screens/edit_profile_screen.dart';
 
 import '../widgets/collection_list.dart';
@@ -13,6 +15,11 @@ class ProfilePage extends StatefulWidget {
   _ProfilePageState createState() => _ProfilePageState();
 }
 
+List<Choice> choices = <Choice>[
+   Choice(title: 'Edit Profile', icon: Icons.person),
+   Choice(title: 'Change Password', icon: Icons.vpn_key),  
+];
+
 class _ProfilePageState extends State<ProfilePage>
     with TickerProviderStateMixin {
   TabController _tabController;
@@ -24,6 +31,14 @@ class _ProfilePageState extends State<ProfilePage>
     print("I am in profile page");
   }
 
+  Choice _selectedChoice = choices[0]; // The app's "state".
+  void _select(Choice choice) {
+    // Causes the app to rebuild with the new _selectedChoice.
+    setState(() {
+      _selectedChoice = choice;
+    });
+  }
+
   @override
   void dispose() {
     _tabController.dispose();
@@ -33,15 +48,30 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<Users>(context).getUserProfile();
-    print(user.about);
+    print(user.about); 
     return Stack(
         children: <Widget>[
           Scaffold(
             appBar: AppBar(
               title: Text("Profile Page"),
-
+              actions: <Widget>[
+              PopupMenuButton<Choice>(
+              elevation:3.2,
+              onCanceled: () {
+              print('You have not chosen anything');
+              },
+              onSelected: _select,
+              itemBuilder: (BuildContext context) {
+                return choices.skip(0).map((Choice choice) {
+                  return PopupMenuItem<Choice>(
+                    value: choice,
+                    child: Text(choice.title),
+                  );
+                }).toList();
+              },
             ),
-
+        ],
+            ),
             body: Stack(
                 children: <Widget>[
                   Padding(
@@ -105,18 +135,18 @@ class _ProfilePageState extends State<ProfilePage>
                             ),
                           ),
                         ),
-                        new SizedBox(
-                          width: double.infinity,
-                          child: RaisedButton(
-                            color: Colors.transparent,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0), side: BorderSide(color: Colors.black)),
+                        // new SizedBox(
+                        //   width: double.infinity,
+                        //   child: RaisedButton(
+                        //     color: Colors.transparent,
+                        //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0), side: BorderSide(color: Colors.black)),
 
-                            child: new Text("Edit Profile"),
-                            onPressed: (){
-                              Navigator.of(context).pushNamed(EditProfile.routeName);
-                            },
-                          ),
-                        ),
+                        //     child: new Text("Edit Profile"),
+                        //     onPressed: (){
+                        //       Navigator.of(context).pushNamed(EditProfile.routeName);
+                        //     },
+                        //   ),
+                        // ),
                         new Container(
                           decoration: new BoxDecoration(
                               color: Theme
@@ -146,4 +176,11 @@ class _ProfilePageState extends State<ProfilePage>
       );
 
   }
+ }   
+  //Choice class
+  class Choice {
+   Choice({this.title, this.icon});
+   String title;
+   IconData icon;
 }
+
