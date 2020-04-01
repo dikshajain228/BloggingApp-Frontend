@@ -1,3 +1,4 @@
+import 'package:bloggingapp/screens/article_test_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:quill_delta/quill_delta.dart';
 import 'package:zefyr/zefyr.dart';
@@ -7,6 +8,9 @@ import 'dart:convert';
 // widgets
 import '../widgets/tags_input.dart';
 import '../widgets/image_input.dart';
+
+import '../providers/articles.dart';
+import '../providers/article.dart';
 
 class ArticleEditScreen extends StatefulWidget {
   static const routeName = "/article/edit";
@@ -21,6 +25,8 @@ class ArticleEditScreenState extends State<ArticleEditScreen> {
   List<dynamic> tags = ["haha", "tag1", "tag2"];
   String content = "Article content\n";
   String title = "Article Title\n";
+
+  Article article;
 
   File uploadedImage;
   String image_url = "https://picsum.photos/200";
@@ -96,6 +102,13 @@ class ArticleEditScreenState extends State<ArticleEditScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.cancel),
+          onPressed: () {
+            Navigator.of(context).pushNamed(ArticleScreenTest.routeName,
+                arguments: "4"); // Change after linking to provider
+          },
+        ),
         title: Text("Edit Article"),
         centerTitle: true,
         actions: <Widget>[
