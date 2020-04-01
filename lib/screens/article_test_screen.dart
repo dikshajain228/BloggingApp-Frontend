@@ -16,7 +16,7 @@ class ArticleScreenTest extends StatefulWidget {
   static const routeName = "/article-test";
 
   String article_id;
-  ArticleScreenTest(this.article_id);
+  ArticleScreenTest({Key key, @required this.article_id}) : super(key: key);
 
   @override
   _ArticleScreenTestState createState() => _ArticleScreenTestState(article_id);
