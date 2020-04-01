@@ -1,7 +1,6 @@
 import 'dart:io';
 import '../screens/collection_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../providers/collection.dart';
 import '../providers/collections.dart';
@@ -9,15 +8,29 @@ import '../widgets/image_input.dart';
 
 
 class EditCollection extends StatefulWidget {
-  static const routeName = '/edit-collection';
+  static const routeName = '/collection/edit';
+  var collection_id;
+  EditCollection(this.collection_id);
+
   @override
-  _EditCollectionState createState() => _EditCollectionState();
+  _EditCollectionState createState() => _EditCollectionState(collection_id);
+  //_EditCollectionState createState() => _EditCollectionState();
 }
 
-class _EditCollectionState extends State<EditCollection> {
-  void initState() {
-    print("Hello I am in editCollection Page");
+class _EditCollectionState extends State<EditCollection>  {
+
+     
+  var collection_id;
+  Collection collection;
+
+  _EditCollectionState(this.collection_id);
+
+   void initState() {
+    super.initState();
+    print("Edit Collection Page.");
+    print(collection_id);
   }
+
 
   File uploadedImage;
   String image_url = "https://picsum.photos/200";
@@ -27,11 +40,15 @@ class _EditCollectionState extends State<EditCollection> {
       uploadedImage = image;
     });
   }
-
-
+  
   @override
   Widget build(BuildContext context) {
     Collection collection = Provider.of<Collections>(context).getCollectionById("1");
+    final _collectionName = TextEditingController(text:collection.collection_name);
+     final _collectionDescription = TextEditingController(text:collection.description);
+
+     
+
     print(collection.description);
     return Scaffold(
       appBar: AppBar(
@@ -39,7 +56,7 @@ class _EditCollectionState extends State<EditCollection> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.done),
-            onPressed: saveChanges,
+            onPressed:saveChanges,
           )
         ],
       ),
@@ -49,43 +66,65 @@ class _EditCollectionState extends State<EditCollection> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                 Row(
-                  children: [
-                    Expanded(
-                      flex: 9,
-                      child: FittedBox(
+                
+                  Padding(
+                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                      child: (FittedBox(
                         fit: BoxFit.fill,
-                        //child: Image.network(collection.image_url),
-                      ),
+                        child: Column(
+                             children: <Widget>[
+                              ImageInput(uploadedImage, setImage, image_url),
+                               ],
+                        ),
+                      )
                     ),
-                  ],
-                ),
+                   ),
+                
+                
                 Padding(
+                  
                   padding: EdgeInsets.fromLTRB(0.0, 16.0, 16.0, 16.0),
                   child: TextFormField(
-                    initialValue: collection.collection_name,
-                    decoration: InputDecoration(labelText: 'Collection Name'),
-                    //textInputAction: TextInputAction.next,
-                  ),
-                ),
-                TextFormField(
+                   //initialValue:collection.collection_name,
+                   decoration: InputDecoration(labelText: 'Collection Name'),
+                   controller:_collectionName,
+                    
+                  )
+                  
+                ), 
+                
+                TextFormField( 
                   maxLines: 3,
-                  initialValue: collection.description,
-                  decoration: InputDecoration(labelText: 'Description'),
+                  //initialValue:collection.description,
+                   decoration: InputDecoration(labelText: 'Description'),
+                  controller: _collectionDescription,
+                  
                 ),
 
 
               ],
+              
             ),
-          ),
+           
+         ),
         ),
+        
       ),
+      
     );
-  }
 
-   void saveChanges() {
+    void _printChanges(){
+      print("Collection Name: "+_collectionName.text);
+       print("Collection Description: "+_collectionDescription.text);
+
+    }
+}
+
+void  saveChanges() {
     _showSaveDialog();
-  }
+   
+ }
+
 
   void _submitCollection() {
     if (uploadedImage != null) {
@@ -103,18 +142,10 @@ class _EditCollectionState extends State<EditCollection> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            "Edit Collection",
+            "Edit the Collection?",
             style: TextStyle(
               fontSize: 20.0,
               fontWeight: FontWeight.bold,
-            ),
-          ),
-          content: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              children: <Widget>[
-                ImageInput(uploadedImage, setImage, image_url),
-              ],
             ),
           ),
           actions: [
@@ -122,12 +153,12 @@ class _EditCollectionState extends State<EditCollection> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text("Close"),
+              child: Text("No"),
               color: Colors.red,
               splashColor: Colors.redAccent,
             ),
             FlatButton(
-              child: Text("Post"),
+              child: Text("Yes"),
               color: Colors.teal,
               splashColor: Colors.tealAccent,
               onPressed: () {
