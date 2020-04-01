@@ -194,5 +194,6 @@ class _ProfilePageState extends State<ProfilePage>
    Choice({this.title, this.icon});
    String title;
    IconData icon;
+    
 }
 
