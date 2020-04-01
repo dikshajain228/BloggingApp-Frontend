@@ -65,8 +65,8 @@ class MyApp extends StatelessWidget {
           var routes = <String, WidgetBuilder>{
             CollectionScreen.routeName: (context) =>
                 CollectionScreen(settings.arguments),
-            ArticleScreenTest.routeName: (context) =>
-                ArticleScreenTest(article_id: settings.arguments),
+            ArticleScreenTest.routeName: (context) => ArticleScreenTest(
+                key: UniqueKey(), article_id: settings.arguments),
           };
           WidgetBuilder builder = routes[settings.name];
           return MaterialPageRoute(builder: (ctx) => builder(ctx));

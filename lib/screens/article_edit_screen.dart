@@ -105,8 +105,7 @@ class ArticleEditScreenState extends State<ArticleEditScreen> {
         leading: IconButton(
           icon: Icon(Icons.cancel),
           onPressed: () {
-            Navigator.of(context).pushNamed(ArticleScreenTest.routeName,
-                arguments: "4"); // Change after linking to provider
+            Navigator.pop(context, "1"); // Change to article id
           },
         ),
         title: Text("Edit Article"),
