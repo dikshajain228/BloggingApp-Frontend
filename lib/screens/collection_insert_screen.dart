@@ -122,6 +122,14 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
+          content: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              children: <Widget>[
+                AuthorsInput(authors, setAuthors),
+              ],
+            ),
+          ),
           actions: [
             FlatButton(
               onPressed: () {
