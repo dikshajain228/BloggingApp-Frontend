@@ -16,6 +16,9 @@ class CollectionInsertScreen extends StatefulWidget {
 class CollectionInsertScreenState extends State<CollectionInsertScreen> {
   List<dynamic> authors = [];
 
+  final _collectionName = TextEditingController();
+  final _collectionDescription = TextEditingController();
+
   File uploadedImage;
   String image_url = "https://picsum.photos/200";
 
@@ -57,21 +60,23 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 9,
-                      child: FittedBox(
+                Padding(
+                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                      child: (FittedBox(
                         fit: BoxFit.fill,
-                        //child: Image.network(collection.image_url),
-                      ),
+                        child: Column(
+                             children: <Widget>[
+                              ImageInput(uploadedImage, setImage, image_url),
+                               ],
+                        ),
+                      )
                     ),
-                  ],
-                ),
+                   ),
                 Padding(
                   padding: EdgeInsets.fromLTRB(0.0, 16.0, 16.0, 16.0),
                   child: TextFormField(
                     decoration: InputDecoration(labelText: 'Collection Name'),
+                    controller: _collectionName,
                     //textInputAction: TextInputAction.next,
                   ),
                 ),
@@ -79,6 +84,7 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
                   maxLines: 3,
                   decoration:
                       InputDecoration(labelText: 'Collection Description'),
+                      controller: _collectionDescription,
                 ),
               ],
             ),
@@ -90,6 +96,8 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
 
   void saveChanges() {
     _showSaveDialog();
+    print("Collection Name: "+_collectionName.text);
+    print("Collection Description: "+_collectionDescription.text);
   }
 
   void _submitCollection() {
@@ -112,15 +120,6 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
             style: TextStyle(
               fontSize: 20.0,
               fontWeight: FontWeight.bold,
-            ),
-          ),
-          content: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              children: <Widget>[
-                AuthorsInput(authors, setAuthors),
-                ImageInput(uploadedImage, setImage, image_url),
-              ],
             ),
           ),
           actions: [
