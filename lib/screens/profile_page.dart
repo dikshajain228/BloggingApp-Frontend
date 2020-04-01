@@ -33,6 +33,18 @@ class _ProfilePageState extends State<ProfilePage>
 
   Choice _selectedChoice = choices[0]; // The app's "state".
   void _select(Choice choice) {
+    
+     if(_selectedChoice==choices[0])
+      
+                               {
+                                        Navigator.of(context).pushNamed(
+                                        EditProfile.routeName,
+                                         arguments: user.user_id,
+                                         );
+                               }
+    if(_selectedChoice==choices[1])
+    {//dialog box to change password.
+    }
     // Causes the app to rebuild with the new _selectedChoice.
     setState(() {
       _selectedChoice = choice;
