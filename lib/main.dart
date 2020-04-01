@@ -59,6 +59,7 @@ class MyApp extends StatelessWidget {
           EditCollection.routeName: (context) => EditCollection(),
           CollectionInsertScreen.routeName: (context) =>
               CollectionInsertScreen(),
+          ArticleDeleteScreen.routeName: (context) => ArticleDeleteScreen()
           // CollectionScreen.routeName: (context) => CollectionScreen(),
         },
         onGenerateRoute: (RouteSettings settings) {
