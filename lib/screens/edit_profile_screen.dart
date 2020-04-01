@@ -1,20 +1,34 @@
 import 'dart:io';
+import 'package:bloggingapp/widgets/image_input.dart';
+
 import '../screens/profile_page.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../providers/user.dart';
 import '../providers/users.dart';
 
 class EditProfile extends StatefulWidget {
   static const routeName = '/edit-profile';
+   var profile_id;
+  EditProfile(this.profile_id);
+ 
   @override
-  _EditProfileState createState() => _EditProfileState();
+  _EditProfileState createState() => _EditProfileState(profile_id);
+   
+  
 }
 
 class _EditProfileState extends State<EditProfile> {
+
+  var profile_id;
+  User user;
+ _EditProfileState(this.profile_id);
+
   void initState() {
-    print("Hello I am in editProfile Page");
+    super.initState();
+    print("Edit Profile Page");
+    print(this.profile_id);
+    
   }
   File uploadedImage;
   String image_url = "https://picsum.photos/200";
@@ -36,6 +50,9 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
+      //User user = ModalRoute.of(context).settings.arguments;
+     //print(context);
+
     User user = Provider.of<Users>(context).getUserProfile();
     print(user.about);
     return Scaffold(
@@ -69,15 +86,51 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                   ),
                 ),
-                GestureDetector(
-                  child: Text("Change profile picture", style: TextStyle(color: Colors.blue),),
-                  onTap: () async {
-                    var file = await ImagePicker.pickImage(
-                        source: ImageSource.gallery);
-                    print(file);
-                    
-                  },
-                ),
+                FlatButton(
+              child: Text("Change profile picture."),
+              color: Colors.white,
+              splashColor: Colors.tealAccent,
+              onPressed: () {
+
+                print("thj");
+                       showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              children: <Widget>[
+                ImageInput(uploadedImage, setImage, image_url),
+              ],
+            ),
+          ),
+          actions: [
+            FlatButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Close"),
+              color: Colors.red,
+              splashColor: Colors.redAccent,
+            ),
+            FlatButton(
+              child: Text("Change"),
+              color: Colors.teal,
+              splashColor: Colors.tealAccent,
+              onPressed: () {
+               
+              },
+            ),
+          ],
+        );
+      },
+    );
+     
+              },
+            ),
+               
                 Padding(
                   padding: EdgeInsets.fromLTRB(0.0, 16.0, 16.0, 16.0),
                   child: TextFormField(

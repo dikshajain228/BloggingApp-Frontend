@@ -1,3 +1,4 @@
+import 'package:bloggingapp/screens/article_delete_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
           TabScreen.routeName: (context) => TabScreen(),
           ProfilePage.routeName: (context) => ProfilePage(),
           ArticleScreen.routeName: (context) => ArticleScreen(),
-          EditProfile.routeName: (context) => EditProfile(),
+          //EditProfile.routeName: (context) => EditProfile(),
           BookmarkScreen.routeName: (context) => BookmarkScreen(),
           ExploreScreen.routeName: (context) => ExploreScreen(),
           YourArticles.routeName: (context) => YourArticles(),
@@ -59,14 +60,16 @@ class MyApp extends StatelessWidget {
           EditCollection.routeName: (context) => EditCollection(),
           CollectionInsertScreen.routeName: (context) =>
               CollectionInsertScreen(),
+          ArticleDeleteScreen.routeName: (context) => ArticleDeleteScreen()
           // CollectionScreen.routeName: (context) => CollectionScreen(),
         },
         onGenerateRoute: (RouteSettings settings) {
           var routes = <String, WidgetBuilder>{
             CollectionScreen.routeName: (context) =>
                 CollectionScreen(settings.arguments),
-            ArticleScreenTest.routeName: (context) => ArticleScreenTest(
-                key: UniqueKey(), article_id: settings.arguments),
+            ArticleScreenTest.routeName: (context) =>
+                ArticleScreenTest(article_id: settings.arguments),
+            EditProfile.routeName: (context) => EditProfile(settings.arguments),
           };
           WidgetBuilder builder = routes[settings.name];
           return MaterialPageRoute(builder: (ctx) => builder(ctx));

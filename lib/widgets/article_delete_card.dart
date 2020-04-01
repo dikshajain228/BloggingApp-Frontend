@@ -34,9 +34,8 @@ class ArticleDeleteCard extends StatelessWidget {
               Icons.cancel,
               color: Theme.of(context).primaryColor,
             ),
-            onPressed: () {
-              handleOnPressed();
-            },
+            onPressed:() => 
+            showAlert(context),
           ),
           onTap: () {
             Navigator.of(context).pushNamed(ArticleScreen.routeName,
@@ -47,30 +46,32 @@ class ArticleDeleteCard extends StatelessWidget {
     );
   }
 
-   Future handleOnPressed(){
-    return showDialog(
-      barrierDismissible: false, // user must tap button!
+   showAlert(BuildContext context) {
+    showDialog(
+      context: context,
       builder: (BuildContext context) {
-      return 
-        AlertDialog(
-          title: Text("Delete"),
-          content: Text("Are you sure you want to delete this article?"),
+        return AlertDialog(
+          title: Text('Alert'),
+          content: Text("Are You Sure Want To Delete?"),
           actions: <Widget>[
             FlatButton(
-              child: const Text("No"),
-              onPressed: (){
-
-            }),
+              child: Text("YES"),
+              onPressed: () {
+                //Delete the article
+                Navigator.of(context).pop();
+              },
+            ),
             FlatButton(
-              child: const Text("Yes"),
-              onPressed: (){
-
-            }),
+              child: Text("NO"),
+              onPressed: () {
+                //Stay on the same page
+                Navigator.of(context).pop();
+              },
+            ),
           ],
-          elevation: 24.0,
-          backgroundColor: Colors.white ,
         );
-      } 
+      },
     );
   }
+
 }
