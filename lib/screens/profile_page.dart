@@ -1,16 +1,18 @@
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
 
 import '../screens/edit_profile_screen.dart';
 
 import '../widgets/collection_list.dart';
 import '../widgets/articles_list.dart';
+
 import '../providers/users.dart';
 import '../providers/user.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import '../providers/articles.dart';
 
 class ProfilePage extends StatefulWidget {
-  static const routeName = "/profile-page";
+  static const routeName = "/profile";
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
@@ -22,6 +24,11 @@ List<Choice> choices = <Choice>[
 
 class _ProfilePageState extends State<ProfilePage>
     with TickerProviderStateMixin {
+  bool _loadingProfile = true;
+  bool _loadingArticles = true;
+  bool _loadingCollections = true;
+  User _user;
+
   TabController _tabController;
 
   @override
@@ -29,6 +36,26 @@ class _ProfilePageState extends State<ProfilePage>
     _tabController = new TabController(vsync: this, length: 2);
     super.initState();
     print("I am in profile page");
+  }
+
+  @override
+  void didChangeDependencies() {
+    // Get profile details
+    Provider.of<User>(context).getProfile().then((data) {
+      setState(() {
+        _loadingProfile = false;
+        _user = data;
+      });
+    });
+
+    // Get authored articles
+    Provider.of<Articles>(context).getUserArticles().then((_) {
+      setState(() {
+        _loadingArticles = false;
+      });
+    });
+
+    super.didChangeDependencies();
   }
 
   Choice _selectedChoice = choices[0]; // The app's "state".
@@ -42,7 +69,7 @@ class _ProfilePageState extends State<ProfilePage>
     if (_selectedChoice == choices[1]) {
       //dialog box to change password.
     }
-    // Causes the app to rebuild with the new _selectedChoice.
+
     setState(() {
       _selectedChoice = choice;
     });
@@ -56,104 +83,117 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   Widget build(BuildContext context) {
-    User user = Provider.of<Users>(context).getUserProfile();
-    print(user.about);
-    return Stack(
-      children: <Widget>[
-        Scaffold(
-          appBar: AppBar(
-            title: Text("Profile Page"),
-            actions: <Widget>[
-              PopupMenuButton<Choice>(
-                elevation: 3.2,
-                onCanceled: () {
-                  print('You have not chosen anything');
-                },
-                onSelected: _select,
-                itemBuilder: (BuildContext context) {
-                  return choices.skip(0).map((Choice choice) {
-                    return PopupMenuItem<Choice>(
-                      value: choice,
-                      child: Text(choice.title),
-                    );
-                  }).toList();
-                },
-              ),
-            ],
-          ),
-          body: Stack(children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Profile"),
+          actions: <Widget>[
+            PopupMenuButton<Choice>(
+              elevation: 3.2,
+              onCanceled: () {},
+              onSelected: _select,
+              itemBuilder: (BuildContext context) {
+                return choices.skip(0).map((Choice choice) {
+                  return PopupMenuItem<Choice>(
+                    value: choice,
+                    child: Text(choice.title),
+                  );
+                }).toList();
+              },
+            ),
+          ],
+        ),
+        body: (_loadingProfile == true
+            ? SpinKitChasingDots(
+                color: Colors.teal,
+              )
+            : Column(
                 children: <Widget>[
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(user.profile_image_url),
-                    radius: 60,
-                  ),
-                  new Text(
-                    user.username,
-                    textAlign: TextAlign.center,
-                    style:
-                        TextStyle(fontSize: 23.0, fontWeight: FontWeight.bold),
-                  ),
-                  new Text(user.about,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 18.0)),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 16, 0, 6),
-                    child: Container(
-                      color: Colors.blueGrey[100],
-                      child: Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              flex: 1,
-                              child: Column(
-                                children: <Widget>[
-                                  Text(
-                                    "1011" + " followers",
-                                    style: TextStyle(
-                                      fontSize: 17.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.blue,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              flex: 1,
-                              child: Column(
-                                children: <Widget>[
-                                  Text(
-                                    "1078" + " following",
-                                    style: TextStyle(
-                                      fontSize: 17.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.blue,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                  Row(
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: CircleAvatar(
+                          backgroundImage:
+                              NetworkImage(_user.profile_image_url),
+                          radius: 60,
                         ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.fromLTRB(10, 10, 10, 2),
+                            child: Text(
+                              _user.username,
+                              style: TextStyle(
+                                fontSize: 25.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.fromLTRB(10, 2, 10, 10),
+                            child: Text(
+                              _user.email,
+                              style: TextStyle(
+                                  fontSize: 17.0,
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.grey),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Text(
+                      _user.about,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 18.0),
+                    ),
+                  ),
+                  Container(
+                    color: Colors.teal[100],
+                    child: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 1,
+                            child: Column(
+                              children: <Widget>[
+                                Text(
+                                  _user.followerCount.toString() + " followers",
+                                  style: TextStyle(
+                                    fontSize: 17.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Column(
+                              children: <Widget>[
+                                Text(
+                                  _user.followingCount.toString() +
+                                      " following",
+                                  style: TextStyle(
+                                    fontSize: 17.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  // new SizedBox(
-                  //   width: double.infinity,
-                  //   child: RaisedButton(
-                  //     color: Colors.transparent,
-                  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0), side: BorderSide(color: Colors.black)),
-
-                  //     child: new Text("Edit Profile"),
-                  //     onPressed: (){
-                  //       Navigator.of(context).pushNamed(EditProfile.routeName);
-                  //     },
-                  //   ),
-                  // ),
                   new Container(
                     decoration: new BoxDecoration(
                         color: Theme.of(context).primaryColor),
@@ -166,17 +206,20 @@ class _ProfilePageState extends State<ProfilePage>
                     child: TabBarView(
                         controller: _tabController,
                         children: <Widget>[
-                          ArticlesList(),
-                          CollectionList(),
+                          (_loadingArticles == true
+                              ? SpinKitDoubleBounce(
+                                  color: Colors.teal,
+                                )
+                              : ArticlesList()),
+                          (_loadingCollections == true
+                              ? SpinKitFadingGrid(
+                                  color: Colors.teal,
+                                )
+                              : CollectionList()),
                         ]),
                   )
                 ],
-              ),
-            ),
-          ]),
-        ),
-      ],
-    );
+              )));
   }
 }
 

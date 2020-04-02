@@ -20,6 +20,7 @@ import './screens/collection_insert_screen.dart';
 import './providers/articles.dart';
 import './providers/collections.dart';
 import './providers/users.dart';
+import './providers/user.dart';
 
 void main() => runApp(MyApp());
 
@@ -30,6 +31,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(
           value: Users(),
+        ),
+        ChangeNotifierProvider.value(
+          value: User(),
         ),
         ChangeNotifierProvider.value(
           value: Articles(),
