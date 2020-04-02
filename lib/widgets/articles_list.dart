@@ -9,7 +9,7 @@ class ArticlesList extends StatelessWidget {
     final articles = Provider.of<Articles>(context).articles;
 
     print("Article list");
-    print(articles);
+    // print(articles);
 
     return (articles.length == 0
         ? Center(

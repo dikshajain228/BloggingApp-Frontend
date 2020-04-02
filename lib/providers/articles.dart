@@ -42,11 +42,40 @@ class Articles with ChangeNotifier {
           is_bookmarked: article["is_bookmarked"] == 0 ? false : true,
           date_created: DateTime.parse(article["date_created"]),
         ));
-        print("Article:");
-        print(article);
       }
       _articles = [...fetchedArticles];
-      notifyListeners();
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  Future<void> getUserArticles() async {
+    List<Article> fetchedArticles = [];
+
+    final token = await storage.read(key: "token");
+    print("Obtained token ");
+    final userId = await storage.read(key: "userId");
+    print("Obtained userId ");
+
+    String url = baseUrl + "user/" + userId.toString() + "/articles";
+    try {
+      final response = await http.get(
+        url,
+        headers: {HttpHeaders.authorizationHeader: token},
+      );
+      final responseJson = json.decode(response.body);
+      for (final article in responseJson) {
+        fetchedArticles.add(Article(
+          article_id: article["article_id"],
+          user_id: article["user_id"],
+          collection_id: article["collection_id"],
+          title: article["title"],
+          image_path: article["image_path"],
+          is_bookmarked: article["is_bookmarked"] == 0 ? false : true,
+          date_created: DateTime.parse(article["date_created"]),
+        ));
+      }
+      _articles = [...fetchedArticles];
     } catch (error) {
       throw error;
     }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
@@ -29,27 +31,27 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _writeToken() async {
-    await storage.write(
-        key: "token",
-        value:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo2LCJlbWFpbCI6ImFzaGxleUBnbWFpbC5jb20iLCJpYXQiOjE1ODU3OTk2NTgsImV4cCI6MTU4NzA5NTY1OH0.oMwuiyNYJmSP4UZhmeVRywWSo0CRX4xdkFLWgo-MSLI");
+    final token =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo2LCJlbWFpbCI6ImFzaGxleUBnbWFpbC5jb20iLCJpYXQiOjE1ODU3OTk2NTgsImV4cCI6MTU4NzA5NTY1OH0.oMwuiyNYJmSP4UZhmeVRywWSo0CRX4xdkFLWgo-MSLI";
+    await storage.write(key: "token", value: token);
+    final tokenPayload = token.split(".");
+    final payloadMap = jsonDecode(
+        utf8.decode(base64Url.decode(base64Url.normalize(tokenPayload[1]))));
+    // print(payloadMap);
+    await storage.write(key: "userId", value: payloadMap["user_id"].toString());
+    await storage.write(key: "email", value: payloadMap["email"]);
   }
 
   @override
   void didChangeDependencies() {
     _writeToken();
     // _readToken();
-    if (_isInit) {
+
+    Provider.of<Articles>(context).getFeedArticles().then((_) {
       setState(() {
-        _loading = true;
+        _loading = false;
       });
-      Provider.of<Articles>(context).getFeedArticles().then((_) {
-        setState(() {
-          _loading = false;
-        });
-      });
-    }
-    _isInit = false;
+    });
 
     super.didChangeDependencies();
   }
