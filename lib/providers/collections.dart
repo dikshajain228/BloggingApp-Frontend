@@ -61,7 +61,6 @@ class Collections with ChangeNotifier {
         url,
         headers: {HttpHeaders.authorizationHeader: token},
       );
-      print(response.body);
       final responseJson = json.decode(response.body);
       final data = responseJson[0];
       Collection collection = Collection(
@@ -78,6 +77,32 @@ class Collections with ChangeNotifier {
       print("Authors");
       print(collection.authors);
       return collection;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // Add new collection
+  Future<void> addCollection(Map<String, dynamic> data, File image) async {
+    print(data);
+    final token = await storage.read(key: "token");
+    final userId = await storage.read(key: "userId");
+    String collectionId = userId.toString() + DateTime.now().toString();
+    String url = baseUrl + "collections";
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.headers["Authorization"] = token;
+    if (image != null) {
+      String filename = image.path;
+      request.files.add(await http.MultipartFile.fromPath('image', filename));
+    }
+    request.fields["collection_id"] = collectionId;
+    request.fields["user_id"] = userId;
+    request.fields["collection_name"] = data["collectionName"];
+    request.fields["description"] = data["description"];
+    request.fields["image_url"] = "";
+    try {
+      final response = await request.send();
+      print(response);
     } catch (error) {
       throw error;
     }
@@ -223,10 +248,4 @@ class Collections with ChangeNotifier {
     _collections = fetchedData;
     notifyListeners();
   }
-
-  Future<void> addCollection(Collection newCollection) async {}
-
-  Future<void> updateCollection(String id, Collection newCollection) async {}
-
-  Future<void> deleteCollection(String id) async {}
 }
