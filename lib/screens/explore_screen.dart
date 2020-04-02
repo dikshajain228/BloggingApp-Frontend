@@ -21,8 +21,10 @@ enum SearchStatus { NoQuery, Searching, Searched }
 
 class _ExploreScreenState extends State<ExploreScreen>
     with SingleTickerProviderStateMixin {
-  var _isInit = true;
-  var _isLoading = false;
+  bool _queryEntered = false;
+  bool _loadingArticles = true;
+  bool _loadingCollections = true;
+  bool _loadingUsers = true;
   TabController tabController;
   TextEditingController searchController;
 
@@ -93,6 +95,7 @@ class _ExploreScreenState extends State<ExploreScreen>
               // send a query
               setState(() {
                 searchText = searchController.text;
+                _queryEntered = true;
                 searchStatus = SearchStatus.Searching;
                 search();
               });
@@ -109,11 +112,12 @@ class _ExploreScreenState extends State<ExploreScreen>
                 searchController.text = "";
                 setState(() {
                   searchText = "";
+                  _queryEntered = false;
                 });
               },
             )
           ],
-          bottom: (searchStatus != SearchStatus.Searched
+          bottom: (_queryEntered == false
               ? null
               : TabBar(controller: tabController, tabs: [
                   Tab(text: "Collections"),
@@ -121,7 +125,7 @@ class _ExploreScreenState extends State<ExploreScreen>
                   Tab(text: "People"),
                 ])),
         ),
-        body: (searchStatus == SearchStatus.NoQuery
+        body: (_queryEntered == false
             ? Center(
                 child: Container(
                   width: 300,
@@ -135,18 +139,26 @@ class _ExploreScreenState extends State<ExploreScreen>
                   ),
                 ),
               )
-            : (searchStatus == SearchStatus.Searching
-                ? SpinKitWanderingCubes(
-                    color: Colors.teal,
-                  )
-                : TabBarView(
-                    controller: tabController,
-                    children: <Widget>[
-                      CollectionList(),
-                      ArticlesList(),
-                      UserList(),
-                    ],
-                  ))),
+            : (TabBarView(
+                controller: tabController,
+                children: <Widget>[
+                  (_loadingCollections == true
+                      ? SpinKitWanderingCubes(
+                          color: Colors.teal,
+                        )
+                      : CollectionList()),
+                  (_loadingArticles == true
+                      ? SpinKitWanderingCubes(
+                          color: Colors.teal,
+                        )
+                      : ArticlesList()),
+                  (_loadingUsers == true
+                      ? SpinKitWanderingCubes(
+                          color: Colors.teal,
+                        )
+                      : UserList()),
+                ],
+              ))),
         drawer: MainDrawer());
   }
 }
