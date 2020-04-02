@@ -1,11 +1,19 @@
-import 'package:bloggingapp/screens/collection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
+import '../screens/collection_screen.dart';
+
 import '../providers/collection.dart';
 
 class CollectionPreviewCard extends StatelessWidget {
   Widget build(BuildContext context) {
-    final collection = Provider.of<Collection>(context);
+    final _collection = Provider.of<Collection>(context);
+
+    print("COllection card");
+    print(_collection.collection_id);
+    print(_collection.collection_name);
+    print(_collection.description);
 
     return new Card(
       elevation: 8.0,
@@ -16,15 +24,27 @@ class CollectionPreviewCard extends StatelessWidget {
           contentPadding:
               EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
           leading: ClipOval(
-            child: Image.network(
-              collection.image_url,
+            child: CachedNetworkImage(
+              imageUrl: _collection.image_url,
+              placeholder: (context, url) => Image.network(
+                "http://via.placeholder.com/640x360",
+                fit: BoxFit.cover,
+                height: 50.0,
+                width: 50.0,
+              ),
+              errorWidget: (context, url, error) => Image.network(
+                "http://via.placeholder.com/640x360",
+                fit: BoxFit.cover,
+                height: 50.0,
+                width: 50.0,
+              ),
               fit: BoxFit.cover,
               height: 50.0,
               width: 50.0,
             ),
           ),
           title: Text(
-            collection.collection_name,
+            _collection.collection_name,
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
@@ -32,11 +52,11 @@ class CollectionPreviewCard extends StatelessWidget {
             ),
           ),
           subtitle: Text(
-            collection.description,
+            _collection.description,
             overflow: TextOverflow.ellipsis,
           ),
           // Is owner
-          trailing: collection.is_owner
+          trailing: _collection.is_owner
               ? FlatButton(
                   color: Colors.purple,
                   disabledColor: Colors.deepOrange,
@@ -47,7 +67,7 @@ class CollectionPreviewCard extends StatelessWidget {
                   child: Text("Owner"),
                 )
               // Is author
-              : collection.is_author
+              : _collection.is_author
                   ? FlatButton(
                       color: Colors.purple,
                       disabledColor: Colors.purple,
@@ -57,7 +77,7 @@ class CollectionPreviewCard extends StatelessWidget {
                       onPressed: null,
                       child: Text("Author"),
                     )
-                  : collection.is_following
+                  : _collection.is_following
                       ?
                       // is following
                       FlatButton(
@@ -65,7 +85,7 @@ class CollectionPreviewCard extends StatelessWidget {
                           textColor: Colors.white,
                           padding: EdgeInsets.all(10.0),
                           onPressed: () {
-                            collection.followUnfollow();
+                            _collection.followUnfollow();
                           },
                           child: Text("Following"),
                         )
@@ -78,14 +98,14 @@ class CollectionPreviewCard extends StatelessWidget {
                           textColor: Colors.blue,
                           padding: EdgeInsets.all(10.0),
                           onPressed: () {
-                            collection.followUnfollow();
+                            _collection.followUnfollow();
                           },
                           child: Text("Follow"),
                         ),
           onTap: () {
             Navigator.of(context).pushNamed(
               CollectionScreen.routeName,
-              arguments: collection.collection_id,
+              arguments: _collection.collection_id,
             );
           },
         ),

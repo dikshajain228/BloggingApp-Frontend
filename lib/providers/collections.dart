@@ -1,22 +1,65 @@
-import 'package:flutter/widgets.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import './collection.dart';
 
 class Collections with ChangeNotifier {
-  List<Collection> _collections = [
-    Collection(
-      collection_id: "1",
-      collection_name: "storytellers",
-      user_id: 1,
-      image_url:
-      "https://images.pexels.com/photos/531602/pexels-photo-531602.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-      description: "Stories through the eyes of a teenager",
-      is_owner: true,
-      is_author: false,
-      is_following: false,
-    )
-  ];
+  static const baseUrl = "http://10.0.2.2:3000/api/v1/";
+  final storage = FlutterSecureStorage();
+
+  List<Collection> _collections = [];
+
+  // List<Collection> _collections = [
+  //   Collection(
+  //     collection_id: "1",
+  //     collection_name: "storytellers",
+  //     user_id: 1,
+  //     image_url:
+  //     "https://images.pexels.com/photos/531602/pexels-photo-531602.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+  //     description: "Stories through the eyes of a teenager",
+  //     is_owner: true,
+  //     is_author: false,
+  //     is_following: false,
+  //   )
+  // ];
+
+  // Get User owned or authored collections
+  Future<void> getUserCollections() async {
+    List<Collection> fetchedCollections = [];
+    final token = await storage.read(key: "token");
+    print("Obtained token user collection");
+    final userId = await storage.read(key: "userId");
+
+    String url = baseUrl + "user/" + userId.toString() + "/collections";
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {HttpHeaders.authorizationHeader: token},
+      );
+      final responseJson = json.decode(response.body);
+      for (final collection in responseJson) {
+        fetchedCollections.add(Collection(
+          collection_id: collection["collection_id"],
+          user_id: collection["user_id"],
+          collection_name: collection["collection_name"],
+          image_url: collection["image_url"],
+          description: collection["description"],
+          is_owner: collection["is_owner"] == 0 ? false : true,
+          is_author: collection["is_author"] == 0 ? false : true,
+          is_following: false,
+        ));
+      }
+      _collections = [...fetchedCollections];
+    } catch (error) {
+      throw error;
+    }
+  }
 
   List<Collection> get collections {
     return [..._collections];

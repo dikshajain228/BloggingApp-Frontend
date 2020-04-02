@@ -10,6 +10,7 @@ import '../widgets/articles_list.dart';
 import '../providers/users.dart';
 import '../providers/user.dart';
 import '../providers/articles.dart';
+import '../providers/collections.dart';
 
 class ProfilePage extends StatefulWidget {
   static const routeName = "/profile";
@@ -53,6 +54,14 @@ class _ProfilePageState extends State<ProfilePage>
       setState(() {
         _loadingArticles = false;
       });
+    });
+
+    // Get owned / authored collections
+    Provider.of<Collections>(context).getUserCollections().then((_) {
+      setState(() {
+        _loadingCollections = false;
+      });
+      print("Got collections");
     });
 
     super.didChangeDependencies();
