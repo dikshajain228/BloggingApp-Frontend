@@ -1,4 +1,3 @@
-import 'package:bloggingapp/screens/article_test_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:quill_delta/quill_delta.dart';
 import 'package:zefyr/zefyr.dart';
@@ -105,7 +104,7 @@ class ArticleEditScreenState extends State<ArticleEditScreen> {
         leading: IconButton(
           icon: Icon(Icons.cancel),
           onPressed: () {
-            Navigator.pop(context, "1"); // Change to article id
+            Navigator.pop(context, "4"); // Change to article id
           },
         ),
         title: Text("Edit Article"),

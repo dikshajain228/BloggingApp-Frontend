@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../screens/article_test_screen.dart';
+import '../screens/article_screen.dart';
 
 import '../providers/article.dart';
 
@@ -60,7 +60,7 @@ class ArticlePreviewCard extends StatelessWidget {
             },
           ),
           onTap: () {
-            Navigator.of(context).pushNamed(ArticleScreenTest.routeName,
+            Navigator.of(context).pushNamed(ArticleScreen.routeName,
                 arguments: article.article_id);
           },
         ),

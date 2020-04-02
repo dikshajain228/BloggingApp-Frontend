@@ -1,162 +1,173 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:quill_delta/quill_delta.dart';
+import 'package:zefyr/zefyr.dart';
 
-var now = new DateTime.now();
-DateTime date;
+import './article_edit_screen.dart';
 
-class ArticleScreen extends StatelessWidget {
+import '../providers/articles.dart';
+import '../providers/article.dart';
+
+class ArticleScreen extends StatefulWidget {
   static const routeName = "/article";
+
+  String article_id;
+  ArticleScreen({Key key, @required this.article_id}) : super(key: key);
+
   @override
-  Widget build(BuildContext context) {
-    Widget titleSection = Container(
-      padding: const EdgeInsets.all(32),
-      child: Row(
-        children: [
-          Expanded(
-            /*1*/
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                /*2*/
-                Container(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: Text(
-                    'Title of the article',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Icon(
-            Icons.thumb_up,
-            color: Colors.red[500],
-          ),
-          Text(' 41'),
-        ],
-      ),
-    );
+  _ArticleScreenState createState() => _ArticleScreenState(article_id);
+}
 
-    //Color color = Theme.of(context).primaryColor;
+class _ArticleScreenState extends State<ArticleScreen>
+    with SingleTickerProviderStateMixin {
+  String article_id;
+  Article article;
+  bool is_author = true; // link to provider
+  String content;
+  NotusDocument document;
 
-    Widget articleTextSection = Container(
-      padding: const EdgeInsets.all(32),
-      child: Text(
-        'Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese '
-        'Alps. Situated 1,578 meters above sea level, it is one of the '
-        'larger Alpine Lakes. A gondola ride from Kandersteg, followed by a '
-        'half-hour walk through pastures and pine forest, leads you to the '
-        'lake, which warms to 20 degrees Celsius in the summer. Activities '
-        'enjoyed here include rowing, and riding the summer toboggan run.',
-        softWrap: true,
-      ),
-    );
+  _ArticleScreenState(this.article_id);
 
-    Widget buttonSection = Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          //_buildButtonColumn(FlatButton (color, Icons.edit, 'EDIT',)),
-          FlatButton(
-            child: Text("EDIT"),
-            onPressed: () {
-              //sholud take to edit page
-              Navigator.of(context).pop();
-            },
-          ),
+  @override
+  void initState() {
+    super.initState();
+    print(this.article_id);
 
-          FlatButton(
-            child: Text("DELETE"),
-            onPressed: () {
-              //Navigator.of(context).pop();
-              onPressed:
-              () => showAlert(context);
-            },
-          ),
-        ],
-      ),
-    );
+    content = jsonEncode([
+      {"insert": "Enter content\nOMG "},
+      {
+        "insert": "please work",
+        "attributes": {"i": true}
+      },
+      {"insert": "\n"},
+      {
+        "insert": "I'm tired",
+        "attributes": {"b": true}
+      },
+      {"insert": "\nI'll cry now"},
+      {
+        "insert": "\n",
+        "attributes": {"heading": 1}
+      }
+    ]);
 
-    Widget dateSection = Container(
-      padding: const EdgeInsets.all(32),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Text("Written On"),
-          ),
-          Container(
-            child: Text(new DateFormat("dd-MM-yyyy").format(now)),
-          ),
-        ],
-      ),
-    );
-
-    Widget commentSection = Container(
-      padding: const EdgeInsets.all(32),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            child: Text(
-              '  View Comments',
-              style: TextStyle(
-                  //color: Colors.grey[500],
-                  ),
-            ),
-          ),
-        ],
-      ),
-    );
-
-    return MaterialApp(
-      title: 'Article',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Article'),
-        ),
-        body: ListView(
-          children: [
-            titleSection,
-            articleTextSection,
-            buttonSection,
-            dateSection,
-            commentSection,
-          ],
-        ),
-      ),
-    );
+    document = getContent();
   }
 
-  //Has to be implemented in class AlertWithButtonsWidget extends State {}
-  showAlert(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Alert Dialog.'),
-          content: Text("Are You Sure Want To Delete?"),
-          actions: <Widget>[
-            FlatButton(
-              child: Text("YES"),
-              onPressed: () {
-                //Delete the article
-                Navigator.of(context).pop();
-              },
+  @override
+  void didChangeDependencies() {
+    article = Provider.of<Articles>(context).findById(article_id);
+    Provider.of<Articles>(context).getCollectionArticles(article_id);
+    super.didChangeDependencies();
+    print(article.title);
+    getContent();
+  }
+
+  NotusDocument getContent() {
+    dynamic documentData = jsonDecode(content);
+    return NotusDocument.fromJson(documentData);
+
+    // final Delta delta = Delta()..insert("Zefyr Quick Start\n");
+    // return NotusDocument.fromDelta(delta);
+    // print(NotusDocument.fromJson(data));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Article"),
+        ),
+        body: Column(
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.only(
+                bottom: 10,
+                top: 10,
+              ),
+              child: Center(
+                child: Text(
+                  'Title of the article',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 35.0,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ),
-            FlatButton(
-              child: Text("NO"),
-              onPressed: () {
-                //Stay on the same page
-                Navigator.of(context).pop();
-              },
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 10,
+                right: 10,
+                bottom: 5,
+              ),
+              child: Container(
+                height: 200,
+                width: double.infinity,
+                child: Image.network(
+                  article.image_path,
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: ZefyrView(
+                document: document,
+                // imageDelegate: CustomImageDelegate(),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Text("Published on  "),
+                  Text(DateFormat("dd-MM-yyyy").format(article.date_created)),
+                ],
+              ),
             ),
           ],
-        );
-      },
-    );
+        ),
+        floatingActionButton: this.is_author ? plusFloatingButton() : null);
+  }
+
+  // Floating button for authors
+  Widget plusFloatingButton() {
+    return (SpeedDial(
+      animatedIcon: AnimatedIcons.menu_close,
+      animatedIconTheme: IconThemeData(),
+      curve: Curves.bounceIn,
+      overlayColor: Colors.black,
+      overlayOpacity: 0.5,
+      onOpen: () => {},
+      onClose: () => {},
+      tooltip: 'Options',
+      backgroundColor: Colors.teal,
+      foregroundColor: Colors.white,
+      elevation: 10.0,
+      children: [
+        SpeedDialChild(
+          child: Icon(Icons.delete_sweep),
+          backgroundColor: Colors.tealAccent,
+          label: 'Delete Article',
+          labelStyle: TextStyle(fontSize: 18.0),
+          onTap: () => {},
+        ),
+        SpeedDialChild(
+          child: Icon(Icons.edit),
+          backgroundColor: Colors.tealAccent,
+          label: 'Edit Article',
+          labelStyle: TextStyle(fontSize: 18.0),
+          onTap: () =>
+              {Navigator.of(context).pushNamed(ArticleEditScreen.routeName)},
+        ),
+      ],
+    ));
   }
 }

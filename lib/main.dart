@@ -15,7 +15,6 @@ import './screens/article_insert_screen.dart';
 import './screens/article_edit_screen.dart';
 import './screens/collection_edit_screen.dart';
 import './screens/collection_insert_screen.dart';
-import './screens/article_test_screen.dart';
 
 // Providers
 import './providers/articles.dart';
@@ -50,7 +49,6 @@ class MyApp extends StatelessWidget {
         routes: {
           TabScreen.routeName: (context) => TabScreen(),
           ProfilePage.routeName: (context) => ProfilePage(),
-          ArticleScreen.routeName: (context) => ArticleScreen(),
           //EditProfile.routeName: (context) => EditProfile(),
           BookmarkScreen.routeName: (context) => BookmarkScreen(),
           ExploreScreen.routeName: (context) => ExploreScreen(),
@@ -67,10 +65,9 @@ class MyApp extends StatelessWidget {
           var routes = <String, WidgetBuilder>{
             CollectionScreen.routeName: (context) =>
                 CollectionScreen(settings.arguments),
-            ArticleScreenTest.routeName: (context) =>
-                ArticleScreenTest(article_id: settings.arguments),
-            EditProfile.routeName: (context) => 
-                EditProfile(settings.arguments),
+            ArticleScreen.routeName: (context) =>
+                ArticleScreen(article_id: settings.arguments),
+            EditProfile.routeName: (context) => EditProfile(settings.arguments),
             EditCollection.routeName: (context) =>
                 EditCollection(settings.arguments),
           };
