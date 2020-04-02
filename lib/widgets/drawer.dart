@@ -3,7 +3,6 @@ import 'package:bloggingapp/screens/collection_insert_screen.dart';
 import '../screens/bookmarks_screen.dart';
 import '../screens/explore_screen.dart';
 import '../screens/home_screen.dart';
-import '../screens/your_articles_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
