@@ -1,65 +1,67 @@
-
-import 'package:bloggingapp/screens/article_insert_screen.dart';
-import 'package:bloggingapp/widgets/authors_input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:bloggingapp/screens/collection_edit_screen.dart';
-import 'article_delete_screen.dart';
+
+import '../screens/collection_edit_screen.dart';
+import '../screens/article_delete_screen.dart';
+import '../screens/article_insert_screen.dart';
 
 // Widgets
 import '../widgets/collection_details_card.dart';
 import '../widgets/articles_list.dart';
+import '../widgets/authors_input.dart';
 
 // Providers
-import '../providers/articles.dart';
 import '../providers/collections.dart';
 import '../providers/collection.dart';
+import '../providers/articles.dart';
 
 class CollectionScreen extends StatefulWidget {
   static const routeName = "/collection";
-
-  var collection_id;
-
-  CollectionScreen(this.collection_id);
-
+  String collectionId;
+  CollectionScreen(this.collectionId);
   @override
-  _CollectionScreenState createState() => _CollectionScreenState(collection_id);
+  _CollectionScreenState createState() => _CollectionScreenState();
 }
 
 class _CollectionScreenState extends State<CollectionScreen>
     with SingleTickerProviderStateMixin {
-  var collection_id;
-  Collection collection;
+  Collection _collection;
+  bool _loadingCollection = true;
+  bool _loadingArticles = true;
   List<dynamic> authors = [];
   //should be deleted
   List<bool> inputs = new List<bool>();
-  //to be removed
-//  String dropdownValue = 'One';
-//   List <String> spinnerItems = [
-//     'One', 
-//     'Two', 
-//     'Three', 
-//     'Four', 
-//     'Five'
-//     ] ;
-
-
-  _CollectionScreenState(this.collection_id);
 
   @override
   void initState() {
     super.initState();
     print("Collection screen");
-    print(this.collection_id);
+    print(widget.collectionId);
   }
 
   @override
   void didChangeDependencies() {
-    collection = Provider.of<Collections>(context).findById(collection_id);
-    Provider.of<Articles>(context).getCollectionArticles(collection_id);
+    // Get collection details
+    Provider.of<Collections>(context)
+        .fetchCollectionById(widget.collectionId)
+        .then((data) {
+      setState(() {
+        _loadingCollection = false;
+        _collection = data;
+      });
+    });
+
+    // Get articles of this collection
+    Provider.of<Articles>(context)
+        .getCollectionArticles(widget.collectionId)
+        .then((_) {
+      setState(() {
+        _loadingArticles = false;
+      });
+    });
     super.didChangeDependencies();
-    print(collection.collection_name);
   }
 
   @override
@@ -68,41 +70,53 @@ class _CollectionScreenState extends State<CollectionScreen>
       appBar: AppBar(
         title: Text("Collection Screen"),
       ),
-      body: Column(
-        children: [
-          ChangeNotifierProvider.value(
-            value: collection,
-            child: CollectionDetailsCard(),
-          ),
-          Flexible(child: ArticlesList()),
-        ],
-      ),
-      floatingActionButton: this.collection.is_owner
-          ? plusFloatingButton()
-          : this.collection.is_author
-              ? FloatingActionButton(
-                  backgroundColor: Theme.of(context).primaryColor,
-                  foregroundColor: Colors.white,
-                  onPressed: () {},
-                  child: Icon(Icons.add),
-                  tooltip: "Add Articles",
-                )
-              : null,
+      body: (_loadingCollection == true
+          ? SpinKitChasingDots(
+              color: Colors.teal,
+            )
+          : Column(
+              children: [
+                ChangeNotifierProvider.value(
+                  value: _collection,
+                  child: CollectionDetailsCard(),
+                ),
+                (_loadingArticles == true
+                    ? SpinKitWanderingCubes(
+                        color: Colors.teal,
+                      )
+                    : Flexible(
+                        child: ArticlesList(),
+                      )),
+              ],
+            )),
+      floatingActionButton: (_loadingCollection == true
+          ? null
+          : this._collection.is_owner
+              ? plusFloatingButton()
+              : this._collection.is_author
+                  ? FloatingActionButton(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      foregroundColor: Colors.white,
+                      onPressed: () {},
+                      child: Icon(Icons.add),
+                      tooltip: "Add Articles",
+                    )
+                  : null),
     );
   }
 
-  void cancelChanges(){
+  void cancelChanges() {
     Navigator.of(context).pop();
     print("cancel");
   }
 
-void saveChanges(){
+  void saveChanges() {
     //Call function to delete
     Navigator.of(context).pop();
     print("save");
   }
 
-void ItemChange(bool val,int index){
+  void ItemChange(bool val, int index) {
     setState(() {
       inputs[index] = val;
     });
@@ -128,20 +142,19 @@ void ItemChange(bool val,int index){
           backgroundColor: Colors.tealAccent,
           label: 'Delete Collection',
           labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () => 
-            showAlert(context),
+          onTap: () => showAlert(context),
         ),
         SpeedDialChild(
           child: Icon(Icons.edit),
           backgroundColor: Colors.tealAccent,
           label: 'Edit Collection',
           labelStyle: TextStyle(fontSize: 18.0),
-          onTap: (){
+          onTap: () {
             {
               Navigator.of(context).pushNamed(
-              EditCollection.routeName,
-              arguments: collection.collection_id,
-            );
+                EditCollection.routeName,
+                arguments: _collection.collection_id,
+              );
             }
           },
         ),
@@ -150,37 +163,35 @@ void ItemChange(bool val,int index){
           backgroundColor: Colors.tealAccent,
           label: 'Delete Article',
           labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () => 
-            {Navigator.of(context).pushNamed(ArticleDeleteScreen.routeName)},
+          onTap: () =>
+              {Navigator.of(context).pushNamed(ArticleDeleteScreen.routeName)},
         ),
         SpeedDialChild(
           child: Icon(Icons.add),
           backgroundColor: Colors.tealAccent,
           label: 'Add Article',
           labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () => {Navigator.of(context).pushNamed(ArticleInsertScreen.routeName)},
+          onTap: () =>
+              {Navigator.of(context).pushNamed(ArticleInsertScreen.routeName)},
         ),
         SpeedDialChild(
             child: Icon(Icons.person_add),
             backgroundColor: Colors.tealAccent,
             label: 'Add Author',
             labelStyle: TextStyle(fontSize: 18.0),
-            onTap: _showAddAuthorDialog
-        ),
+            onTap: _showAddAuthorDialog),
         SpeedDialChild(
             child: Icon(Icons.delete_forever),
             backgroundColor: Colors.tealAccent,
             label: 'Delete Author',
             labelStyle: TextStyle(fontSize: 18.0),
-            onTap: _showDeleteAuthorDialog
-        ),
+            onTap: _showDeleteAuthorDialog),
         SpeedDialChild(
             child: Icon(Icons.person),
             backgroundColor: Colors.tealAccent,
             label: 'View Author',
             labelStyle: TextStyle(fontSize: 18.0),
-            onTap: _showViewAuthorDialog
-        ),
+            onTap: _showViewAuthorDialog),
       ],
     ));
   }
@@ -196,7 +207,7 @@ void ItemChange(bool val,int index){
             FlatButton(
               child: Text("YES"),
               onPressed: () {
-                //Delete the collection
+                //Delete the _collection
                 Navigator.of(context).pop();
               },
             ),
@@ -213,7 +224,7 @@ void ItemChange(bool val,int index){
     );
   }
 
-void setAuthors(List<dynamic> authorsData) {
+  void setAuthors(List<dynamic> authorsData) {
     setState(() {
       authors = [...authorsData];
     });
@@ -265,116 +276,113 @@ void setAuthors(List<dynamic> authorsData) {
     );
   }
 
-  _getAuthorsofCollection(){
+  _getAuthorsofCollection() {
     // get authors from backend
   }
-  
+
   _showViewAuthorDialog() {
     //data = _getAuthorsofCollection
     final data = List<List<int>>.generate(
-      5, (i) => List<int>.generate(2, (j) => i * 5 + j));
-      print(data);
+        5, (i) => List<int>.generate(2, (j) => i * 5 + j));
+    print(data);
     showDialog(
-      barrierDismissible: true,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            "View Authors",
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
+        barrierDismissible: true,
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              "View Authors",
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          content: SingleChildScrollView(
-          child: 
-            Table(
-               columnWidths: {
-               0: FixedColumnWidth(50.0),
-               1: FixedColumnWidth(250.0),
-               },
-              border: TableBorder.all(width: 1.0),
-              children: data.map((item) {
-                return TableRow(
-                children: item.map((row) {
-                  return Container(
-                    color : Colors.white24,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        row.toString(),
-                        style: TextStyle(fontSize: 16.0),
+            content: SingleChildScrollView(
+              child: Table(
+                columnWidths: {
+                  0: FixedColumnWidth(50.0),
+                  1: FixedColumnWidth(250.0),
+                },
+                border: TableBorder.all(width: 1.0),
+                children: data.map((item) {
+                  return TableRow(
+                      children: item.map((row) {
+                    return Container(
+                      color: Colors.white24,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          row.toString(),
+                          style: TextStyle(fontSize: 16.0),
+                        ),
                       ),
-                    ),
-                  );
-                }).toList()
-              );
-          }).toList(),
-        ),
-      ),
-      actions: [
-        FlatButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-            child: Text("Ok"),
-            color: Colors.red,
-            splashColor: Colors.redAccent,
-        ),
-      ],
-    );
-    }
-  );
-  }
-   _showDeleteAuthorDialog() {
-     showDialog(
-      barrierDismissible: true,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            "Delete Authors",
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
+                    );
+                  }).toList());
+                }).toList(),
+              ),
             ),
-          ),
-           content: SingleChildScrollView(
-          // child: Column(children: <Widget>[
- 
-          // DropdownButton<String>(
-          //   value: dropdownValue,
-          //   icon: Icon(Icons.arrow_drop_down),
-          //   iconSize: 24,
-          //   elevation: 16,
-          //   style: TextStyle(color: Colors.red, fontSize: 18),
-          //   underline: Container(
-          //     height: 2,
-          //     color: Colors.deepPurpleAccent,
-          //   ),
-          //   onChanged: (String data) {
-          //     setState(() {
-          //       dropdownValue = data;
-          //     });
-          //   },
-          //   items: spinnerItems.map<DropdownMenuItem<String>>((String value) {
-          //     return DropdownMenuItem<String>(
-          //       value: value,
-          //       child: Text(value),
-          //     );
-          //   }).toList(),
-          // ),
-          
-          // Text('Selected Item = ' + '$dropdownValue', 
-          // style: TextStyle
-          //     (fontSize: 22, 
-          //     color: Colors.black)),
-          // ]
-          ),
-        );
-      }
-    );
-}   
+            actions: [
+              FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text("Ok"),
+                color: Colors.red,
+                splashColor: Colors.redAccent,
+              ),
+            ],
+          );
+        });
+  }
+
+  _showDeleteAuthorDialog() {
+    showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              "Delete Authors",
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            content: SingleChildScrollView(
+                // child: Column(children: <Widget>[
+
+                // DropdownButton<String>(
+                //   value: dropdownValue,
+                //   icon: Icon(Icons.arrow_drop_down),
+                //   iconSize: 24,
+                //   elevation: 16,
+                //   style: TextStyle(color: Colors.red, fontSize: 18),
+                //   underline: Container(
+                //     height: 2,
+                //     color: Colors.deepPurpleAccent,
+                //   ),
+                //   onChanged: (String data) {
+                //     setState(() {
+                //       dropdownValue = data;
+                //     });
+                //   },
+                //   items: spinnerItems.map<DropdownMenuItem<String>>((String value) {
+                //     return DropdownMenuItem<String>(
+                //       value: value,
+                //       child: Text(value),
+                //     );
+                //   }).toList(),
+                // ),
+
+                // Text('Selected Item = ' + '$dropdownValue',
+                // style: TextStyle
+                //     (fontSize: 22,
+                //     color: Colors.black)),
+                // ]
+                ),
+          );
+        });
+  }
 
 // ListView makeCheckList(){
 //   return ListView.builder(

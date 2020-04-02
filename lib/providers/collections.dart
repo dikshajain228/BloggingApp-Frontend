@@ -14,19 +14,9 @@ class Collections with ChangeNotifier {
 
   List<Collection> _collections = [];
 
-  // List<Collection> _collections = [
-  //   Collection(
-  //     collection_id: "1",
-  //     collection_name: "storytellers",
-  //     user_id: 1,
-  //     image_url:
-  //     "https://images.pexels.com/photos/531602/pexels-photo-531602.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-  //     description: "Stories through the eyes of a teenager",
-  //     is_owner: true,
-  //     is_author: false,
-  //     is_following: false,
-  //   )
-  // ];
+  List<Collection> get collections {
+    return [..._collections];
+  }
 
   // Get User owned or authored collections
   Future<void> getUserCollections() async {
@@ -61,8 +51,36 @@ class Collections with ChangeNotifier {
     }
   }
 
-  List<Collection> get collections {
-    return [..._collections];
+// Get collection by ID
+// Change name to get
+  Future<Collection> fetchCollectionById(String collectionId) async {
+    final token = await storage.read(key: "token");
+    String url = baseUrl + "collections/" + collectionId;
+    try {
+      final response = await http.get(
+        url,
+        headers: {HttpHeaders.authorizationHeader: token},
+      );
+      print(response.body);
+      final responseJson = json.decode(response.body);
+      final data = responseJson[0];
+      Collection collection = Collection(
+        collection_id: data["collection_id"],
+        collection_name: data["collection_name"],
+        user_id: data["user_id"],
+        image_url: data["image_url"],
+        description: data["description"],
+        is_owner: data["is_owner"] == 0 ? false : true,
+        is_author: data["is_author"] == 0 ? false : true,
+        is_following: data["is_following"] == 0 ? false : true,
+        authors: data["authors"],
+      );
+      print("Authors");
+      print(collection.authors);
+      return collection;
+    } catch (error) {
+      throw error;
+    }
   }
 
   Collection findById(String collection_id) {

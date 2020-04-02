@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../providers/collection.dart';
 
 class CollectionDetailsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final collection = Provider.of<Collection>(context);
+    final _collection = Provider.of<Collection>(context);
     return (Column(
       children: [
         Stack(
@@ -17,7 +18,18 @@ class CollectionDetailsCard extends StatelessWidget {
                   flex: 10,
                   child: FittedBox(
                     fit: BoxFit.fill,
-                    child: Image.network(collection.image_url),
+                    child: CachedNetworkImage(
+                      imageUrl: _collection.image_url,
+                      placeholder: (context, url) => Image.network(
+                        "http://via.placeholder.com/640x360",
+                        fit: BoxFit.fill,
+                      ),
+                      errorWidget: (context, url, error) => Image.network(
+                        "http://via.placeholder.com/640x360",
+                        fit: BoxFit.fill,
+                      ),
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
               ],
@@ -30,7 +42,7 @@ class CollectionDetailsCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    collection.collection_name,
+                    _collection.collection_name,
                     style: TextStyle(
                       color: Colors.black87,
                       fontWeight: FontWeight.bold,
@@ -51,10 +63,13 @@ class CollectionDetailsCard extends StatelessWidget {
                 color: Colors.blueGrey[100],
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: Text(collection.description,
-                      style: TextStyle(
-                        fontSize: 18.0,
-                      )),
+                  child: Text(
+                    _collection.description,
+                    style: TextStyle(
+                      fontSize: 18.0,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
             ),
@@ -65,48 +80,46 @@ class CollectionDetailsCard extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(10.0),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                Expanded(
-                  flex: 6,
-                  child: Column(
-                    children: <Widget>[
-                      Text(
-                        "10" + " followers",
-                        style: TextStyle(
-                          fontSize: 17.0,
-                          fontWeight: FontWeight.bold,
+                // No data
+                // Expanded(
+                //   flex: 6,
+                //   child: Column(
+                //     children: <Widget>[
+                //       Text(
+                //         "10" + " followers",
+                //         style: TextStyle(
+                //           fontSize: 17.0,
+                //           fontWeight: FontWeight.bold,
+                //           color: Colors.blue,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                _collection.is_following
+                    ? FlatButton(
+                        color: Colors.blue,
+                        textColor: Colors.white,
+                        padding: EdgeInsets.all(10.0),
+                        onPressed: () {
+                          _collection.followUnfollow();
+                        },
+                        child: Text("Following"),
+                      )
+                    : OutlineButton(
+                        color: Colors.blue,
+                        borderSide: BorderSide(
                           color: Colors.blue,
                         ),
+                        textColor: Colors.blue,
+                        padding: EdgeInsets.all(10.0),
+                        onPressed: () {
+                          _collection.followUnfollow();
+                        },
+                        child: Text("Follow"),
                       ),
-                    ],
-                  ),
-                ),
-
-                Expanded(
-                  flex: 4,
-                  child: collection.is_following
-                      ? FlatButton(
-                          color: Colors.blue,
-                          textColor: Colors.white,
-                          padding: EdgeInsets.all(10.0),
-                          onPressed: () {
-                            collection.followUnfollow();
-                          },
-                          child: Text("Following"),
-                        )
-                      : OutlineButton(
-                          color: Colors.blue,
-                          borderSide: BorderSide(
-                            color: Colors.blue,
-                          ),
-                          textColor: Colors.blue,
-                          padding: EdgeInsets.all(10.0),
-                          onPressed: () {
-                            collection.followUnfollow();
-                          },
-                          child: Text("Follow"),
-                        ),
-                ),
               ],
             ),
           ),
