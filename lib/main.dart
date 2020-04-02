@@ -10,7 +10,6 @@ import './screens/collection_screen.dart';
 import './screens/bookmarks_screen.dart';
 import './screens/explore_screen.dart';
 import './screens/profile_page.dart';
-import './screens/your_articles_screen.dart';
 import './screens/article_insert_screen.dart';
 import './screens/article_edit_screen.dart';
 import './screens/collection_edit_screen.dart';
@@ -56,7 +55,6 @@ class MyApp extends StatelessWidget {
           //EditProfile.routeName: (context) => EditProfile(),
           BookmarkScreen.routeName: (context) => BookmarkScreen(),
           ExploreScreen.routeName: (context) => ExploreScreen(),
-          YourArticles.routeName: (context) => YourArticles(),
           ArticleInsertScreen.routeName: (context) => ArticleInsertScreen(),
           ArticleEditScreen.routeName: (context) => ArticleEditScreen(),
           //EditCollection.routeName: (context) => EditCollection(),
