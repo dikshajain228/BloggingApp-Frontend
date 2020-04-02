@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 // Screens
-import './screens/tabs_screen.dart';
+import './screens/home_screen.dart';
 import './screens/edit_profile_screen.dart';
 import './screens/article_screen.dart';
 import './screens/collection_screen.dart';
@@ -45,9 +45,9 @@ class MyApp extends StatelessWidget {
           accentColor: Colors.white60,
           primarySwatch: Colors.purple,
         ),
-        home: TabScreen(),
+        home: HomeScreen(),
         routes: {
-          TabScreen.routeName: (context) => TabScreen(),
+          HomeScreen.routeName: (context) => HomeScreen(),
           ProfilePage.routeName: (context) => ProfilePage(),
           //EditProfile.routeName: (context) => EditProfile(),
           BookmarkScreen.routeName: (context) => BookmarkScreen(),

@@ -2,15 +2,16 @@ import '../widgets/articles_list.dart';
 import '../widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
-class TabScreen extends StatefulWidget {
+class HomeScreen extends StatefulWidget {
   static const routeName = "/home-page";
   @override
-  _TabScreenState createState() => _TabScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _TabScreenState extends State<TabScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
+    super.initState();
     print("Hello I am in home page init now");
   }
 

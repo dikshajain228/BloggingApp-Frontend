@@ -2,16 +2,13 @@ import 'package:bloggingapp/screens/collection_insert_screen.dart';
 
 import '../screens/bookmarks_screen.dart';
 import '../screens/explore_screen.dart';
-import '../screens/tabs_screen.dart';
+import '../screens/home_screen.dart';
 import '../screens/your_articles_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 // Screens
 import '../screens/profile_page.dart';
-import '../screens/article_insert_screen.dart';
-import '../screens/article_edit_screen.dart';
-
 
 class MainDrawer extends StatelessWidget {
   @override
@@ -20,13 +17,13 @@ class MainDrawer extends StatelessWidget {
       child: new ListView(
         children: <Widget>[
           new UserAccountsDrawerHeader(
-           
             decoration: new BoxDecoration(
                 image: new DecorationImage(
                     image: new NetworkImage(
                         "https://images.pexels.com/photos/414171/pexels-photo-414171.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"),
                     fit: BoxFit.fill)),
-            accountEmail: null,accountName:null,
+            accountEmail: null,
+            accountName: null,
           ),
           new ListTile(
               leading: Icon(Icons.person),
@@ -38,7 +35,7 @@ class MainDrawer extends StatelessWidget {
               leading: Icon(Icons.home),
               title: new Text("Home Page"),
               onTap: () {
-                Navigator.of(context).pushNamed(TabScreen.routeName);
+                Navigator.of(context).pushNamed(HomeScreen.routeName);
               }),
           new ListTile(
               leading: Icon(Icons.bookmark),
@@ -50,7 +47,8 @@ class MainDrawer extends StatelessWidget {
               leading: Icon(Icons.collections),
               title: new Text(" Add Collections"),
               onTap: () {
-                Navigator.of(context).pushNamed(CollectionInsertScreen.routeName);
+                Navigator.of(context)
+                    .pushNamed(CollectionInsertScreen.routeName);
               }),
           new ListTile(
               leading: Icon(Icons.explore),
@@ -58,8 +56,6 @@ class MainDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).pushNamed(ExploreScreen.routeName);
               }),
-         
-          
           new Divider(),
           new ListTile(
               title: new Text("Logout"),
