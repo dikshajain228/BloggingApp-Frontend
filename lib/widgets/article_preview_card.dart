@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -27,8 +28,15 @@ class ArticlePreviewCard extends StatelessWidget {
           contentPadding:
               EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
           leading: ClipOval(
-            child: Image.network(
-              article.image_path,
+            child: CachedNetworkImage(
+              imageUrl: article.image_path,
+              placeholder: (context, url) => Image.network(
+                "http://via.placeholder.com/640x360",
+                fit: BoxFit.cover,
+                height: 50.0,
+                width: 50.0,
+              ),
+              errorWidget: (context, url, error) => Icon(Icons.error),
               fit: BoxFit.cover,
               height: 50.0,
               width: 50.0,
@@ -43,13 +51,15 @@ class ArticlePreviewCard extends StatelessWidget {
             ),
             overflow: TextOverflow.ellipsis,
           ),
-          subtitle: Text(
-              "Published on " +
-                  DateFormat("dd-MM-yyyy").format(article.date_created),
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 12,
-              )),
+          subtitle: article.date_created == null
+              ? Text("No date")
+              : Text(
+                  "Published on " +
+                      DateFormat("dd-MM-yyyy").format(article.date_created),
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 12,
+                  )),
           trailing: IconButton(
             icon: Icon(
               article.is_bookmarked ? Icons.bookmark : Icons.bookmark_border,

@@ -6,15 +6,24 @@ import '../providers/articles.dart';
 class ArticlesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final articlesData = Provider.of<Articles>(context);
-    final articles = articlesData.articles;
-    return ListView.builder(
-      itemCount: articles.length,
-      itemBuilder: (ctx, index) => ChangeNotifierProvider.value(
-        value: articles[index],
+    final articles = Provider.of<Articles>(context).articles;
+
+    print("Article list");
+    print(articles);
+
+    return (articles.length == 0
+        ? Center(
+            child: Container(
+              child: Text("Follow collections to view articles"),
+            ),
+          )
+        : ListView.builder(
+            itemCount: articles.length,
+            itemBuilder: (ctx, index) => ChangeNotifierProvider.value(
+              value: articles[index],
 //        builder: (c) => articles[index],
-        child: ArticlePreviewCard(),
-      ),
-    );
+              child: ArticlePreviewCard(),
+            ),
+          ));
   }
 }

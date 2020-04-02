@@ -20,13 +20,13 @@ class Article with ChangeNotifier {
       @required this.collection_id,
       @required this.user_id,
       @required this.title,
-      @required this.content,
-      @required this.published,
-      @required this.image_path,
-      @required this.views_count,
-      @required this.kudos_count,
-      @required this.date_created,
-      @required this.date_updated,
+      this.content,
+      this.published,
+      this.image_path,
+      this.views_count,
+      this.kudos_count,
+      this.date_created,
+      this.date_updated,
       this.is_bookmarked});
 
   void setUnsetbookmark() {
