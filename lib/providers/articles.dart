@@ -21,6 +21,7 @@ class Articles with ChangeNotifier {
     return [..._articles];
   }
 
+  // Get Feed Articles
   Future<void> getFeedArticles() async {
     List<Article> fetchedArticles = [];
     String url = baseUrl + "user/feed";
@@ -49,6 +50,7 @@ class Articles with ChangeNotifier {
     }
   }
 
+  // Get User authored articles
   Future<void> getUserArticles() async {
     List<Article> fetchedArticles = [];
 
@@ -58,6 +60,37 @@ class Articles with ChangeNotifier {
     print("Obtained userId ");
 
     String url = baseUrl + "user/" + userId.toString() + "/articles";
+    try {
+      final response = await http.get(
+        url,
+        headers: {HttpHeaders.authorizationHeader: token},
+      );
+      final responseJson = json.decode(response.body);
+      for (final article in responseJson) {
+        fetchedArticles.add(Article(
+          article_id: article["article_id"],
+          user_id: article["user_id"],
+          collection_id: article["collection_id"],
+          title: article["title"],
+          image_path: article["image_path"],
+          is_bookmarked: article["is_bookmarked"] == 0 ? false : true,
+          date_created: DateTime.parse(article["date_created"]),
+        ));
+      }
+      _articles = [...fetchedArticles];
+    } catch (error) {
+      throw error;
+    }
+  }
+
+// Get bookmarked articles
+  Future<void> getBookmarkedArticles() async {
+    List<Article> fetchedArticles = [];
+
+    final token = await storage.read(key: "token");
+    print("Obtained token ");
+
+    String url = baseUrl + "user/bookmarks";
     try {
       final response = await http.get(
         url,
