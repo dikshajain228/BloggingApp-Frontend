@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
           //EditProfile.routeName: (context) => EditProfile(),
           BookmarkScreen.routeName: (context) => BookmarkScreen(),
           ExploreScreen.routeName: (context) => ExploreScreen(),
-          ArticleInsertScreen.routeName: (context) => ArticleInsertScreen(),
+          // ArticleInsertScreen.routeName: (context) => ArticleInsertScreen(),
           ArticleEditScreen.routeName: (context) => ArticleEditScreen(),
           //EditCollection.routeName: (context) => EditCollection(),
           CollectionInsertScreen.routeName: (context) =>
@@ -67,11 +67,13 @@ class MyApp extends StatelessWidget {
           var routes = <String, WidgetBuilder>{
             CollectionScreen.routeName: (context) =>
                 CollectionScreen(settings.arguments),
-            ArticleScreen.routeName: (context) =>
-                ArticleScreen(article_id: settings.arguments),
-            EditProfile.routeName: (context) => EditProfile(settings.arguments),
             EditCollection.routeName: (context) =>
                 EditCollection(settings.arguments),
+            ArticleScreen.routeName: (context) =>
+                ArticleScreen(article_id: settings.arguments),
+            ArticleInsertScreen.routeName: (context) =>
+                ArticleInsertScreen(settings.arguments),
+            EditProfile.routeName: (context) => EditProfile(settings.arguments),
           };
           WidgetBuilder builder = routes[settings.name];
           return MaterialPageRoute(builder: (ctx) => builder(ctx));

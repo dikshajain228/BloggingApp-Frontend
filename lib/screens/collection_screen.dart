@@ -171,8 +171,10 @@ class _CollectionScreenState extends State<CollectionScreen>
           backgroundColor: Colors.tealAccent,
           label: 'Add Article',
           labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () =>
-              {Navigator.of(context).pushNamed(ArticleInsertScreen.routeName)},
+          onTap: () {
+            Navigator.of(context).pushNamed(ArticleInsertScreen.routeName,
+                arguments: _collection.collection_id);
+          },
         ),
         SpeedDialChild(
             child: Icon(Icons.person_add),

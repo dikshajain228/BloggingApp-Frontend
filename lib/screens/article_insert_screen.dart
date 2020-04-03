@@ -11,6 +11,8 @@ import '../widgets/image_input.dart';
 
 class ArticleInsertScreen extends StatefulWidget {
   static const routeName = "/article/insert";
+  String collection_id;
+  ArticleInsertScreen(this.collection_id);
   @override
   ArticleInsertScreenState createState() => ArticleInsertScreenState();
 }
@@ -117,14 +119,14 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
   //   return NotusDocument.fromDelta(delta);
   // }
 
-  void _saveDocument(BuildContext context) {
-    final content = jsonEncode(_controller.document);
-    String contentString = content.toString();
-    final String title = _titleController.text;
-    // print("Title " + title);
-    // print(contentString);
-    _showSaveDialog();
-  }
+  // void _saveDocument(BuildContext context) {
+  //   final content = jsonEncode(_controller.document);
+  //   String contentString = content.toString();
+  //   final String title = _titleController.text;
+  //   // print("Title " + title);
+  //   // print(contentString);
+  //   _showSaveDialog();
+  // }
 
   // Save alert dialog
   void _showSaveDialog() {
@@ -182,5 +184,7 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
     final content = jsonEncode((_controller.document).toJson());
     String tags = _tags.toString();
     print("Tags string: " + tags);
+    String collection_id = widget.collection_id;
+    print(collection_id);
   }
 }
