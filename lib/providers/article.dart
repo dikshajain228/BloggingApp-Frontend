@@ -14,20 +14,25 @@ class Article with ChangeNotifier {
   final DateTime date_created;
   DateTime date_updated;
   bool is_bookmarked;
+  String tags;
+  bool is_author;
 
-  Article(
-      {@required this.article_id,
-      @required this.collection_id,
-      @required this.user_id,
-      @required this.title,
-      this.content,
-      this.published,
-      this.image_path,
-      this.views_count,
-      this.kudos_count,
-      this.date_created,
-      this.date_updated,
-      this.is_bookmarked});
+  Article({
+    @required this.article_id,
+    @required this.collection_id,
+    @required this.user_id,
+    @required this.title,
+    this.content,
+    this.published,
+    this.image_path,
+    this.views_count,
+    this.kudos_count,
+    this.date_created,
+    this.date_updated,
+    this.is_bookmarked,
+    this.tags,
+    this.is_author,
+  });
 
   void setUnsetbookmark() {
     is_bookmarked = !is_bookmarked;

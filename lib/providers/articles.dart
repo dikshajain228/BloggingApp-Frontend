@@ -59,6 +59,38 @@ class Articles with ChangeNotifier {
     }
   }
 
+  // Get article by ID
+  Future<Article> getArticleById(String articleId) async {
+    final token = await storage.read(key: "token");
+    String url = baseUrl + "articles/" + articleId;
+    try {
+      final response = await http.get(
+        url,
+        headers: {HttpHeaders.authorizationHeader: token},
+      );
+      final responseJson = json.decode(response.body);
+      final data = responseJson[0];
+      Article article = Article(
+        article_id: data["article_id"],
+        collection_id: data["collection_id"],
+        user_id: data["user_id"],
+        title: data["title"],
+        content: data["content"],
+        image_path: data["image_path"],
+        kudos_count: data["kudos_count"],
+        date_created: DateTime.parse(data["date_created"]),
+        date_updated: DateTime.parse(data["date_updated"]),
+        tags: data["tags"],
+        is_bookmarked: data["is_bookmarked"] == 0 ? false : true,
+        is_author: data["is_author"] == 0 ? false : true,
+      );
+      print(data);
+      return article;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   // Get Feed Articles
   Future<void> getFeedArticles() async {
     List<Article> fetchedArticles = [];

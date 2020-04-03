@@ -70,7 +70,7 @@ class MyApp extends StatelessWidget {
             EditCollection.routeName: (context) =>
                 EditCollection(settings.arguments),
             ArticleScreen.routeName: (context) =>
-                ArticleScreen(article_id: settings.arguments),
+                ArticleScreen(settings.arguments),
             ArticleInsertScreen.routeName: (context) =>
                 ArticleInsertScreen(settings.arguments),
             EditProfile.routeName: (context) => EditProfile(settings.arguments),
