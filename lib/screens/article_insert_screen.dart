@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:quill_delta/quill_delta.dart';
 import 'package:zefyr/zefyr.dart';
@@ -18,7 +19,7 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
   ZefyrController _controller;
   TextEditingController _titleController;
   FocusNode _focusNode;
-  List<dynamic> tags = [];
+  List<dynamic> _tags = [];
 
   File uploadedImage;
   String image_url = "https://picsum.photos/200";
@@ -27,7 +28,7 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
   void initState() {
     super.initState();
     // Initial content of text editor
-    final Delta delta = Delta()..insert("Enter content\n");
+    final Delta delta = Delta()..insert("Start typing...\n");
     final document = NotusDocument.fromDelta(delta);
     _controller = ZefyrController(document);
     _focusNode = FocusNode();
@@ -42,7 +43,7 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
 
   void setTags(List<dynamic> tagsData) {
     setState(() {
-      tags = [...tagsData];
+      _tags = [...tagsData];
     });
   }
 
@@ -101,7 +102,7 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
             icon: Icon(Icons.save),
             color: Colors.white,
             tooltip: "Post article",
-            onPressed: () => _saveDocument(context),
+            onPressed: _showSaveDialog,
           ),
         ],
       ),
@@ -125,18 +126,6 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
     _showSaveDialog();
   }
 
-  void _submitArticle() {
-    final content = jsonEncode((_controller.document).toJson());
-    String contentString = content.toString();
-    final String title = _titleController.text;
-    print(contentString);
-    if (uploadedImage != null) {
-      print(uploadedImage.path);
-    } else {
-      print("no upload");
-    }
-  }
-
   // Save alert dialog
   void _showSaveDialog() {
     showDialog(
@@ -155,7 +144,7 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
             scrollDirection: Axis.vertical,
             child: Column(
               children: <Widget>[
-                TagsInput(tags, setTags),
+                TagsInput(_tags, setTags),
                 ImageInput(uploadedImage, setImage, image_url),
               ],
             ),
@@ -174,14 +163,24 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
               color: Colors.teal,
               splashColor: Colors.tealAccent,
               onPressed: () {
-                _submitArticle();
-                print("tags");
-                print(tags);
+                _insertArticle();
               },
             ),
           ],
         );
       },
     );
+  }
+
+  void _insertArticle() {
+    if (uploadedImage != null) {
+      print(uploadedImage.path);
+    } else {
+      print("no upload");
+    }
+    String title = _titleController.text;
+    final content = jsonEncode((_controller.document).toJson());
+    String tags = _tags.toString();
+    print("Tags string: " + tags);
   }
 }
