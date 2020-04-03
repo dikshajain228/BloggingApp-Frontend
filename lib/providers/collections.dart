@@ -161,7 +161,7 @@ class Collections with ChangeNotifier {
           description: collection["description"],
           is_owner: collection["is_owner"] == 0 ? false : true,
           is_author: collection["is_author"] == 0 ? false : true,
-          is_following: false,
+          is_following: collection["is_following"] == 0 ? false : true,
         ));
       }
       _collections = [...fetchedCollections];
