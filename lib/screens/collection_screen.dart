@@ -153,7 +153,7 @@ class _CollectionScreenState extends State<CollectionScreen>
             {
               Navigator.of(context).pushNamed(
                 EditCollection.routeName,
-                arguments: _collection.collection_id,
+                arguments: _collection,
               );
             }
           },
