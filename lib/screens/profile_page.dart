@@ -72,7 +72,7 @@ class _ProfilePageState extends State<ProfilePage>
     if (_selectedChoice == choices[0]) {
       Navigator.of(context).pushNamed(
         EditProfile.routeName,
-        arguments: "1",
+        arguments: _user,
       );
     }
     if (_selectedChoice == choices[1]) {

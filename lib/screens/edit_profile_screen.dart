@@ -9,29 +9,24 @@ import '../providers/users.dart';
 
 class EditProfile extends StatefulWidget {
   static const routeName = '/edit-profile';
-   var profile_id;
-  EditProfile(this.profile_id);
- 
+  User user;
+  EditProfile(this.user);
+
   @override
-  _EditProfileState createState() => _EditProfileState(profile_id);
-   
-  
+  _EditProfileState createState() => _EditProfileState();
 }
 
 class _EditProfileState extends State<EditProfile> {
-
-  var profile_id;
-  User user;
- _EditProfileState(this.profile_id);
+  final _username = TextEditingController();
+  final _about = TextEditingController();
+  File uploadedImage;
 
   void initState() {
     super.initState();
     print("Edit Profile Page");
-    print(this.profile_id);
-    
+    _username.text = widget.user.username;
+    _about.text = widget.user.about;
   }
-  File uploadedImage;
-  String image_url = "https://picsum.photos/200";
 
   void setImage(File image) {
     setState(() {
@@ -39,33 +34,28 @@ class _EditProfileState extends State<EditProfile> {
     });
   }
 
-  void saveChanges(){
+  void saveChanges() {
     //Call function to edit changes
     Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
   }
 
-  void cancelChanges(){
+  void cancelChanges() {
     Navigator.of(context).pushReplacementNamed((ProfilePage.routeName));
   }
 
   @override
   Widget build(BuildContext context) {
-      //User user = ModalRoute.of(context).settings.arguments;
-     //print(context);
-
-    User user = Provider.of<Users>(context).getUserProfile();
-    print(user.about);
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.clear),
-          onPressed: cancelChanges,
-        ),
-        title: Text('Edit Profile'),
+        // leading: IconButton(
+        //   icon: Icon(Icons.arrow_back),
+        //   onPressed: cancelChanges,
+        // ),
+        title: Text('Edit Profile...'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.done),
-            onPressed: saveChanges,
+            onPressed: _showSaveDialog,
           )
         ],
       ),
@@ -77,33 +67,61 @@ class _EditProfileState extends State<EditProfile> {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
-                  child: ClipOval(
-                    child: Image.network(
-                      "https://media-exp1.licdn.com/dms/image/C5103AQHBDtEzuau2rA/profile-displayphoto-shrink_200_200/0?e=1590624000&v=beta&t=ZhtIT5ULua7ZmYzouKF2j4wHzTbFLdbxMcVTRjDHKFk",
-                      fit: BoxFit.cover,
-                      height: 150.0,
-                      width: 150.0,
-                    ),
+                  child: FittedBox(
+                    child: ImageInput(
+                        uploadedImage, setImage, widget.user.profile_image_url),
                   ),
                 ),
-                FlatButton(
-              child: Text("Change profile picture."),
-              color: Colors.white,
-              splashColor: Colors.tealAccent,
-              onPressed: () {
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0.0, 16.0, 16.0, 16.0),
+                  child: TextFormField(
+                    controller: _username,
+                    decoration: InputDecoration(labelText: 'Username'),
+                    //textInputAction: TextInputAction.next,
+                  ),
+                ),
+                TextFormField(
+                  maxLines: 3,
+                  controller: _about,
+                  decoration: InputDecoration(labelText: 'Description'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
-                print("thj");
-                       showDialog(
+  void _updateProfile() {
+    if (uploadedImage != null) {
+      print(uploadedImage.path);
+    } else {
+      print("no upload");
+    }
+    String username = _username.text;
+    String about = _about.text;
+    final data = {
+      "username": username,
+      "about": about,
+      "imageUrl": widget.user.profile_image_url,
+    };
+    Provider.of<Users>(context).updateProfile(data, uploadedImage).then((_) {
+      print("Updated");
+    });
+  }
+
+  void _showSaveDialog() {
+    showDialog(
       barrierDismissible: true,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              children: <Widget>[
-                ImageInput(uploadedImage, setImage, image_url),
-              ],
+          title: Text(
+            "Confirm changes ?",
+            style: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
             ),
           ),
           actions: [
@@ -111,46 +129,21 @@ class _EditProfileState extends State<EditProfile> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text("Close"),
+              child: Text("No"),
               color: Colors.red,
               splashColor: Colors.redAccent,
             ),
             FlatButton(
-              child: Text("Change"),
+              child: Text("Yes"),
               color: Colors.teal,
               splashColor: Colors.tealAccent,
               onPressed: () {
-               
+                _updateProfile();
               },
             ),
           ],
         );
       },
-    );
-     
-              },
-            ),
-               
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0.0, 16.0, 16.0, 16.0),
-                  child: TextFormField(
-                    initialValue: user.username,
-                    decoration: InputDecoration(labelText: 'Username'),
-                    //textInputAction: TextInputAction.next,
-                  ),
-                ),
-                TextFormField(
-                  maxLines: 3,
-                  initialValue: user.about,
-                  decoration: InputDecoration(labelText: 'Description'),
-                ),
-
-
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
