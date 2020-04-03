@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:intl/intl.dart';
 
 import './article.dart';
 
@@ -19,6 +20,43 @@ class Articles with ChangeNotifier {
 
   List<Article> get articles {
     return [..._articles];
+  }
+
+  // Insert Article
+  Future<void> addArticle(Map<String, dynamic> data, File image) async {
+    String url = baseUrl + "articles";
+    print(data);
+    final token = await storage.read(key: "token");
+    final userId = await storage.read(key: "userId");
+
+    String articleId =
+        userId.toString() + (DateTime.now().millisecond).toString();
+    DateFormat dateFormatter = new DateFormat('yyyy-MM-dd');
+    String dateCreated = dateFormatter.format(DateTime.now());
+
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.headers["Authorization"] = token;
+    if (image != null) {
+      String filename = image.path;
+      request.files.add(await http.MultipartFile.fromPath('image', filename));
+    }
+    request.fields["article_id"] = articleId;
+    request.fields["collection_id"] = data["collectionId"];
+    request.fields["user_id"] = userId;
+    request.fields["title"] = data["title"];
+    request.fields["content"] = data["content"];
+    request.fields["image_path"] = "";
+    request.fields["views_count"] = "0";
+    request.fields["date_created"] = dateCreated;
+    request.fields["date_updated"] = dateCreated;
+    request.fields["tags"] = data["tags"];
+
+    try {
+      final response = await request.send();
+      print(response);
+    } catch (error) {
+      throw error;
+    }
   }
 
   // Get Feed Articles

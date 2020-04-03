@@ -2,12 +2,15 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:quill_delta/quill_delta.dart';
 import 'package:zefyr/zefyr.dart';
 
 // widgets
 import '../widgets/tags_input.dart';
 import '../widgets/image_input.dart';
+
+import '../providers/articles.dart';
 
 class ArticleInsertScreen extends StatefulWidget {
   static const routeName = "/article/insert";
@@ -182,9 +185,16 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
     }
     String title = _titleController.text;
     final content = jsonEncode((_controller.document).toJson());
-    String tags = _tags.toString();
+    String tags = _tags.join(",");
     print("Tags string: " + tags);
-    String collection_id = widget.collection_id;
-    print(collection_id);
+    final data = {
+      "collectionId": widget.collection_id,
+      "title": title,
+      "content": content,
+      "tags": tags,
+    };
+    Provider.of<Articles>(context).addArticle(data, uploadedImage).then((_) {
+      print("Added article");
+    });
   }
 }
