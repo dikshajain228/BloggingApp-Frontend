@@ -30,7 +30,7 @@ class Articles with ChangeNotifier {
     final userId = await storage.read(key: "userId");
 
     String articleId =
-        userId.toString() + (DateTime.now().millisecond).toString();
+        userId.toString() + (DateTime.now().millisecondsSinceEpoch).toString();
     DateFormat dateFormatter = new DateFormat('yyyy-MM-dd');
     String dateCreated = dateFormatter.format(DateTime.now());
 
