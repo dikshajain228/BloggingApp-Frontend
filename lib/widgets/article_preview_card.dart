@@ -60,15 +60,29 @@ class ArticlePreviewCard extends StatelessWidget {
                     color: Colors.black,
                     fontSize: 12,
                   )),
-          trailing: IconButton(
-            icon: Icon(
-              article.is_bookmarked ? Icons.bookmark : Icons.bookmark_border,
-              color: Theme.of(context).primaryColor,
-            ),
-            onPressed: () {
-              article.setUnsetbookmark();
-            },
-          ),
+          trailing: (article.is_bookmarked
+              ? IconButton(
+                  icon: Icon(
+                    Icons.bookmark,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  onPressed: () {
+                    article.removeBookmark(article.article_id).then((_) {
+                      print("Bookmark removed");
+                    });
+                  },
+                )
+              : IconButton(
+                  icon: Icon(
+                    Icons.bookmark_border,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  onPressed: () {
+                    article.addBookmark(article.article_id).then((_) {
+                      print("Bookmark added");
+                    });
+                  },
+                )),
           onTap: () {
             Navigator.of(context).pushNamed(ArticleScreen.routeName,
                 arguments: article.article_id);

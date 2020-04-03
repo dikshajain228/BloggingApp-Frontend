@@ -1,5 +1,11 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Article with ChangeNotifier {
   final String article_id;
@@ -17,6 +23,9 @@ class Article with ChangeNotifier {
   String tags;
   bool is_author;
 
+  static const baseUrl = "http://10.0.2.2:3000/api/v1/";
+  final storage = FlutterSecureStorage();
+
   Article({
     @required this.article_id,
     @required this.collection_id,
@@ -33,6 +42,42 @@ class Article with ChangeNotifier {
     this.tags,
     this.is_author,
   });
+
+  // Add bookmark
+  Future<void> addBookmark(String articleId) async {
+    String url = baseUrl + "user/bookmarks/" + articleId;
+    final token = await storage.read(key: "token");
+    try {
+      final response = await http.post(
+        url,
+        headers: {HttpHeaders.authorizationHeader: token},
+      );
+      // final responseJson = json.decode(response.body);
+      print(response.body);
+      is_bookmarked = true;
+      notifyListeners();
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // Remove bookmark
+  Future<void> removeBookmark(String articleId) async {
+    String url = baseUrl + "user/bookmarks/" + articleId;
+    final token = await storage.read(key: "token");
+    try {
+      final response = await http.delete(
+        url,
+        headers: {HttpHeaders.authorizationHeader: token},
+      );
+      // final responseJson = json.decode(response.body);
+      print(response.body);
+      is_bookmarked = false;
+      notifyListeners();
+    } catch (error) {
+      throw error;
+    }
+  }
 
   void setUnsetbookmark() {
     is_bookmarked = !is_bookmarked;
