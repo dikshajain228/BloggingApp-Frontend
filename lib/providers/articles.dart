@@ -145,6 +145,39 @@ class Articles with ChangeNotifier {
     }
   }
 
+// Search Articles
+  Future<void> searchArticles(String query) async {
+    List<Article> fetchedArticles = [];
+    final token = await storage.read(key: "token");
+
+    String base = "10.0.2.2:3000";
+    String path = "/api/v1/articles";
+    var queryParams = {"q": query};
+    var url = Uri.http(base, path, queryParams);
+    try {
+      final response = await http.get(
+        url,
+        headers: {HttpHeaders.authorizationHeader: token},
+      );
+      print(response.body);
+      final responseJson = json.decode(response.body);
+      for (final article in responseJson) {
+        fetchedArticles.add(Article(
+          article_id: article["article_id"],
+          user_id: article["user_id"],
+          collection_id: article["collection_id"],
+          title: article["title"],
+          image_path: article["image_path"],
+          is_bookmarked: article["is_bookmarked"] == 0 ? false : true,
+          date_created: DateTime.parse(article["date_created"]),
+        ));
+      }
+      _articles = [...fetchedArticles];
+    } catch (error) {
+      throw error;
+    }
+  }
+
   void getArticles() {
     List<Article> fetchedData = [];
 

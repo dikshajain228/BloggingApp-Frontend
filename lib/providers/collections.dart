@@ -87,7 +87,8 @@ class Collections with ChangeNotifier {
     print(data);
     final token = await storage.read(key: "token");
     final userId = await storage.read(key: "userId");
-    String collectionId = userId.toString() + DateTime.now().toString();
+    String collectionId =
+        userId.toString() + (DateTime.now().millisecond).toString();
     String url = baseUrl + "collections";
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.headers["Authorization"] = token;
@@ -103,6 +104,40 @@ class Collections with ChangeNotifier {
     try {
       final response = await request.send();
       print(response);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // Search Collections
+  Future<void> searchCollections(String query) async {
+    List<Collection> fetchedCollections = [];
+    final token = await storage.read(key: "token");
+
+    String base = "10.0.2.2:3000";
+    String path = "/api/v1/collections";
+    var queryParams = {"q": query};
+    var url = Uri.http(base, path, queryParams);
+    try {
+      final response = await http.get(
+        url,
+        headers: {HttpHeaders.authorizationHeader: token},
+      );
+      print(response.body);
+      final responseJson = json.decode(response.body);
+      for (final collection in responseJson) {
+        fetchedCollections.add(Collection(
+          collection_id: collection["collection_id"],
+          user_id: collection["user_id"],
+          collection_name: collection["collection_name"],
+          image_url: collection["image_url"],
+          description: collection["description"],
+          is_owner: collection["is_owner"] == 0 ? false : true,
+          is_author: collection["is_author"] == 0 ? false : true,
+          is_following: false,
+        ));
+      }
+      _collections = [...fetchedCollections];
     } catch (error) {
       throw error;
     }

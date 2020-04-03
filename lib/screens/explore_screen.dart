@@ -17,20 +17,15 @@ class ExploreScreen extends StatefulWidget {
   _ExploreScreenState createState() => _ExploreScreenState();
 }
 
-enum SearchStatus { NoQuery, Searching, Searched }
-
 class _ExploreScreenState extends State<ExploreScreen>
     with SingleTickerProviderStateMixin {
   bool _queryEntered = false;
   bool _loadingArticles = true;
   bool _loadingCollections = true;
   bool _loadingUsers = true;
+  String _query = "";
   TabController tabController;
   TextEditingController searchController;
-
-  String searchText;
-
-  SearchStatus searchStatus;
 
   @override
   void initState() {
@@ -41,8 +36,6 @@ class _ExploreScreenState extends State<ExploreScreen>
       initialIndex: 0,
     );
     searchController = TextEditingController();
-    searchText = "";
-    searchStatus = SearchStatus.NoQuery;
   }
 
   @override
@@ -57,12 +50,16 @@ class _ExploreScreenState extends State<ExploreScreen>
   }
 
   void search() {
-    Provider.of<Collections>(context).getCollections();
-    Provider.of<Articles>(context).getArticles();
-    // to be removed
-    Timer(Duration(seconds: 2), () {
+    // Search collections
+    Provider.of<Collections>(context).searchCollections(_query).then((_) {
       setState(() {
-        searchStatus = SearchStatus.Searched;
+        _loadingCollections = false;
+      });
+    });
+    // Search articles
+    Provider.of<Articles>(context).searchArticles(_query).then((_) {
+      setState(() {
+        _loadingArticles = false;
       });
     });
   }
@@ -94,9 +91,8 @@ class _ExploreScreenState extends State<ExploreScreen>
             onSubmitted: (text) {
               // send a query
               setState(() {
-                searchText = searchController.text;
+                _query = searchController.text;
                 _queryEntered = true;
-                searchStatus = SearchStatus.Searching;
                 search();
               });
               print(text);
@@ -111,7 +107,7 @@ class _ExploreScreenState extends State<ExploreScreen>
               onPressed: () {
                 searchController.text = "";
                 setState(() {
-                  searchText = "";
+                  _query = "";
                   _queryEntered = false;
                 });
               },
