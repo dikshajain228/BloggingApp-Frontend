@@ -109,6 +109,33 @@ class Collections with ChangeNotifier {
     }
   }
 
+// Add new collection
+  Future<void> updateCollection(Map<String, dynamic> data, File image) async {
+    print(data);
+    final token = await storage.read(key: "token");
+
+    String collectionId = data["collectionId"];
+    String url = baseUrl + "collections/" + collectionId;
+
+    var request = http.MultipartRequest('PATCH', Uri.parse(url));
+    request.headers["Authorization"] = token;
+
+    if (image != null) {
+      String filename = image.path;
+      request.files.add(await http.MultipartFile.fromPath('image', filename));
+    }
+    request.fields["description"] = data["description"];
+    request.fields["image_url"] = data["imageUrl"];
+    request.fields["tags"] = data["tags"];
+
+    try {
+      final response = await request.send();
+      print(response);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   // Search Collections
   Future<void> searchCollections(String query) async {
     List<Collection> fetchedCollections = [];

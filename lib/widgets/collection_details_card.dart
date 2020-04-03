@@ -12,27 +12,27 @@ class CollectionDetailsCard extends StatelessWidget {
       children: [
         Stack(
           children: [
-            Row(
-              children: [
-                Expanded(
-                  flex: 10,
-                  child: FittedBox(
-                    fit: BoxFit.fill,
-                    child: CachedNetworkImage(
-                      imageUrl: _collection.image_url,
-                      placeholder: (context, url) => Image.network(
-                        "http://via.placeholder.com/640x360",
-                        fit: BoxFit.fill,
-                      ),
-                      errorWidget: (context, url, error) => Image.network(
-                        "http://via.placeholder.com/640x360",
-                        fit: BoxFit.fill,
-                      ),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
+            Container(
+              height: 300,
+              width: double.infinity,
+              child: CachedNetworkImage(
+                imageUrl: _collection.image_url,
+                placeholder: (context, url) => Image.network(
+                  "http://via.placeholder.com/640x360",
+                  fit: BoxFit.cover,
+                  height: 300,
+                  width: double.infinity,
                 ),
-              ],
+                errorWidget: (context, url, error) => Image.network(
+                  "http://via.placeholder.com/640x360",
+                  fit: BoxFit.cover,
+                  height: 300,
+                  width: double.infinity,
+                ),
+                fit: BoxFit.cover,
+                height: 300,
+                width: double.infinity,
+              ),
             ),
             Container(
               color: Colors.white38,
