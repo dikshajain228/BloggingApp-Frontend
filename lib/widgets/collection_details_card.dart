@@ -104,7 +104,11 @@ class CollectionDetailsCard extends StatelessWidget {
                         textColor: Colors.white,
                         padding: EdgeInsets.all(10.0),
                         onPressed: () {
-                          _collection.followUnfollow();
+                          _collection
+                              .unfollowCollection(_collection.collection_id)
+                              .then((_) {
+                            print("Unfollowed collection");
+                          });
                         },
                         child: Text("Following"),
                       )
@@ -116,7 +120,11 @@ class CollectionDetailsCard extends StatelessWidget {
                         textColor: Colors.blue,
                         padding: EdgeInsets.all(10.0),
                         onPressed: () {
-                          _collection.followUnfollow();
+                          _collection
+                              .followCollection(_collection.collection_id)
+                              .then((_) {
+                            print("Followed collection");
+                          });
                         },
                         child: Text("Follow"),
                       ),
