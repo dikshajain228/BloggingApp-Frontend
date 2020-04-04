@@ -67,6 +67,7 @@ class _CollectionScreenState extends State<CollectionScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text("Collection Screen"),
       ),
