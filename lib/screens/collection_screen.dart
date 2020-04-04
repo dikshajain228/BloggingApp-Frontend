@@ -11,6 +11,7 @@ import '../screens/article_insert_screen.dart';
 import '../widgets/collection_details_card.dart';
 import '../widgets/articles_list.dart';
 import '../widgets/authors_input.dart';
+import '../widgets/author_input.dart';
 
 // Providers
 import '../providers/collections.dart';
@@ -31,6 +32,15 @@ class _CollectionScreenState extends State<CollectionScreen>
   bool _loadingCollection = true;
   bool _loadingArticles = true;
   List<dynamic> authors = [];
+  List<Map<String, dynamic>> _authors = [
+    {
+      "user_id": 20,
+      "username": "Ananya",
+      "email": "ananya@gmail.com",
+      "image_url":
+          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
+    }
+  ];
   //should be deleted
   List<bool> inputs = new List<bool>();
 
@@ -164,8 +174,9 @@ class _CollectionScreenState extends State<CollectionScreen>
           backgroundColor: Colors.tealAccent,
           label: 'Delete Article',
           labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () =>
-              {Navigator.of(context).pushNamed(ArticleDeleteScreen.routeName)},
+          onTap: () {
+            Navigator.of(context).pushNamed(ArticleDeleteScreen.routeName);
+          },
         ),
         SpeedDialChild(
           child: Icon(Icons.add),
@@ -178,25 +189,47 @@ class _CollectionScreenState extends State<CollectionScreen>
           },
         ),
         SpeedDialChild(
-            child: Icon(Icons.person_add),
-            backgroundColor: Colors.tealAccent,
-            label: 'Add Author',
-            labelStyle: TextStyle(fontSize: 18.0),
-            onTap: _showAddAuthorDialog),
+          child: Icon(Icons.person_add),
+          backgroundColor: Colors.tealAccent,
+          label: 'Add Author',
+          labelStyle: TextStyle(fontSize: 18.0),
+          onTap: _showChipInput,
+        ),
         SpeedDialChild(
-            child: Icon(Icons.delete_forever),
-            backgroundColor: Colors.tealAccent,
-            label: 'Delete Author',
-            labelStyle: TextStyle(fontSize: 18.0),
-            onTap: _showDeleteAuthorDialog),
+          child: Icon(Icons.delete_forever),
+          backgroundColor: Colors.tealAccent,
+          label: 'Delete Author',
+          labelStyle: TextStyle(fontSize: 18.0),
+          onTap: _showDeleteAuthorDialog,
+        ),
         SpeedDialChild(
-            child: Icon(Icons.person),
-            backgroundColor: Colors.tealAccent,
-            label: 'View Author',
-            labelStyle: TextStyle(fontSize: 18.0),
-            onTap: _showViewAuthorDialog),
+          child: Icon(Icons.person),
+          backgroundColor: Colors.tealAccent,
+          label: 'View Author',
+          labelStyle: TextStyle(fontSize: 18.0),
+          onTap: _showViewAuthorDialog,
+        ),
       ],
     ));
+  }
+
+  _showChipInput() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Alert'),
+          content: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              children: <Widget>[
+                AuthorInput(_authors),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   showAlert(BuildContext context) {
