@@ -39,14 +39,14 @@ class ImageInputState extends State<ImageInput> {
   Widget build(BuildContext context) {
     return (Column(
       children: <Widget>[
+        showImage(),
+        SizedBox(
+          height: 20.0,
+        ),
         OutlineButton(
           onPressed: selectImage,
           child: Text("Select Image"),
         ),
-        SizedBox(
-          height: 20.0,
-        ),
-        showImage(),
       ],
     ));
   }
