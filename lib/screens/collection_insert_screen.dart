@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 // widgets
-import '../widgets/authors_input.dart';
 import '../widgets/image_input.dart';
 
 import '../providers/collections.dart';

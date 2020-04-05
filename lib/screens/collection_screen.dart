@@ -10,7 +10,6 @@ import '../screens/article_insert_screen.dart';
 // Widgets
 import '../widgets/collection_details_card.dart';
 import '../widgets/articles_list.dart';
-import '../widgets/authors_input.dart';
 import '../widgets/author_input.dart';
 
 // Providers
@@ -32,15 +31,7 @@ class _CollectionScreenState extends State<CollectionScreen>
   bool _loadingCollection = true;
   bool _loadingArticles = true;
   List<dynamic> authors = [];
-  List<Map<String, dynamic>> _authors = [
-    {
-      "user_id": 20,
-      "username": "Ananya",
-      "email": "ananya@gmail.com",
-      "image_url":
-          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
-    }
-  ];
+  List<dynamic> _authors = [];
   //should be deleted
   List<bool> inputs = new List<bool>();
 
@@ -60,7 +51,9 @@ class _CollectionScreenState extends State<CollectionScreen>
       setState(() {
         _loadingCollection = false;
         _collection = data;
+        _authors = data.authors;
       });
+      print(_authors);
     });
 
     // Get articles of this collection
@@ -266,55 +259,51 @@ class _CollectionScreenState extends State<CollectionScreen>
     });
   }
 
-  _showAddAuthorDialog() {
-    showDialog(
-      barrierDismissible: true,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            "Add Authors",
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          content: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              children: <Widget>[
-                AuthorsInput(authors, setAuthors),
-              ],
-            ),
-          ),
-          actions: [
-            FlatButton(
-              onPressed: () {
-                print("hey");
-                Navigator.of(context).pop();
-              },
-              child: Text("Close"),
-              color: Colors.red,
-              splashColor: Colors.redAccent,
-            ),
-            FlatButton(
-              child: Text("Add"),
-              color: Colors.teal,
-              splashColor: Colors.tealAccent,
-              onPressed: () {
-                print("authors");
-                print(authors);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  _getAuthorsofCollection() {
-    // get authors from backend
-  }
+  // _showAddAuthorDialog() {
+  //   showDialog(
+  //     barrierDismissible: true,
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: Text(
+  //           "Add Authors",
+  //           style: TextStyle(
+  //             fontSize: 20.0,
+  //             fontWeight: FontWeight.bold,
+  //           ),
+  //         ),
+  //         content: SingleChildScrollView(
+  //           scrollDirection: Axis.vertical,
+  //           child: Column(
+  //             children: <Widget>[
+  //               AuthorsInput(authors, setAuthors),
+  //             ],
+  //           ),
+  //         ),
+  //         actions: [
+  //           FlatButton(
+  //             onPressed: () {
+  //               print("hey");
+  //               Navigator.of(context).pop();
+  //             },
+  //             child: Text("Close"),
+  //             color: Colors.red,
+  //             splashColor: Colors.redAccent,
+  //           ),
+  //           FlatButton(
+  //             child: Text("Add"),
+  //             color: Colors.teal,
+  //             splashColor: Colors.tealAccent,
+  //             onPressed: () {
+  //               print("authors");
+  //               print(authors);
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
   _showViewAuthorDialog() {
     //data = _getAuthorsofCollection
