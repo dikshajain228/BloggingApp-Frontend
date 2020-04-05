@@ -11,7 +11,7 @@ import '../constants.dart' as Constants;
 import './collection.dart';
 
 class Collections with ChangeNotifier {
-  static const baseUrl = Constants.SERVER_IP+"api/v1/";
+  static const baseUrl = Constants.SERVER_IP + "/api/v1/";
   final storage = FlutterSecureStorage();
 
   List<Collection> _collections = [];
@@ -63,18 +63,22 @@ class Collections with ChangeNotifier {
         url,
         headers: {HttpHeaders.authorizationHeader: token},
       );
+      print(response.body);
       final responseJson = json.decode(response.body);
-      final data = responseJson[0];
+      print("jsonnnnnnnnnnnnnnnnnnnnnn");
+      print(responseJson);
+      final collectionData = responseJson["collection"][0];
+      final authorData = responseJson["authors"];
       Collection collection = Collection(
-        collection_id: data["collection_id"],
-        collection_name: data["collection_name"],
-        user_id: data["user_id"],
-        image_url: data["image_url"],
-        description: data["description"],
-        is_owner: data["is_owner"] == 0 ? false : true,
-        is_author: data["is_author"] == 0 ? false : true,
-        is_following: data["is_following"] == 0 ? false : true,
-        authors: data["authors"],
+        collection_id: collectionData["collection_id"],
+        collection_name: collectionData["collection_name"],
+        user_id: collectionData["user_id"],
+        image_url: collectionData["image_url"],
+        description: collectionData["description"],
+        is_owner: collectionData["is_owner"] == 0 ? false : true,
+        is_author: collectionData["is_author"] == 0 ? false : true,
+        is_following: collectionData["is_following"] == 0 ? false : true,
+        authors: authorData,
       );
       print("Authors");
       print(collection.authors);
@@ -152,7 +156,7 @@ class Collections with ChangeNotifier {
         url,
         headers: {HttpHeaders.authorizationHeader: token},
       );
-      print("meowmoew"+url.toString());
+      print("meowmoew" + url.toString());
       // print(response.body);
       final responseJson = json.decode(response.body);
       for (final collection in responseJson) {
