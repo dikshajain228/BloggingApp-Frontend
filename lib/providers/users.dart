@@ -11,7 +11,7 @@ import './user.dart';
 import '../constants.dart' as Constants;
 
 class Users with ChangeNotifier {
-  static const baseUrl = Constants.SERVER_IP+"/api/v1/";
+  static const baseUrl = Constants.SERVER_IP + "/api/v1/";
   final storage = FlutterSecureStorage();
 
   List<User> _users = [];
@@ -57,5 +57,37 @@ class Users with ChangeNotifier {
             "HElo gurls nd bois ssup with y'all. How is corona treating you? Hope all are infected",
         profile_image_url:
             "https://media-exp1.licdn.com/dms/image/C5103AQHBDtEzuau2rA/profile-displayphoto-shrink_200_200/0?e=1590624000&v=beta&t=ZhtIT5ULua7ZmYzouKF2j4wHzTbFLdbxMcVTRjDHKFk");
+  }
+
+  Future<void> searchUsers(String query) async {
+    List<User> fetchedUsers = [];
+    final token = await storage.read(key: "token");
+    final user_id = await storage.read(key: "user_id");
+    String base = Constants.base;
+    String path = "/api/v1/users";
+    var queryParams = {"q": query};
+    var url = Uri.http(base, path, queryParams);
+    try {
+      final response = await http.get(
+        url,
+        headers: {HttpHeaders.authorizationHeader: token},
+      );
+      print(response.body);
+      print("hello kitty" + url.toString());
+      final responseJson = json.decode(response.body);
+      for (final user in responseJson) {
+          fetchedUsers.add(User(
+            user_id: user["user_id"],
+            email: user["email"],
+            username: user["username"],
+            profile_image_url: user["profile_image_url"],
+            is_following: user["is_following"] == 0 ? false : true,
+          ));
+        
+      }
+      _users = [...fetchedUsers];
+    } catch (error) {
+      throw error;
+    }
   }
 }

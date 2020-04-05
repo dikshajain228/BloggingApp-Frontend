@@ -152,7 +152,8 @@ class Collections with ChangeNotifier {
         url,
         headers: {HttpHeaders.authorizationHeader: token},
       );
-      print(response.body);
+      print("meowmoew"+url.toString());
+      // print(response.body);
       final responseJson = json.decode(response.body);
       for (final collection in responseJson) {
         fetchedCollections.add(Collection(

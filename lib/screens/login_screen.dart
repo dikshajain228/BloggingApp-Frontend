@@ -13,9 +13,6 @@ const SERVER_IP = Constants.SERVER_IP;
 final storage = FlutterSecureStorage();
 
 class LoginScreenState extends State<LoginScreen> {
-  
-  
-
   final formKey = new GlobalKey<FormState>();
   String formType = "login";
 
@@ -35,7 +32,7 @@ class LoginScreenState extends State<LoginScreen> {
         body: {"email": email, "password": password},
       );
       final resJson = json.decode(res.body);
-      print(Constants.SERVER_IP+"jajajaja");
+      print(Constants.SERVER_IP + "jajajaja");
       print("Length" + resJson.length.toString());
       print(resJson);
       if (resJson.length == 1) {
@@ -105,19 +102,17 @@ class LoginScreenState extends State<LoginScreen> {
           return value.isEmpty ? 'Email required' : null;
         },
       ),
-    
       new Padding(
-        padding:EdgeInsets.symmetric(vertical: 20.0),
-        child:TextFormField(
-        controller: _passwordController,
-        decoration: new InputDecoration(labelText: 'Password'),
-        obscureText: true,
-        validator: (value) {
-          return value.isEmpty ? 'Password required' : null;
-        },
+        padding: EdgeInsets.symmetric(vertical: 20.0),
+        child: TextFormField(
+          controller: _passwordController,
+          decoration: new InputDecoration(labelText: 'Password'),
+          obscureText: true,
+          validator: (value) {
+            return value.isEmpty ? 'Password required' : null;
+          },
+        ),
       ),
-      ),
-      
     ];
   }
 
@@ -134,8 +129,13 @@ class LoginScreenState extends State<LoginScreen> {
 
             var token = await attemptLogin(email, password);
             if (token != null) {
-              storage.write(key: "token", value: token);
-              print(token);
+              await storage.write(key: "token", value: token);
+              final tokenPayload = token.split(".");
+              final payloadMap = jsonDecode(utf8.decode(
+                  base64Url.decode(base64Url.normalize(tokenPayload[1]))));
+              await storage.write(
+                  key: "userId", value: payloadMap["user_id"].toString());
+              await storage.write(key: "email", value: payloadMap["email"]);
               Navigator.of(context).pushNamed(HomeScreen.routeName);
             } else {
               displayDialog(context, "Incorrect email or password",
@@ -177,11 +177,11 @@ class LoginScreenState extends State<LoginScreen> {
   Widget logo() {
     return new Padding(
       padding: EdgeInsets.all(10.0),
-      child:CircleAvatar(
-      radius: 110.0,
-      backgroundColor: Colors.transparent,
-      child: Image.asset('assets/images/logo.png'),
-    ),
+      child: CircleAvatar(
+        radius: 110.0,
+        backgroundColor: Colors.transparent,
+        child: Image.asset('assets/images/logo.png'),
+      ),
     );
   }
 }

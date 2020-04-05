@@ -5,6 +5,7 @@ import 'dart:async';
 
 import '../providers/collections.dart';
 import '../providers/articles.dart';
+import '../providers/users.dart';
 
 import '../widgets/drawer.dart';
 import '../widgets/collection_list.dart';
@@ -60,6 +61,11 @@ class _ExploreScreenState extends State<ExploreScreen>
     Provider.of<Articles>(context).searchArticles(_query).then((_) {
       setState(() {
         _loadingArticles = false;
+      });
+    });
+    Provider.of<Users>(context).searchUsers(_query).then((_){
+      setState(() {
+        _loadingUsers = false;
       });
     });
   }
