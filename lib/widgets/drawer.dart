@@ -1,15 +1,18 @@
-import 'package:bloggingapp/screens/collection_insert_screen.dart';
-
+import '../screens/collection_insert_screen.dart';
 import '../screens/bookmarks_screen.dart';
 import '../screens/explore_screen.dart';
 import '../screens/home_screen.dart';
+import '../screens/login_screen.dart';
+
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 // Screens
 import '../screens/profile_page.dart';
 
 class MainDrawer extends StatelessWidget {
+  final storage = FlutterSecureStorage();
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -60,7 +63,8 @@ class MainDrawer extends StatelessWidget {
               title: new Text("Logout"),
               trailing: new Icon(Icons.cancel),
               onTap: () {
-                Navigator.of(context).pushNamed(ProfilePage.routeName);
+                storage.delete(key: "token");
+                Navigator.of(context).pushNamed(LoginScreen.routeName);
               }),
         ],
       ),
