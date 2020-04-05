@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_chips_input/flutter_chips_input.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class AuthorInput extends StatefulWidget {
-  List<Map<String, dynamic>> authors;
+  List<dynamic> authors;
   AuthorInput(this.authors);
 
   @override
@@ -30,6 +31,7 @@ class _AuthorInputState extends State<AuthorInput> {
     }
     setState(() {
       _initialAuthors = [..._tempList];
+      _selectedAuthors = [..._tempList];
     });
   }
 
@@ -69,6 +71,7 @@ class _AuthorInputState extends State<AuthorInput> {
           maxChips: 4,
           decoration: InputDecoration(
             labelText: "Add Author",
+            hintText: "Enter email",
           ),
           findSuggestions: (String query) {
             if (query.length != 0) {
@@ -91,8 +94,22 @@ class _AuthorInputState extends State<AuthorInput> {
             return InputChip(
               key: ObjectKey(profile),
               label: Text(profile.username),
-              avatar: CircleAvatar(
-                backgroundImage: NetworkImage(profile.image_url),
+              avatar: ClipOval(
+                child: CachedNetworkImage(
+                  imageUrl: (profile.image_url != null
+                      ? profile.image_url
+                      : "http://via.placeholder.com/640x360"),
+                  placeholder: (context, url) => Image.network(
+                    "http://via.placeholder.com/640x360",
+                    fit: BoxFit.cover,
+                    height: 50.0,
+                    width: 50.0,
+                  ),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  fit: BoxFit.cover,
+                  height: 50.0,
+                  width: 50.0,
+                ),
               ),
               onDeleted: () => state.deleteChip(profile),
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -101,8 +118,22 @@ class _AuthorInputState extends State<AuthorInput> {
           suggestionBuilder: (context, state, profile) {
             return ListTile(
               key: ObjectKey(profile),
-              leading: CircleAvatar(
-                backgroundImage: NetworkImage(profile.image_url),
+              leading: ClipOval(
+                child: CachedNetworkImage(
+                  imageUrl: (profile.image_url != null
+                      ? profile.image_url
+                      : "http://via.placeholder.com/640x360"),
+                  placeholder: (context, url) => Image.network(
+                    "http://via.placeholder.com/640x360",
+                    fit: BoxFit.cover,
+                    height: 50.0,
+                    width: 50.0,
+                  ),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  fit: BoxFit.cover,
+                  height: 50.0,
+                  width: 50.0,
+                ),
               ),
               title: Text(profile.username),
               subtitle: Text(profile.email),
@@ -116,6 +147,8 @@ class _AuthorInputState extends State<AuthorInput> {
             FlatButton(
               child: Text("YES"),
               onPressed: () {
+                print("selected");
+                print(_selectedAuthors);
                 List<Author> temp;
                 // _newAuthors = _selectedAuthors - _initialAuthors
                 temp = (_selectedAuthors.where(
@@ -130,7 +163,7 @@ class _AuthorInputState extends State<AuthorInput> {
                 for (var data in temp) {
                   _deletedAuthors.add(data.user_id);
                 }
-                print("Selected authors: " + _selectedAuthors.toString());
+                print("New authors: " + _newAuthors.toString());
                 print("Deleted authors: " + _deletedAuthors.toString());
                 Navigator.of(context).pop();
               },
