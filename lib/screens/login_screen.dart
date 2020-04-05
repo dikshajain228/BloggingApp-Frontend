@@ -1,22 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter/widgets.dart';
+import 'dart:async';
+import 'dart:convert';
 
-class LoginRegisterState extends State<LoginRegisterPage> {
+import '../screens/home_screen.dart';
+
+const SERVER_IP = 'http://10.0.2.0:3000';
+final storage = FlutterSecureStorage();
+
+class LoginScreenState extends State<LoginScreen> {
   final formKey = new GlobalKey<FormState>();
-
   String formType = "login";
-  String email = "";
-  String password = "";
-  String username = "";
 
-  bool saveForm() {
-    final form = formKey.currentState;
-    if (form.validate()) {
-      form.save();
-      return true;
-    } else {
-      return false;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  void displayDialog(context, title, text) => showDialog(
+        context: context,
+        builder: (context) =>
+            AlertDialog(title: Text(title), content: Text(text)),
+      );
+
+  Future<String> attemptLogin(String email, String password) async {
+    try {
+      var res = await http.post(
+        "$SERVER_IP/api/v1/login",
+        body: {"email": email, "password": password},
+      );
+      final resJson = json.decode(res.body);
+      print("Length" + resJson.length.toString());
+      print(resJson);
+      if (resJson.length == 1) {
+        return null;
+      }
+      return resJson["token"];
+    } catch (error) {
+      throw error;
     }
   }
+
+  // bool saveForm() {
+  //   final form = formKey.currentState;
+  //   if (form.validate()) {
+  //     form.save();
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   void moveToRegister() {
     formKey.currentState.reset();
@@ -38,12 +71,11 @@ class LoginRegisterState extends State<LoginRegisterPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        //resizeToAvoidBottomPadding: false,
-        appBar: new AppBar(
-          title: new Text("Flutter Blog App"),
-        ),
-        body: SingleChildScrollView(
-            child: new Container(
+      appBar: new AppBar(
+        title: new Text("Flutter Blog App"),
+      ),
+      body: SingleChildScrollView(
+        child: new Container(
           margin: EdgeInsets.all(25.0),
           child: new Form(
             key: formKey,
@@ -52,41 +84,34 @@ class LoginRegisterState extends State<LoginRegisterPage> {
               children: createInputs() + createButtons(),
             ),
           ),
-        )));
+        ),
+      ),
+    );
   }
 
   List<Widget> createInputs() {
     return [
-      SizedBox(
-        height: 10.0,
-      ),
       logo(),
-      SizedBox(
-        height: 10.0,
-      ),
       new TextFormField(
-          decoration: new InputDecoration(labelText: 'Email'),
-          validator: (value) {
-            return value.isEmpty ? 'Email required' : null;
-          },
-          onSaved: (value) {
-            return email = value;
-          }),
-      SizedBox(
-        height: 10.0,
+        controller: _emailController,
+        decoration: new InputDecoration(labelText: 'Email'),
+        validator: (value) {
+          return value.isEmpty ? 'Email required' : null;
+        },
       ),
-      new TextFormField(
-          decoration: new InputDecoration(labelText: 'Password'),
-          obscureText: true,
-          validator: (value) {
-            return value.isEmpty ? 'Password required' : null;
-          },
-          onSaved: (value) {
-            return password = value;
-          }),
-      SizedBox(
-        height: 20.0,
+    
+      new Padding(
+        padding:EdgeInsets.symmetric(vertical: 20.0),
+        child:TextFormField(
+        controller: _passwordController,
+        decoration: new InputDecoration(labelText: 'Password'),
+        obscureText: true,
+        validator: (value) {
+          return value.isEmpty ? 'Password required' : null;
+        },
       ),
+      ),
+      
     ];
   }
 
@@ -97,7 +122,20 @@ class LoginRegisterState extends State<LoginRegisterPage> {
           child: new Text("Login", style: TextStyle(fontSize: 20.0)),
           textColor: Colors.white,
           color: Colors.purple,
-          onPressed: saveForm,
+          onPressed: () async {
+            var email = _emailController.text;
+            var password = _passwordController.text;
+
+            var token = await attemptLogin(email, password);
+            if (token != null) {
+              storage.write(key: "token", value: token);
+              print(token);
+              Navigator.of(context).pushNamed(HomeScreen.routeName);
+            } else {
+              displayDialog(context, "Incorrect email or password",
+                  "No account was found matching that email and password");
+            }
+          },
         ),
         new FlatButton(
           child: new Text("Dont have an account? Create Account?",
@@ -109,18 +147,16 @@ class LoginRegisterState extends State<LoginRegisterPage> {
     } else {
       return [
         new TextFormField(
-            decoration: new InputDecoration(labelText: 'Username'),
-            validator: (value) {
-              return value.isEmpty ? 'Username required' : null;
-            },
-            onSaved: (value) {
-              return username = value;
-            }),
+          decoration: new InputDecoration(labelText: 'Username'),
+          validator: (value) {
+            return value.isEmpty ? 'Username required' : null;
+          },
+        ),
         new RaisedButton(
           child: new Text("Create account", style: TextStyle(fontSize: 20.0)),
           textColor: Colors.white,
           color: Colors.purple,
-          onPressed: saveForm,
+          onPressed: () {},
         ),
         new FlatButton(
           child: new Text("Have an account? Login",
@@ -133,15 +169,19 @@ class LoginRegisterState extends State<LoginRegisterPage> {
   }
 
   Widget logo() {
-    return new CircleAvatar(
+    return new Padding(
+      padding: EdgeInsets.all(10.0),
+      child:CircleAvatar(
       radius: 110.0,
       backgroundColor: Colors.transparent,
       child: Image.asset('assests/images/logo.png'),
+    ),
     );
   }
 }
 
-class LoginRegisterPage extends StatefulWidget {
+class LoginScreen extends StatefulWidget {
+  static const routeName = "/login-screen";
   @override
-  LoginRegisterState createState() => LoginRegisterState();
+  LoginScreenState createState() => LoginScreenState();
 }
