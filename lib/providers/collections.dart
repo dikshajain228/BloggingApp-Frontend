@@ -143,7 +143,7 @@ class Collections with ChangeNotifier {
     List<Collection> fetchedCollections = [];
     final token = await storage.read(key: "token");
 
-    String base = "10.0.2.2:3000";
+    String base = Constants.SERVER_IP;
     String path = "/api/v1/collections";
     var queryParams = {"q": query};
     var url = Uri.http(base, path, queryParams);

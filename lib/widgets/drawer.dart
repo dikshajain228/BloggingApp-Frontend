@@ -64,7 +64,7 @@ class MainDrawer extends StatelessWidget {
               trailing: new Icon(Icons.cancel),
               onTap: () {
                 storage.delete(key: "token");
-                Navigator.of(context).pushNamed(LoginScreen.routeName);
+                Navigator.of(context).pushNamedAndRemoveUntil('/login-screen', (Route<dynamic> route) => false);
               }),
         ],
       ),
