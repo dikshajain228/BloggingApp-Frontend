@@ -14,6 +14,7 @@ import './screens/article_insert_screen.dart';
 import './screens/article_edit_screen.dart';
 import './screens/collection_edit_screen.dart';
 import './screens/collection_insert_screen.dart';
+import './screens/login_screen.dart';
 
 // Providers
 import './providers/articles.dart';
@@ -48,8 +49,9 @@ class MyApp extends StatelessWidget {
           accentColor: Colors.white60,
           primarySwatch: Colors.purple,
         ),
-        home: HomeScreen(),
+        home: LoginScreen(),
         routes: {
+          LoginScreen.routeName: (context) => LoginScreen(),
           HomeScreen.routeName: (context) => HomeScreen(),
           ProfilePage.routeName: (context) => ProfilePage(),
           //EditProfile.routeName: (context) => EditProfile(),

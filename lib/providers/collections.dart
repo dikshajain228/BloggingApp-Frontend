@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../constants.dart' as Constants;
+
 import './collection.dart';
 
 class Collections with ChangeNotifier {
-  static const baseUrl = "http://10.0.2.2:3000/api/v1/";
+  static const baseUrl = Constants.SERVER_IP+"api/v1/";
   final storage = FlutterSecureStorage();
 
   List<Collection> _collections = [];

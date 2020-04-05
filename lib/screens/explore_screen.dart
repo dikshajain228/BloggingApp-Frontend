@@ -129,7 +129,7 @@ class _ExploreScreenState extends State<ExploreScreen>
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image:
-                          ExactAssetImage("assests/images/person_search.png"),
+                          ExactAssetImage("assets/images/person_search.png"),
                       fit: BoxFit.fill,
                     ),
                   ),

@@ -7,10 +7,11 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 
+import '../constants.dart' as Constants;
 import './article.dart';
 
 class Articles with ChangeNotifier {
-  static const baseUrl = "http://10.0.2.2:3000/api/v1/";
+  static const baseUrl = Constants.SERVER_IP+"/api/v1/";
   final storage = FlutterSecureStorage();
   List<Article> _articles = [];
 

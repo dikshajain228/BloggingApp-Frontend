@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../constants.dart' as Constants;
+
 class Collection with ChangeNotifier {
   final String collection_id;
   final int user_id;
@@ -19,7 +21,7 @@ class Collection with ChangeNotifier {
   bool is_following;
   dynamic authors;
 
-  static const baseUrl = "http://10.0.2.2:3000/api/v1/";
+  static const baseUrl = Constants.SERVER_IP+"api/v1/";
   final storage = FlutterSecureStorage();
 
   Collection({
