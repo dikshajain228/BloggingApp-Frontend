@@ -8,7 +8,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../server_util.dart' as Server;
 
-class Login with ChangeNotifier {
+class Authentication with ChangeNotifier {
   static const SERVER_IP = Server.SERVER_IP;
   final storage = FlutterSecureStorage();
 

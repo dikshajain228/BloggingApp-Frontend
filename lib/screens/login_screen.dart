@@ -89,7 +89,7 @@ class LoginScreenState extends State<LoginScreen> {
       new TextFormField(
         controller: _emailController,
         decoration: new InputDecoration(labelText: 'Email'),
-        validator: (value) {
+        validator: (value){
           if(value.isEmpty)  return 'Email required';
           else{
             Pattern pattern = r"[A-Za-z0-9]*@[A-Za-z]+.[a-zA-Z]{2,}";
@@ -133,7 +133,7 @@ class LoginScreenState extends State<LoginScreen> {
               var password = _passwordController.text;
 
               var token =
-                  await Provider.of<Login>(context).attemptLogin(email, password);
+                  await Provider.of<Authentication>(context).attemptLogin(email, password);
               if (token != null) {
                 _writeToken(token);
                 Navigator.of(context).pushNamed(HomeScreen.routeName);
@@ -171,7 +171,7 @@ class LoginScreenState extends State<LoginScreen> {
               var username = _usernameController.text;
 
               int res =
-                  await Provider.of<Login>(context).attemptSignUp(email, password, username);
+                  await Provider.of<Authentication>(context).attemptSignUp(email, password, username);
                   if(res==400)
                     displayDialog(context, "Unknown Error", "Some unknown error occured. Try again");
                   else if(res==200)

@@ -7,6 +7,7 @@ import '../widgets/image_input.dart';
 
 import '../providers/collections.dart';
 import '../providers/collection.dart';
+import '../screens/profile_page.dart';
 
 class CollectionInsertScreen extends StatefulWidget {
   static const routeName = "/collection/insert";
@@ -98,6 +99,8 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
         .addCollection(data, uploadedImage)
         .then((_) {
       print("Inserted");
+      Navigator.of(context)
+                    .pushReplacementNamed(ProfilePage.routeName);
     });
   }
 }
