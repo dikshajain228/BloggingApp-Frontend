@@ -216,7 +216,7 @@ class _CollectionScreenState extends State<CollectionScreen>
             scrollDirection: Axis.vertical,
             child: Column(
               children: <Widget>[
-                AuthorInput(_authors),
+                AuthorInput(_authors, widget.collectionId),
               ],
             ),
           ),

@@ -8,7 +8,8 @@ import '../models/author.dart';
 
 class AuthorInput extends StatefulWidget {
   List<dynamic> authors;
-  AuthorInput(this.authors);
+  String collectionId;
+  AuthorInput(this.authors, this.collectionId);
 
   @override
   _AuthorInputState createState() => _AuthorInputState();
@@ -168,6 +169,8 @@ class _AuthorInputState extends State<AuthorInput> {
                 }
                 print("New authors: " + _newAuthors.toString());
                 print("Deleted authors: " + _deletedAuthors.toString());
+
+                print(widget.collectionId);
 
                 Navigator.of(context).pop();
               },
