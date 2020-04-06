@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/widgets.dart';
-import 'dart:async';
 import 'dart:convert';
 
-import '../server_util.dart' as Server;
+import '../providers/userAuthentication.dart';
 
 import '../screens/home_screen.dart';
-
-const SERVER_IP = Server.SERVER_IP;
-final storage = FlutterSecureStorage();
 
 class LoginScreenState extends State<LoginScreen> {
   final formKey = new GlobalKey<FormState>();
   String formType = "login";
 
+  final storage = FlutterSecureStorage();
+
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -25,23 +24,14 @@ class LoginScreenState extends State<LoginScreen> {
             AlertDialog(title: Text(title), content: Text(text)),
       );
 
-  Future<String> attemptLogin(String email, String password) async {
-    try {
-      var res = await http.post(
-        "$SERVER_IP/api/v1/login",
-        body: {"email": email, "password": password},
-      );
-      final resJson = json.decode(res.body);
-      print(Server.SERVER_IP + "jajajaja");
-      print("Length" + resJson.length.toString());
-      print(resJson);
-      if (resJson.length == 1) {
-        return null;
-      }
-      return resJson["token"];
-    } catch (error) {
-      throw error;
-    }
+  void _writeToken(String token) async {
+    await storage.write(key: "token", value: token);
+    final tokenPayload = token.split(".");
+    final payloadMap = jsonDecode(
+        utf8.decode(base64Url.decode(base64Url.normalize(tokenPayload[1]))));
+    print(payloadMap);
+    await storage.write(key: "userId", value: payloadMap["user_id"].toString());
+    await storage.write(key: "email", value: payloadMap["email"]);
   }
 
   // bool saveForm() {
@@ -127,15 +117,10 @@ class LoginScreenState extends State<LoginScreen> {
             var email = _emailController.text;
             var password = _passwordController.text;
 
-            var token = await attemptLogin(email, password);
+            var token =
+                await Provider.of<Login>(context).attemptLogin(email, password);
             if (token != null) {
-              await storage.write(key: "token", value: token);
-              final tokenPayload = token.split(".");
-              final payloadMap = jsonDecode(utf8.decode(
-                  base64Url.decode(base64Url.normalize(tokenPayload[1]))));
-              await storage.write(
-                  key: "userId", value: payloadMap["user_id"].toString());
-              await storage.write(key: "email", value: payloadMap["email"]);
+              _writeToken(token);
               Navigator.of(context).pushNamed(HomeScreen.routeName);
             } else {
               displayDialog(context, "Incorrect email or password",
@@ -153,6 +138,7 @@ class LoginScreenState extends State<LoginScreen> {
     } else {
       return [
         new TextFormField(
+          controller: _usernameController,
           decoration: new InputDecoration(labelText: 'Username'),
           validator: (value) {
             return value.isEmpty ? 'Username required' : null;
@@ -162,7 +148,17 @@ class LoginScreenState extends State<LoginScreen> {
           child: new Text("Create account", style: TextStyle(fontSize: 20.0)),
           textColor: Colors.white,
           color: Colors.purple,
-          onPressed: () {},
+          onPressed: () async {
+            var email = _emailController.text;
+            var password = _passwordController.text;
+            var username = _usernameController.text;
+
+            int res =
+                await Provider.of<Login>(context).attemptSignUp(email, password, username);
+                if(res==400)displayDialog(context, "Unknown Error", "Some unknown error occured. Try again");
+                else if(res==200)displayDialog(context, "Success", "The user was created. Log in now.");
+                else if(res==409)displayDialog(context, "That username is already registered", "Please try to sign up using another username or log in if you already have an account.");  
+          },
         ),
         new FlatButton(
           child: new Text("Have an account? Login",

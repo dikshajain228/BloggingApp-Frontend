@@ -21,7 +21,7 @@ class Collection with ChangeNotifier {
   bool is_following;
   List<dynamic> authors;
 
-  static const baseUrl = Server.SERVER_IP + "api/v1/";
+  static const baseUrl = Server.SERVER_IP + "/api/v1/";
   final storage = FlutterSecureStorage();
 
   Collection({
