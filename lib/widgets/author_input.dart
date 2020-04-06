@@ -73,7 +73,7 @@ class _AuthorInputState extends State<AuthorInput> {
         ChipsInput(
           initialValue: _initialAuthors,
           enabled: true,
-          maxChips: 4,
+          maxChips: 6,
           textStyle: TextStyle(height: 1.5, fontFamily: "Roboto", fontSize: 16),
           decoration: InputDecoration(
             labelText: "Select People",
@@ -171,6 +171,21 @@ class _AuthorInputState extends State<AuthorInput> {
                 print("Deleted authors: " + _deletedAuthors.toString());
 
                 print(widget.collectionId);
+
+                if (_newAuthors.length != 0) {
+                  Author.addAuthors(_newAuthors, widget.collectionId)
+                      .then((reply) {
+                    print("Added");
+                    print(reply);
+                  });
+                }
+                if (_deletedAuthors.length != 0) {
+                  Author.deleteAuthors(_deletedAuthors, widget.collectionId)
+                      .then((reply) {
+                    print("Deleted authors");
+                    print(reply);
+                  });
+                }
 
                 Navigator.of(context).pop();
               },
