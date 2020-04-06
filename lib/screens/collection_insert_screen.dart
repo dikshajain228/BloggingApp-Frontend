@@ -16,6 +16,8 @@ class CollectionInsertScreen extends StatefulWidget {
 }
 
 class CollectionInsertScreenState extends State<CollectionInsertScreen> {
+  final _formKey = new GlobalKey<FormState>();
+
   final _collectionName = TextEditingController();
   final _collectionDescription = TextEditingController();
 
@@ -48,6 +50,8 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
+          key : _formKey,
+          autovalidate: true,
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
@@ -67,6 +71,10 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
                   child: TextFormField(
                     decoration: InputDecoration(labelText: 'Collection Name'),
                     controller: _collectionName,
+                    validator: (value){
+                      if(value.isEmpty) return 'Collection Name required';
+                      return null;
+                    }
                   ),
                 ),
                 TextFormField(
@@ -74,6 +82,10 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
                   decoration:
                       InputDecoration(labelText: 'Collection Description'),
                   controller: _collectionDescription,
+                  validator: (value){
+                      if(value.isEmpty) return 'Collection Description required';
+                      return null;
+                    }
                 ),
               ],
             ),
@@ -84,23 +96,23 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
   }
 
   void _insertCollection() {
-    if (uploadedImage != null) {
-      print(uploadedImage.path);
-    } else {
-      print("no upload");
+    if(_formKey.currentState.validate()){
+      if (uploadedImage != null) {
+        print(uploadedImage.path);
+      } else {
+        print("no upload");
+      }
+      String collectionName = _collectionName.text;
+      String description = _collectionDescription.text;
+      final data = {"collectionName": collectionName, "description": description};
+      print("form submit");
+      Provider.of<Collections>(context)
+          .addCollection(data, uploadedImage)
+          .then((_) {
+        print("Inserted");
+        Navigator.of(context)
+                      .pushReplacementNamed(ProfilePage.routeName);
+      });
     }
-    String collectionName = _collectionName.text;
-    String description = _collectionDescription.text;
-    final data = {"collectionName": collectionName, "description": description};
-    print("form submit");
-    print(collectionName);
-    print(description);
-    Provider.of<Collections>(context)
-        .addCollection(data, uploadedImage)
-        .then((_) {
-      print("Inserted");
-      Navigator.of(context)
-                    .pushReplacementNamed(ProfilePage.routeName);
-    });
   }
 }

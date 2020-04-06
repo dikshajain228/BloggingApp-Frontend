@@ -33,17 +33,7 @@ class LoginScreenState extends State<LoginScreen> {
     await storage.write(key: "userId", value: payloadMap["user_id"].toString());
     await storage.write(key: "email", value: payloadMap["email"]);
   }
-
-  // bool saveForm() {
-  //   final form = formKey.currentState;
-  //   if (form.validate()) {
-  //     form.save();
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
+  
   void moveToRegister() {
     //formKey.currentState.reset();
 
