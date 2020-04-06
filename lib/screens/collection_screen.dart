@@ -120,7 +120,7 @@ class _CollectionScreenState extends State<CollectionScreen>
     print("save");
   }
 
-  void ItemChange(bool val, int index) {
+  void itemChange(bool val, int index) {
     setState(() {
       inputs[index] = val;
     });
@@ -182,18 +182,11 @@ class _CollectionScreenState extends State<CollectionScreen>
           },
         ),
         SpeedDialChild(
-          child: Icon(Icons.person_add),
+          child: Icon(Icons.person),
           backgroundColor: Colors.tealAccent,
-          label: 'Add Author',
+          label: 'Edit Authors',
           labelStyle: TextStyle(fontSize: 18.0),
-          onTap: _showChipInput,
-        ),
-        SpeedDialChild(
-          child: Icon(Icons.delete_forever),
-          backgroundColor: Colors.tealAccent,
-          label: 'Delete Author',
-          labelStyle: TextStyle(fontSize: 18.0),
-          onTap: _showDeleteAuthorDialog,
+          onTap: _showEditAuthorDialog,
         ),
         SpeedDialChild(
           child: Icon(Icons.person),
@@ -206,12 +199,12 @@ class _CollectionScreenState extends State<CollectionScreen>
     ));
   }
 
-  _showChipInput() {
+  _showEditAuthorDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Alert'),
+          title: Text('Edit Authors...'),
           content: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(
@@ -258,52 +251,6 @@ class _CollectionScreenState extends State<CollectionScreen>
       authors = [...authorsData];
     });
   }
-
-  // _showAddAuthorDialog() {
-  //   showDialog(
-  //     barrierDismissible: true,
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: Text(
-  //           "Add Authors",
-  //           style: TextStyle(
-  //             fontSize: 20.0,
-  //             fontWeight: FontWeight.bold,
-  //           ),
-  //         ),
-  //         content: SingleChildScrollView(
-  //           scrollDirection: Axis.vertical,
-  //           child: Column(
-  //             children: <Widget>[
-  //               AuthorsInput(authors, setAuthors),
-  //             ],
-  //           ),
-  //         ),
-  //         actions: [
-  //           FlatButton(
-  //             onPressed: () {
-  //               print("hey");
-  //               Navigator.of(context).pop();
-  //             },
-  //             child: Text("Close"),
-  //             color: Colors.red,
-  //             splashColor: Colors.redAccent,
-  //           ),
-  //           FlatButton(
-  //             child: Text("Add"),
-  //             color: Colors.teal,
-  //             splashColor: Colors.tealAccent,
-  //             onPressed: () {
-  //               print("authors");
-  //               print(authors);
-  //             },
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
 
   _showViewAuthorDialog() {
     //data = _getAuthorsofCollection
@@ -408,27 +355,4 @@ class _CollectionScreenState extends State<CollectionScreen>
           );
         });
   }
-
-// ListView makeCheckList(){
-//   return ListView.builder(
-//           itemCount: inputs.length,
-//           itemBuilder: (BuildContext context, int index){
-//             return new Card(
-//               child: new Container(
-//                 padding: new EdgeInsets.all(10.0),
-//                 child: new Column(
-//                   children: <Widget>[
-//                     new CheckboxListTile(
-//                         value: inputs[index],
-//                         title: new Text('item $index'),
-//                         controlAffinity: ListTileControlAffinity.leading,
-//                         onChanged:(bool val){ItemChange(val, index);}
-//                     )
-//                   ],
-//                 ),
-//               ),
-//             );
-//           }
-//       );
-// }
 }
