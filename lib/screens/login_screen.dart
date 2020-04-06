@@ -45,7 +45,7 @@ class LoginScreenState extends State<LoginScreen> {
   // }
 
   void moveToRegister() {
-    formKey.currentState.reset();
+    //formKey.currentState.reset();
 
     setState(() {
       formType = "register";
@@ -53,7 +53,7 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   void moveToLogin() {
-    formKey.currentState.reset();
+    //formKey.currentState.reset();
 
     setState(() {
       formType = "login";
@@ -72,6 +72,7 @@ class LoginScreenState extends State<LoginScreen> {
           margin: EdgeInsets.all(25.0),
           child: new Form(
             key: formKey,
+            autovalidate: true,
             child: new Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: createInputs() + createButtons(),
@@ -89,7 +90,16 @@ class LoginScreenState extends State<LoginScreen> {
         controller: _emailController,
         decoration: new InputDecoration(labelText: 'Email'),
         validator: (value) {
-          return value.isEmpty ? 'Email required' : null;
+          if(value.isEmpty)  return 'Email required';
+          else{
+            Pattern pattern = r"[A-Za-z0-9]*@[A-Za-z]+.[a-zA-Z]{2,}";
+            RegExp regex = new RegExp(pattern);
+            if(!regex.hasMatch(value))
+              return 'Enter valid Email';
+            else 
+              return null;
+          }
+          return null;
         },
       ),
       new Padding(
@@ -99,7 +109,10 @@ class LoginScreenState extends State<LoginScreen> {
           decoration: new InputDecoration(labelText: 'Password'),
           obscureText: true,
           validator: (value) {
-            return value.isEmpty ? 'Password required' : null;
+            var err= null;
+            if(value.isEmpty) err='Password required';
+            else if(value.length<8) err='Password length should not be less than 8';
+            return err;
           },
         ),
       ),
@@ -114,17 +127,20 @@ class LoginScreenState extends State<LoginScreen> {
           textColor: Colors.white,
           color: Colors.purple,
           onPressed: () async {
-            var email = _emailController.text;
-            var password = _passwordController.text;
+            final form = formKey.currentState;
+            if(form.validate()){
+              var email = _emailController.text;
+              var password = _passwordController.text;
 
-            var token =
-                await Provider.of<Login>(context).attemptLogin(email, password);
-            if (token != null) {
-              _writeToken(token);
-              Navigator.of(context).pushNamed(HomeScreen.routeName);
-            } else {
-              displayDialog(context, "Incorrect email or password",
-                  "No account was found matching that email and password");
+              var token =
+                  await Provider.of<Login>(context).attemptLogin(email, password);
+              if (token != null) {
+                _writeToken(token);
+                Navigator.of(context).pushNamed(HomeScreen.routeName);
+              } else {
+                displayDialog(context, "Incorrect email or password",
+                    "No account was found matching that email and password");
+              }
             }
           },
         ),
@@ -149,15 +165,20 @@ class LoginScreenState extends State<LoginScreen> {
           textColor: Colors.white,
           color: Colors.purple,
           onPressed: () async {
-            var email = _emailController.text;
-            var password = _passwordController.text;
-            var username = _usernameController.text;
+            if(formKey.currentState.validate()){
+              var email = _emailController.text;
+              var password = _passwordController.text;
+              var username = _usernameController.text;
 
-            int res =
-                await Provider.of<Login>(context).attemptSignUp(email, password, username);
-                if(res==400)displayDialog(context, "Unknown Error", "Some unknown error occured. Try again");
-                else if(res==200)displayDialog(context, "Success", "The user was created. Log in now.");
-                else if(res==409)displayDialog(context, "That username is already registered", "Please try to sign up using another username or log in if you already have an account.");  
+              int res =
+                  await Provider.of<Login>(context).attemptSignUp(email, password, username);
+                  if(res==400)
+                    displayDialog(context, "Unknown Error", "Some unknown error occured. Try again");
+                  else if(res==200)
+                    displayDialog(context, "Success", "The user was created. Log in now.");
+                  else if(res==409)
+                    displayDialog(context, "Error", "Please try to sign up using another username or log in if you already have an account.");  
+            }
           },
         ),
         new FlatButton(
