@@ -7,6 +7,8 @@ import '../widgets/image_input.dart';
 import '../providers/collection.dart';
 import '../providers/collections.dart';
 
+import '../screens/collection_screen.dart';
+
 class EditCollection extends StatefulWidget {
   static const routeName = '/collection/edit';
   Collection collection;
@@ -19,6 +21,10 @@ class EditCollection extends StatefulWidget {
 class _EditCollectionState extends State<EditCollection> {
   final _collectionName = TextEditingController();
   final _collectionDescription = TextEditingController();
+
+  final _formKey = new GlobalKey<FormState>();
+
+
   File uploadedImage;
 
   void initState() {
@@ -50,6 +56,8 @@ class _EditCollectionState extends State<EditCollection> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
+          key: _formKey,
+          autovalidate : true,
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
@@ -70,6 +78,10 @@ class _EditCollectionState extends State<EditCollection> {
                   child: TextFormField(
                     decoration: InputDecoration(labelText: 'Collection Name'),
                     controller: _collectionName,
+                    validator: (value){
+                      if(value.isEmpty) return 'Collection Name required';
+                      return null;
+                    }
                   ),
                 ),
                 TextFormField(
@@ -112,38 +124,42 @@ class _EditCollectionState extends State<EditCollection> {
 
   // Save alert dialog
   void _showSaveDialog() {
-    showDialog(
-      barrierDismissible: true,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            "Confirm changes ?",
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
+    if(_formKey.currentState.validate()){
+      showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              "Confirm changes ?",
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          actions: [
-            FlatButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text("No"),
-              color: Colors.red,
-              splashColor: Colors.redAccent,
-            ),
-            FlatButton(
-              child: Text("Yes"),
-              color: Colors.teal,
-              splashColor: Colors.tealAccent,
-              onPressed: () {
-                _updateCollection();
-              },
-            ),
-          ],
-        );
-      },
-    );
+            actions: [
+              FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text("No"),
+                color: Colors.red,
+                splashColor: Colors.redAccent,
+              ),
+              FlatButton(
+                child: Text("Yes"),
+                color: Colors.teal,
+                splashColor: Colors.tealAccent,
+                onPressed: () {
+                  _updateCollection();
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }

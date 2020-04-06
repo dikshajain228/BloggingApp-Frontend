@@ -82,10 +82,6 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
                   decoration:
                       InputDecoration(labelText: 'Collection Description'),
                   controller: _collectionDescription,
-                  validator: (value){
-                      if(value.isEmpty) return 'Collection Description required';
-                      return null;
-                    }
                 ),
               ],
             ),

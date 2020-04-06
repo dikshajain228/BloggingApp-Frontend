@@ -17,6 +17,9 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
+
+  final _formKey = new GlobalKey<FormState>();
+
   final _username = TextEditingController();
   final _about = TextEditingController();
   File uploadedImage;
@@ -55,13 +58,15 @@ class _EditProfileState extends State<EditProfile> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.done),
-            onPressed: _showSaveDialog,
+            onPressed:  _showSaveDialog,
           )
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
+          key : _formKey,
+          autovalidate: true,
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
@@ -77,7 +82,10 @@ class _EditProfileState extends State<EditProfile> {
                   child: TextFormField(
                     controller: _username,
                     decoration: InputDecoration(labelText: 'Username'),
-                    //textInputAction: TextInputAction.next,
+                    validator: (value){
+                      if(value.isEmpty) return "Username cant be empty";
+                      return null;
+                    }
                   ),
                 ),
                 TextFormField(
@@ -112,38 +120,43 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   void _showSaveDialog() {
-    showDialog(
-      barrierDismissible: true,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            "Confirm changes ?",
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
+    if(_formKey.currentState.validate()){
+      showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              "Confirm changes ?",
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          actions: [
-            FlatButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text("No"),
-              color: Colors.red,
-              splashColor: Colors.redAccent,
-            ),
-            FlatButton(
-              child: Text("Yes"),
-              color: Colors.teal,
-              splashColor: Colors.tealAccent,
-              onPressed: () {
-                _updateProfile();
-              },
-            ),
-          ],
-        );
-      },
-    );
+            actions: [
+              FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text("No"),
+                color: Colors.red,
+                splashColor: Colors.redAccent,
+              ),
+              FlatButton(
+                child: Text("Yes"),
+                color: Colors.teal,
+                splashColor: Colors.tealAccent,
+                onPressed: () {
+                  _updateProfile();
+                  Navigator.of(context).pop();
+                  Navigator.of(context)
+                      .pushReplacementNamed(ProfilePage.routeName);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }
