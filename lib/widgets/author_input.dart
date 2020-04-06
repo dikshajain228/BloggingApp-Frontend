@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_chips_input/flutter_chips_input.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_chips_input/flutter_chips_input.dart';
+
+import '../models/author.dart';
+// import '../widgets/chips_input.dart';
 
 class AuthorInput extends StatefulWidget {
   List<dynamic> authors;
@@ -37,30 +40,30 @@ class _AuthorInputState extends State<AuthorInput> {
 
   @override
   Widget build(BuildContext context) {
-    const mockResults = <Author>[
-      Author(1, 'John Doe', 'jdoe@flutter.io',
+    var mockResults = <Author>[
+      Author(100, 'John Doe', 'jdoe@flutter.io',
           'https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX4057996.jpg'),
-      Author(2, 'Paul', 'paul@google.com',
+      Author(102, 'Paul', 'paul@google.com',
           'https://mbtskoudsalg.com/images/person-stock-image-png.png'),
-      Author(3, 'Fred', 'fred@google.com',
+      Author(101, 'Fred', 'fred@google.com',
           'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-      Author(4, 'Brian', 'brian@flutter.io',
+      Author(103, 'Brian', 'brian@flutter.io',
           'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-      Author(5, 'John', 'john@flutter.io',
+      Author(104, 'John', 'john@flutter.io',
           'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-      Author(6, 'Thomas', 'thomas@flutter.io',
+      Author(105, 'Thomas', 'thomas@flutter.io',
           'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-      Author(7, 'Nelly', 'nelly@flutter.io',
+      Author(111, 'Nelly', 'nelly@flutter.io',
           'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-      Author(8, 'Marie', 'marie@flutter.io',
+      Author(112, 'Marie', 'marie@flutter.io',
           'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-      Author(9, 'Charlie', 'charlie@flutter.io',
+      Author(1221, 'Charlie', 'charlie@flutter.io',
           'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-      Author(10, 'Diana', 'diana@flutter.io',
+      Author(121, 'Diana', 'diana@flutter.io',
           'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-      Author(11, 'Ernie', 'ernie@flutter.io',
+      Author(132, 'Ernie', 'ernie@flutter.io',
           'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-      Author(12, 'Gina', 'fred@flutter.io',
+      Author(133, 'Gina', 'fred@flutter.io',
           'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
     ];
 
@@ -68,23 +71,23 @@ class _AuthorInputState extends State<AuthorInput> {
       children: <Widget>[
         ChipsInput(
           initialValue: _initialAuthors,
+          enabled: true,
           maxChips: 4,
+          textStyle: TextStyle(height: 1.5, fontFamily: "Roboto", fontSize: 16),
           decoration: InputDecoration(
-            labelText: "Add Author",
-            hintText: "Enter email",
+            labelText: "Select People",
           ),
-          findSuggestions: (String query) {
+          findSuggestions: (String query) async {
             if (query.length != 0) {
-              return mockResults.where((profile) {
-                return profile.username
-                        .toLowerCase()
-                        .contains(query.toLowerCase()) ||
-                    profile.email.toLowerCase().contains(query.toLowerCase());
-              }).toList();
+              final fetchedAuthors = await Author.getSuggestions(query);
+              print("fetched suggestions");
+              print(fetchedAuthors);
+              return fetchedAuthors;
             }
-            return mockResults;
+            return <Author>[];
           },
           onChanged: (data) {
+            print("On changed");
             print(data);
             setState(() {
               _selectedAuthors = [...data];
@@ -165,6 +168,7 @@ class _AuthorInputState extends State<AuthorInput> {
                 }
                 print("New authors: " + _newAuthors.toString());
                 print("Deleted authors: " + _deletedAuthors.toString());
+
                 Navigator.of(context).pop();
               },
             ),
@@ -178,29 +182,5 @@ class _AuthorInputState extends State<AuthorInput> {
         )
       ],
     );
-  }
-}
-
-class Author {
-  final int user_id;
-  final String username;
-  final String email;
-  final String image_url;
-
-  const Author(this.user_id, this.username, this.email, this.image_url);
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Author &&
-          runtimeType == other.runtimeType &&
-          user_id == other.user_id;
-
-  @override
-  int get hashCode => username.hashCode;
-
-  @override
-  String toString() {
-    return user_id.toString();
   }
 }
