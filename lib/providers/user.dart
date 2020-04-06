@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
-import '../constants.dart' as Constants;
+import '../server_util.dart' as Serverr;
 
 class User with ChangeNotifier {
-  static const baseUrl = Constants.SERVER_IP+"/api/v1/";
+  static const baseUrl = Serverr.SERVER_IP + "/api/v1/";
   final storage = FlutterSecureStorage();
 
   final int user_id;

@@ -7,11 +7,11 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 
-import '../constants.dart' as Constants;
+import '../server_util.dart' as Server;
 import './article.dart';
 
 class Articles with ChangeNotifier {
-  static const baseUrl = Constants.SERVER_IP+"/api/v1/";
+  static const baseUrl = Server.SERVER_IP + "/api/v1/";
   final storage = FlutterSecureStorage();
   List<Article> _articles = [];
 
@@ -221,7 +221,7 @@ class Articles with ChangeNotifier {
     List<Article> fetchedArticles = [];
     final token = await storage.read(key: "token");
 
-    String base = Constants.base;
+    String base = Server.base;
     String path = "/api/v1/articles";
     var queryParams = {"q": query};
     var url = Uri.http(base, path, queryParams);

@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../constants.dart' as Constants;
+import '../server_util.dart' as Server;
 
 import './collection.dart';
 
 class Collections with ChangeNotifier {
-  static const baseUrl = Constants.SERVER_IP + "/api/v1/";
+  static const baseUrl = Server.SERVER_IP + "/api/v1/";
   final storage = FlutterSecureStorage();
 
   List<Collection> _collections = [];
@@ -147,7 +147,7 @@ class Collections with ChangeNotifier {
     List<Collection> fetchedCollections = [];
     final token = await storage.read(key: "token");
 
-    String base = Constants.base;
+    String base = Server.base;
     String path = "/api/v1/collections";
     var queryParams = {"q": query};
     var url = Uri.http(base, path, queryParams);

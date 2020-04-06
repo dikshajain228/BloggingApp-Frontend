@@ -8,10 +8,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import './user.dart';
 
-import '../constants.dart' as Constants;
+import '../server_util.dart' as Server;
 
 class Users with ChangeNotifier {
-  static const baseUrl = Constants.SERVER_IP + "/api/v1/";
+  static const baseUrl = Server.SERVER_IP + "/api/v1/";
   final storage = FlutterSecureStorage();
 
   List<User> _users = [];
@@ -63,7 +63,7 @@ class Users with ChangeNotifier {
     List<User> fetchedUsers = [];
     final token = await storage.read(key: "token");
     final user_id = await storage.read(key: "user_id");
-    String base = Constants.base;
+    String base = Server.base;
     String path = "/api/v1/users";
     var queryParams = {"q": query};
     var url = Uri.http(base, path, queryParams);
@@ -76,14 +76,13 @@ class Users with ChangeNotifier {
       print("hello kitty" + url.toString());
       final responseJson = json.decode(response.body);
       for (final user in responseJson) {
-          fetchedUsers.add(User(
-            user_id: user["user_id"],
-            email: user["email"],
-            username: user["username"],
-            profile_image_url: user["profile_image_url"],
-            is_following: user["is_following"] == 0 ? false : true,
-          ));
-        
+        fetchedUsers.add(User(
+          user_id: user["user_id"],
+          email: user["email"],
+          username: user["username"],
+          profile_image_url: user["profile_image_url"],
+          is_following: user["is_following"] == 0 ? false : true,
+        ));
       }
       _users = [...fetchedUsers];
     } catch (error) {

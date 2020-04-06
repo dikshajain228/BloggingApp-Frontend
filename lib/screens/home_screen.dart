@@ -1,17 +1,15 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
-
 import '../widgets/articles_list.dart';
 import '../widgets/drawer.dart';
 
 import '../providers/articles.dart';
 
-import '../constants.dart' as Constants;
+import '../server_util.dart' as Server;
 
 class HomeScreen extends StatefulWidget {
   static const routeName = "/home-page";
@@ -35,12 +33,12 @@ class _HomeScreenState extends State<HomeScreen> {
   //   final token =
   //       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo2LCJlbWFpbCI6ImFzaGxleUBnbWFpbC5jb20iLCJpYXQiOjE1ODU3OTk2NTgsImV4cCI6MTU4NzA5NTY1OH0.oMwuiyNYJmSP4UZhmeVRywWSo0CRX4xdkFLWgo-MSLI";
   //   await storage.write(key: "token", value: token);
-    // final tokenPayload = token.split(".");
-    // final payloadMap = jsonDecode(
-    //     utf8.decode(base64Url.decode(base64Url.normalize(tokenPayload[1]))));
-    // print(payloadMap);
-    // await storage.write(key: "userId", value: payloadMap["user_id"].toString());
-    // await storage.write(key: "email", value: payloadMap["email"]);
+  // final tokenPayload = token.split(".");
+  // final payloadMap = jsonDecode(
+  //     utf8.decode(base64Url.decode(base64Url.normalize(tokenPayload[1]))));
+  // print(payloadMap);
+  // await storage.write(key: "userId", value: payloadMap["user_id"].toString());
+  // await storage.write(key: "email", value: payloadMap["email"]);
   // }
 
   @override
@@ -71,9 +69,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _testRequest() async {
-    final response = await http.get(Constants.SERVER_IP);
+    final response = await http.get(Server.SERVER_IP);
     //final response = await http.get(GlobalConfiguration().getString("SERVER_IP"));
-    
+
     print("hello" + response.body);
   }
 

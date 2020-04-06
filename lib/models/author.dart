@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
 
-import '../constants.dart' as Constants;
+import '../server_util.dart' as Server;
 
 class Author {
   final int user_id;
@@ -14,7 +14,7 @@ class Author {
   final String email;
   final String image_url;
 
-  static const baseUrl = Constants.SERVER_IP + "/api/v1/";
+  static const baseUrl = Server.SERVER_IP + "/api/v1/";
   static const storage = FlutterSecureStorage();
 
   Author(this.user_id, this.username, this.email, this.image_url);
@@ -39,7 +39,7 @@ class Author {
 
     final token = await storage.read(key: "token");
 
-    String base = Constants.base;
+    String base = Server.base;
     String path = "/api/v1/users";
     var queryParams = {"prompt": query};
     var url = Uri.http(base, path, queryParams);
@@ -71,7 +71,7 @@ class Author {
       List<int> authors, String collectionId) async {
     // /api/v1/collections/:collectionId/authors/
     final token = await storage.read(key: "token");
-    String base = Constants.base;
+    String base = Server.base;
     String path = "/api/v1/collections/" + collectionId + "/authors";
     var url = Uri.http(base, path);
     try {
@@ -95,7 +95,7 @@ class Author {
       List<int> authors, String collectionId) async {
 // /api/v1/collections/:collectionId/authors/
     final token = await storage.read(key: "token");
-    String base = Constants.base;
+    String base = Server.base;
     String path = "/api/v1/collections/" + collectionId + "/authors";
     var url = Uri.http(base, path);
     final client = http.Client();

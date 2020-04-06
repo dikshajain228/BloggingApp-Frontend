@@ -5,11 +5,11 @@ import 'package:flutter/widgets.dart';
 import 'dart:async';
 import 'dart:convert';
 
-import '../constants.dart' as Constants;
+import '../server_util.dart' as Server;
 
 import '../screens/home_screen.dart';
 
-const SERVER_IP = Constants.SERVER_IP;
+const SERVER_IP = Server.SERVER_IP;
 final storage = FlutterSecureStorage();
 
 class LoginScreenState extends State<LoginScreen> {
@@ -32,7 +32,7 @@ class LoginScreenState extends State<LoginScreen> {
         body: {"email": email, "password": password},
       );
       final resJson = json.decode(res.body);
-      print(Constants.SERVER_IP + "jajajaja");
+      print(Server.SERVER_IP + "jajajaja");
       print("Length" + resJson.length.toString());
       print(resJson);
       if (resJson.length == 1) {

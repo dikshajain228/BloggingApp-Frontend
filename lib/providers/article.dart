@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../constants.dart' as Constants;
+import '../server_util.dart' as Server;
 
 class Article with ChangeNotifier {
   final String article_id;
@@ -25,7 +25,7 @@ class Article with ChangeNotifier {
   String tags;
   bool is_author;
 
-  static const baseUrl = Constants.SERVER_IP+"/api/v1/";
+  static const baseUrl = Server.SERVER_IP + "/api/v1/";
   final storage = FlutterSecureStorage();
 
   Article({
