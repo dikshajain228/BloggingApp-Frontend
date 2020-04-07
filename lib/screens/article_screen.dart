@@ -84,71 +84,74 @@ class _ArticleScreenState extends State<ArticleScreen>
             ? SpinKitChasingDots(
                 color: Colors.teal,
               )
-            : Column(
-                children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.only(
-                      bottom: 10,
-                      top: 10,
-                    ),
-                    child: Center(
-                      child: Text(
-                        _article.title,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 35.0,
+            : SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.only(
+                        bottom: 10,
+                        top: 10,
+                      ),
+                      child: Center(
+                        child: Text(
+                          _article.title,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 35.0,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: 10,
-                      right: 10,
-                      bottom: 5,
-                    ),
-                    child: Container(
-                      height: 200,
-                      width: double.infinity,
-                      child: CachedNetworkImage(
-                        imageUrl: _article.image_path,
-                        placeholder: (context, url) => Image.network(
-                          "http://via.placeholder.com/640x360",
-                          fit: BoxFit.cover,
-                          height: 200,
-                          width: double.infinity,
-                        ),
-                        errorWidget: (context, url, error) => Image.network(
-                          "http://via.placeholder.com/640x360",
-                          fit: BoxFit.cover,
-                          height: 200,
-                          width: double.infinity,
-                        ),
-                        fit: BoxFit.cover,
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 10,
+                        right: 10,
+                        bottom: 5,
+                      ),
+                      child: Container(
                         height: 200,
                         width: double.infinity,
+                        child: CachedNetworkImage(
+                          imageUrl: _article.image_path,
+                          placeholder: (context, url) => Image.network(
+                            "http://via.placeholder.com/640x360",
+                            fit: BoxFit.cover,
+                            height: 200,
+                            width: double.infinity,
+                          ),
+                          errorWidget: (context, url, error) => Image.network(
+                            "http://via.placeholder.com/640x360",
+                            fit: BoxFit.cover,
+                            height: 200,
+                            width: double.infinity,
+                          ),
+                          fit: BoxFit.cover,
+                          height: 200,
+                          width: double.infinity,
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(10),
-                    child: ZefyrView(
-                      document: _content,
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: ZefyrView(
+                        document: _content,
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Text("Published on  "),
-                        Text(DateFormat("dd-MM-yyyy")
-                            .format(_article.date_created)),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Text("Published on  "),
+                          Text(DateFormat("dd-MM-yyyy")
+                              .format(_article.date_created)),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               )),
         floatingActionButton: _article.is_author ? plusFloatingButton() : null);
   }
