@@ -20,6 +20,42 @@ class Users with ChangeNotifier {
     return [..._users];
   }
 
+  Future<User> fetchUserById(String userId) async{
+    print("what is the about error");
+    final token = await storage.read(key: "token");
+    String url = baseUrl + "users/" + userId;
+    print("check"+url);
+    try{
+      final response = await http.get(
+        url,
+        headers: {HttpHeaders.authorizationHeader: token},
+      );
+      print("whats rge provlem");
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      print("jajaja");
+      final userData = responseJson[0];
+      print(userData);
+      print("mynamyna");
+      print(userData["about"]+"please bro");
+      User user = User(
+        username: userData["username"],
+        user_id: userData["user_id"],
+        email: userData["email"],
+        about: userData["about"],
+        profile_image_url: userData["profile_image_url"],
+        followerCount: userData["followercount"],
+        followingCount: userData["followingcount"],
+        is_following: userData["is_following"] == 0 ? false:true,
+
+
+      );
+      return user;
+    }catch(error){
+      throw error;
+    }
+  }
+
 // Update user profile
   Future<void> updateProfile(Map<String, dynamic> data, File image) async {
     print(data);
@@ -46,6 +82,11 @@ class Users with ChangeNotifier {
       throw error;
     }
   }
+
+
+
+
+
 
   User getUserProfile() {
     return User(

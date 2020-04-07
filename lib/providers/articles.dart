@@ -291,6 +291,10 @@ class Articles with ChangeNotifier {
 
   void editArticles() {}
 
+  Future<void> deleteArticle(String id) async {
+    
+  }
+
   Future<void> addarticle(Article newArticle) async {
     List<Article> fetchedData = [];
     fetchedData.add(Article(
@@ -364,39 +368,5 @@ class Articles with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> deleteArticle(String id) async {
-    List<Article> fetchedData = [];
-    fetchedData.add(Article(
-      article_id: "1",
-      collection_id: "2",
-      user_id: 1,
-      title: "HEllo there",
-      content: "bjhcbjhgfhgdfhvds",
-      published: true,
-      image_path:
-          "https://images.pexels.com/photos/818252/pexels-photo-818252.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-      views_count: 0,
-      kudos_count: 0,
-      date_created: DateTime.parse("1969-07-20 20:18:04Z"),
-      date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
-      is_bookmarked: false,
-    ));
-
-    fetchedData.add(Article(
-        article_id: "1",
-        collection_id: "2",
-        user_id: 1,
-        title: "HEllo there",
-        content: "bjhcbjhgfhgdfhvds",
-        published: true,
-        image_path:
-            "https://images.pexels.com/photos/818252/pexels-photo-818252.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-        views_count: 0,
-        kudos_count: 0,
-        date_created: DateTime.parse("1969-07-20 20:18:04Z"),
-        date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
-        is_bookmarked: false));
-    _articles = fetchedData;
-    notifyListeners();
-  }
+  
 }

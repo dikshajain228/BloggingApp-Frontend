@@ -15,6 +15,7 @@ import './screens/article_edit_screen.dart';
 import './screens/collection_edit_screen.dart';
 import './screens/collection_insert_screen.dart';
 import './screens/login_screen.dart';
+import './screens/user_screen.dart';
 
 // Providers
 import './providers/articles.dart';
@@ -80,6 +81,7 @@ class MyApp extends StatelessWidget {
             ArticleInsertScreen.routeName: (context) =>
                 ArticleInsertScreen(settings.arguments),
             EditProfile.routeName: (context) => EditProfile(settings.arguments),
+            UserScreen.routeName: (context) => UserScreen(settings.arguments),
           };
           WidgetBuilder builder = routes[settings.name];
           return MaterialPageRoute(builder: (ctx) => builder(ctx));
