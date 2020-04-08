@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quill_delta/quill_delta.dart';
 import 'package:zefyr/zefyr.dart';
+import 'package:toast/toast.dart';
 
 // widgets
 import '../widgets/tags_input.dart';
 import '../widgets/image_input.dart';
 
 import '../providers/articles.dart';
+import '../screens/article_screen.dart';
 
 class ArticleInsertScreen extends StatefulWidget {
   static const routeName = "/article/insert";
@@ -193,8 +195,16 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
       "content": content,
       "tags": tags,
     };
-    Provider.of<Articles>(context).addArticle(data, uploadedImage).then((_) {
+   Provider.of<Articles>(context).addArticle(data, uploadedImage)
+      .then((_) {
       print("Added article");
+      Navigator.of(context).pushReplacementNamed(ArticleScreen.routeName);
+      Toast.show("New article added!", context, duration:7, gravity:  Toast.BOTTOM);
+    })
+    .catchError((_) {
+      print("Unsuccessful");
+      Navigator.of(context).pushReplacementNamed(ArticleInsertScreen.routeName);
+      Toast.show("Article could not be added.Please try again.", context, duration:7, gravity:  Toast.BOTTOM);
     });
   }
 }
