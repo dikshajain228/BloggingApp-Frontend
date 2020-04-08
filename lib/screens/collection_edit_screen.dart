@@ -119,12 +119,12 @@ class _EditCollectionState extends State<EditCollection> {
     Provider.of<Collections>(context).updateCollection(data, uploadedImage)
     .then((_) {
       print("Updated");
-      Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
+      Navigator.of(context).pushReplacementNamed(CollectionScreen.routeName);
       Toast.show("Updated Successfully!", context, duration:7, gravity:  Toast.BOTTOM);
     })
     .catchError((onError){
     print("Updation Unsuccessful.");
-    Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
+    Navigator.of(context).pushReplacementNamed(EditCollection.routeName);
     Toast.show("Updation Unsuccessful!.Please try again", context, duration:7, gravity:  Toast.BOTTOM);
     });
  }
