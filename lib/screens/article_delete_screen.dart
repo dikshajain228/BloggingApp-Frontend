@@ -22,7 +22,6 @@ class _ArticleDeleteScreenState extends State<ArticleDeleteScreen> {
         title: Text('Delete Article'),
       ),
       body: ArticlesDeleteList(),
-      drawer: MainDrawer(),
     );
   }
 }

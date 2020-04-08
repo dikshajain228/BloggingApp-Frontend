@@ -59,6 +59,30 @@ class User with ChangeNotifier {
     }
   }
 
+  Future<int> changePassword(String oldPassword, String newPassword) async {
+    String url = baseUrl+"user/password";
+    final token = await storage.read(key: "token");
+    print(oldPassword);
+    print(newPassword);
+    try{
+      final response = await http.patch(
+        url,
+        body: {
+          "oldPassword" : oldPassword,
+          "newPassword" : newPassword
+        },
+        headers: {HttpHeaders.authorizationHeader: token},
+      );
+      int statusCode=response.statusCode;
+      print("Status Code");
+      print(statusCode);
+      return statusCode;
+    }catch(error){
+      throw error;
+    }
+
+  }
+
   Future<void> followUser(String userId) async{
     final token = await storage.read(key: "token");
     String url = baseUrl + "followers/"+ userId;
