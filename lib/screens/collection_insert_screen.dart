@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:toast/toast.dart';
 
 // widgets
 import '../widgets/image_input.dart';
@@ -106,9 +107,13 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
           .addCollection(data, uploadedImage)
           .then((_) {
         print("Inserted");
-        Navigator.of(context)
-                      .pushReplacementNamed(ProfilePage.routeName);
-      });
+        Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
+        Toast.show("New collection added!", context, duration:7, gravity:  Toast.BOTTOM);
+      })
+      .catchError((onError){
+       print("Unsuccessful.");
+       Toast.show("A new collection could not be created.Please try again.", context, duration:7, gravity:  Toast.BOTTOM);
+    });
     }
   }
 }
