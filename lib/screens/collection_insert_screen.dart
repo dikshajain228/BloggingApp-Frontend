@@ -112,6 +112,7 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
       })
       .catchError((onError){
        print("Unsuccessful.");
+       Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
        Toast.show("A new collection could not be created.Please try again.", context, duration:7, gravity:  Toast.BOTTOM);
     });
     }
