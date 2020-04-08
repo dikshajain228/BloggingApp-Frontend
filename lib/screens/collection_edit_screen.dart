@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:toast/toast.dart';
 
 import '../widgets/image_input.dart';
 
@@ -115,12 +116,16 @@ class _EditCollectionState extends State<EditCollection> {
     print("form submit");
     print(collectionName);
     print(description);
-    Provider.of<Collections>(context)
-        .updateCollection(data, uploadedImage)
-        .then((_) {
+    Provider.of<Collections>(context).updateCollection(data, uploadedImage)
+    .then((_) {
       print("Updated");
+      Toast.show("Updated Successfully!", context, duration:7, gravity:  Toast.BOTTOM);
+    })
+    .catchError((onError){
+      print("Updation Unsuccessful.");
+       Toast.show("Updation Unsuccessful!.Please try again", context, duration:7, gravity:  Toast.BOTTOM);
     });
-  }
+ }
 
   // Save alert dialog
   void _showSaveDialog() {
