@@ -24,6 +24,7 @@ class Article with ChangeNotifier {
   bool is_bookmarked;
   String tags;
   bool is_author;
+  String author;
 
   static const baseUrl = Server.SERVER_IP + "/api/v1/";
   final storage = FlutterSecureStorage();
@@ -43,6 +44,7 @@ class Article with ChangeNotifier {
     this.is_bookmarked,
     this.tags,
     this.is_author,
+    this.author,
   });
 
   //Delete article
