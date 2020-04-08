@@ -163,11 +163,14 @@ class LoginScreenState extends State<LoginScreen> {
               int res =
                   await Provider.of<Authentication>(context).attemptSignUp(email, password, username);
                   if(res==400)
-                    displayDialog(context, "Unknown Error", "Some unknown error occured. Try again");
+                    displayDialog(context, "Error", "Required information is incomplete");
                   else if(res==200)
                     displayDialog(context, "Success", "The user was created. Log in now.");
                   else if(res==409)
-                    displayDialog(context, "Error", "Please try to sign up using another username or log in if you already have an account.");  
+                    displayDialog(context, "Error", "Please try to sign up using another username or log in if you already have an account.");
+                  else
+                    displayDialog(context, "Error", "Unknown error");
+                   
             }
           },
         ),

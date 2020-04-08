@@ -18,15 +18,7 @@ class Authentication with ChangeNotifier {
       var res = await http.post("$SERVER_IP/api/v1/signup",
           body: {"email": email, "password": password, "username": username, "about":"", "profile_image_url":"" },
       );
-      if(res.statusCode==409){
-        return 409;
-      }
-      else if(res.statusCode==200){
-        return 200;
-      }
-      else{
-        return 400;
-      }
+      return res.statusCode;
     } catch (error) {
       throw error;
     }
@@ -39,13 +31,10 @@ class Authentication with ChangeNotifier {
         body: {"email": email, "password": password},
       );
       final resJson = json.decode(res.body);
-      print(Server.SERVER_IP + "jajajaja");
-      print("Length" + resJson.length.toString());
-      print(resJson);
-      if (resJson.length == 1) {
-        return null;
+      if (res.statusCode==200) {
+        return resJson["token"];
       }
-      return resJson["token"];
+      return null;
     } catch (error) {
       throw error;
     }
