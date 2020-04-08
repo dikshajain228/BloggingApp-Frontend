@@ -1,4 +1,4 @@
-import 'package:bloggingapp/widgets/article_delete_list.dart';
+import '../widgets/article_delete_list.dart';
 import 'package:flutter/material.dart';
 import '../widgets/article_delete_list.dart';
 import '../widgets/drawer.dart';

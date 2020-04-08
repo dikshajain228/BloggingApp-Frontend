@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:bloggingapp/widgets/image_input.dart';
+import '../widgets/image_input.dart';
 
 import '../screens/profile_page.dart';
 import 'package:flutter/material.dart';
