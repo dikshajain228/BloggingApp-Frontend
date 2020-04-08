@@ -23,6 +23,11 @@ class Articles with ChangeNotifier {
     return [..._articles];
   }
 
+    Future<void> deleteArticle(String articleId) async{
+      print("Delete from screen");
+      _articles.removeWhere((article) => article.article_id == articleId);
+      notifyListeners();
+    }
   // Insert Article
   Future<void> addArticle(Map<String, dynamic> data, File image) async {
     String url = baseUrl + "articles";
@@ -291,9 +296,6 @@ class Articles with ChangeNotifier {
 
   void editArticles() {}
 
-  Future<void> deleteArticle(String id) async {
-    
-  }
 
   Future<void> addarticle(Article newArticle) async {
     List<Article> fetchedData = [];

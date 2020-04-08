@@ -45,6 +45,25 @@ class Article with ChangeNotifier {
     this.is_author,
   });
 
+  //Delete article
+  Future<void> deleteArticle(String articleId) async{
+    final token  = await storage.read(key : "token");
+    String url = baseUrl+"articles/"+articleId;
+    print(url);
+    try{
+      final response = await http.delete(
+        url,
+        headers : {HttpHeaders.authorizationHeader : token},
+      );
+      print("Delete please babeyy");
+      print(response);
+      notifyListeners();
+    }catch(error){
+      throw error;
+    }
+
+  }
+
   // Add bookmark
   Future<void> addBookmark(String articleId) async {
     String url = baseUrl + "user/bookmarks/" + articleId;

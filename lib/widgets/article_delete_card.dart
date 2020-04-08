@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:bloggingapp/screens/article_screen.dart';
 import 'package:provider/provider.dart';
+
 import '../providers/article.dart';
+import '../providers/articles.dart';
 
 class ArticleDeleteCard extends StatelessWidget {
+  Article article;
+
+  
   Widget build(BuildContext context) {
-    final article = Provider.of<Article>(context);
+
+    article = Provider.of<Article>(context);
+  
 
     return new Card(
       elevation: 8.0,
@@ -34,8 +41,9 @@ class ArticleDeleteCard extends StatelessWidget {
               Icons.cancel,
               color: Theme.of(context).primaryColor,
             ),
-            onPressed:() => 
-            showAlert(context),
+            onPressed: (){
+            showAlert(context, article.article_id);
+            }
           ),
           onTap: () {
             Navigator.of(context).pushNamed(ArticleScreen.routeName,
@@ -46,7 +54,7 @@ class ArticleDeleteCard extends StatelessWidget {
     );
   }
 
-   showAlert(BuildContext context) {
+   showAlert(BuildContext context, article_id) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -57,7 +65,16 @@ class ArticleDeleteCard extends StatelessWidget {
             FlatButton(
               child: Text("YES"),
               onPressed: () {
+                print(article_id);
                 //Delete the article
+                article.deleteArticle(article_id).then((_){
+                  print("Article deleted");
+                  // article.remove(article_id);
+                  // notifyListeners();
+                });
+                Provider.of<Articles>(context).deleteArticle(article_id).then((_) {
+      print("Deleted from list article");
+    });
                 Navigator.of(context).pop();
               },
             ),
