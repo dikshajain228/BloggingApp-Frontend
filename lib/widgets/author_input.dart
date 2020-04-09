@@ -97,7 +97,6 @@ class _AuthorInputState extends State<AuthorInput> {
           chipBuilder: (context, state, profile) {
             return InputChip(
               key: ObjectKey(profile),
-              backgroundColor: Color(0x11191654),
               label: Text(profile.username),
               avatar: ClipOval(
                 child: CachedNetworkImage(

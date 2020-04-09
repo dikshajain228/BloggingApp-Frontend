@@ -79,23 +79,20 @@ class _CollectionScreenState extends State<CollectionScreen>
           ? SpinKitChasingDots(
               color: Colors.teal,
             )
-          : SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Column(
-                children: [
-                  ChangeNotifierProvider.value(
-                    value: _collection,
-                    child: CollectionDetailsCard(),
-                  ),
-                  (_loadingArticles == true
-                      ? SpinKitWanderingCubes(
-                          color: Colors.teal,
-                        )
-                      : Flexible(
-                          child: ArticlesList(),
-                        )),
-                ],
-              ),
+          : Column(
+              children: [
+                ChangeNotifierProvider.value(
+                  value: _collection,
+                  child: CollectionDetailsCard(),
+                ),
+                (_loadingArticles == true
+                    ? SpinKitWanderingCubes(
+                        color: Colors.teal,
+                      )
+                    : Flexible(
+                        child: ArticlesList(),
+                      )),
+              ],
             )),
       floatingActionButton: (_loadingCollection == true
           ? null
@@ -208,64 +205,12 @@ class _CollectionScreenState extends State<CollectionScreen>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          contentPadding: EdgeInsets.only(top: 0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(32.0),
-            ),
-          ),
-          // title: Container(
-          //   // padding: const EdgeInsets.all(8.0),
-          //   child: Text("Edit authors..."),
-          //   decoration: BoxDecoration(
-          //     gradient: LinearGradient(
-          //         begin: Alignment.topLeft,
-          //         end: Alignment.bottomRight,
-          //         colors: <Color>[
-          //           Color(0xff191654),
-          //           Color(0xff43c6ac),
-          //           // Color(0xff6dffe1),
-          //           Color(0xff6dffe1),
-          //         ]),
-          //   ),
-          // ),
+          title: Text('Edit Authors...'),
           content: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Center(
-                    child: Text(
-                      "Edit authors...",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 25.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(32.0),
-                      topRight: Radius.circular(32.0),
-                    ),
-                    gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: <Color>[
-                          Color(0xff191654),
-                          Color(0xff43c6ac),
-                          // Color(0xff6dffe1),
-                          Color(0xff6dffe1),
-                        ]),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: AuthorInput(_authors, widget.collectionId),
-                ),
+                AuthorInput(_authors, widget.collectionId),
               ],
             ),
           ),

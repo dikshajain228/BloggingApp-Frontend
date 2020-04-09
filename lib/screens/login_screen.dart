@@ -33,7 +33,7 @@ class LoginScreenState extends State<LoginScreen> {
     await storage.write(key: "userId", value: payloadMap["user_id"].toString());
     await storage.write(key: "email", value: payloadMap["email"]);
   }
-
+  
   void moveToRegister() {
     //formKey.currentState.reset();
 
@@ -79,15 +79,14 @@ class LoginScreenState extends State<LoginScreen> {
       new TextFormField(
         controller: _emailController,
         decoration: new InputDecoration(labelText: 'Email'),
-        validator: (value) {
-          if (value.isEmpty)
-            return 'Email required';
-          else {
+        validator: (value){
+          if(value.isEmpty)  return 'Email required';
+          else{
             Pattern pattern = r"[A-Za-z0-9]*@[A-Za-z]+.[a-zA-Z]{2,}";
             RegExp regex = new RegExp(pattern);
-            if (!regex.hasMatch(value))
+            if(!regex.hasMatch(value))
               return 'Enter valid Email';
-            else
+            else 
               return null;
           }
           return null;
@@ -100,9 +99,9 @@ class LoginScreenState extends State<LoginScreen> {
           decoration: new InputDecoration(labelText: 'Password'),
           obscureText: true,
           validator: (value) {
-            var err = null;
-            if (value.isEmpty) err = 'Password required';
-            // else if(value.length<8) err='Password length should not be less than 8';
+            var err= null;
+            if(value.isEmpty) err='Password required';
+            else if(value.length<8) err='Password length should not be less than 8';
             return err;
           },
         ),
@@ -119,12 +118,12 @@ class LoginScreenState extends State<LoginScreen> {
           color: Colors.purple,
           onPressed: () async {
             final form = formKey.currentState;
-            if (form.validate()) {
+            if(form.validate()){
               var email = _emailController.text;
               var password = _passwordController.text;
 
-              var token = await Provider.of<Authentication>(context)
-                  .attemptLogin(email, password);
+              var token =
+                  await Provider.of<Authentication>(context).attemptLogin(email, password);
               if (token != null) {
                 _writeToken(token);
                 Navigator.of(context).pushNamed(HomeScreen.routeName);
@@ -156,24 +155,22 @@ class LoginScreenState extends State<LoginScreen> {
           textColor: Colors.white,
           color: Colors.purple,
           onPressed: () async {
-            if (formKey.currentState.validate()) {
+            if(formKey.currentState.validate()){
               var email = _emailController.text;
               var password = _passwordController.text;
               var username = _usernameController.text;
 
-              int res = await Provider.of<Authentication>(context)
-                  .attemptSignUp(email, password, username);
-              if (res == 400)
-                displayDialog(
-                    context, "Error", "Required information is incomplete");
-              else if (res == 200)
-                displayDialog(
-                    context, "Success", "The user was created. Log in now.");
-              else if (res == 409)
-                displayDialog(context, "Error",
-                    "Please try to sign up using another username or log in if you already have an account.");
-              else
-                displayDialog(context, "Error", "Unknown error");
+              int res =
+                  await Provider.of<Authentication>(context).attemptSignUp(email, password, username);
+                  if(res==400)
+                    displayDialog(context, "Error", "Required information is incomplete");
+                  else if(res==200)
+                    displayDialog(context, "Success", "The user was created. Log in now.");
+                  else if(res==409)
+                    displayDialog(context, "Error", "Please try to sign up using another username or log in if you already have an account.");
+                  else
+                    displayDialog(context, "Error", "Unknown error");
+                   
             }
           },
         ),

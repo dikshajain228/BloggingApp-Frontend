@@ -77,30 +77,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xfff3f7f6),
       appBar: AppBar(
         title: Text('Home Screen'),
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: <Color>[
-                  Color(0xff191654),
-                  Color(0xff43c6ac),
-                  // Color(0xff6dffe1),
-                  Color(0xff6dffe1),
-                ]),
-          ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xff43c6ac),
-        splashColor: Color(0xff191654),
-        foregroundColor: Colors.white,
-        onPressed: () {},
-        child: Icon(Icons.add),
-        tooltip: "Add Articles",
       ),
       body: (_loading == true
           ? SpinKitWanderingCubes(
