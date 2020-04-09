@@ -25,11 +25,14 @@ import './providers/users.dart';
 import './providers/user.dart';
 import './providers/userAuthentication.dart';
 
+import './route_observer.dart' as route_observer;
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final routeObserver = route_observer.routeObserver;
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
@@ -49,6 +52,7 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
+        navigatorObservers: <NavigatorObserver>[routeObserver],
         title: "Blogging App",
         theme: ThemeData(
           primaryColor: Colors.teal,
