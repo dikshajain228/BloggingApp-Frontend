@@ -116,31 +116,31 @@ class Users with ChangeNotifier {
   Future<void> searchUsers(String query) async {
     List<User> fetchedUsers = [];
     final token = await storage.read(key: "token");
-    final user_id = await storage.read(key: "user_id");
-    String base = Server.base;
-    String path = "/api/v1/users";
-    var queryParams = {"q": query};
-    var url = Uri.http(base, path, queryParams);
+    String url = baseUrl + "users?q=" + query;
     try {
       final response = await http.get(
         url,
         headers: {HttpHeaders.authorizationHeader: token},
       );
-      print(response.body);
-      print("hello kitty" + url.toString());
-      final responseJson = json.decode(response.body);
-      for (final user in responseJson) {
-        fetchedUsers.add(User(
-          user_id: user["user_id"],
-          email: user["email"],
-          username: user["username"],
-          profile_image_url: user["profile_image_url"],
-          is_following: user["is_following"] == 0 ? false : true,
-        ));
+      if (response.statusCode == 200) {
+        final responseJson = json.decode(response.body);
+        for (final user in responseJson['users']) {
+          fetchedUsers.add(User(
+            user_id: user["user_id"],
+            email: user["email"],
+            username: user["username"],
+            profile_image_url: user["profile_image_url"],
+            is_following: user["is_following"] == 0 ? false : true,
+          ));
+        }
+        _users = [...fetchedUsers];
+      } else {
+        print(response.body);
+        throw "Failed to load users";
       }
-      _users = [...fetchedUsers];
     } catch (error) {
-      throw error;
+      print(error);
+      throw "Failed to load users";
     }
   }
 }

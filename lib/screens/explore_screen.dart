@@ -70,11 +70,13 @@ class _ExploreScreenState extends State<ExploreScreen>
     }).catchError((errorMessage) {
       _errorArticles = true;
     });
-    // Provider.of<Users>(context).searchUsers(_query).then((_) {
-    //   setState(() {
-    //     _loadingUsers = false;
-    //   });
-    // });
+    Provider.of<Users>(context).searchUsers(_query).then((_) {
+      setState(() {
+        _loadingUsers = false;
+      });
+    }).catchError((errorMessage) {
+      _errorUsers = true;
+    });
   }
 
   @override
