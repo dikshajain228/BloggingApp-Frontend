@@ -6,10 +6,9 @@ import 'package:http/http.dart' as http;
 
 import '../widgets/articles_list.dart';
 import '../widgets/drawer.dart';
+import '../widgets/error_dialog.dart';
 
 import '../providers/articles.dart';
-
-import '../server_util.dart' as Server;
 
 class HomeScreen extends StatefulWidget {
   static const routeName = "/home-page";
@@ -41,17 +40,8 @@ class _HomeScreenState extends State<HomeScreen> {
         showDialog(
             context: context,
             builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text("Error"),
-                content: Text(errorMessage),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text("OK"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  )
-                ],
+              return ErrorDialog(
+                errorMessage: errorMessage,
               );
             });
         setState(() {
