@@ -79,20 +79,23 @@ class _CollectionScreenState extends State<CollectionScreen>
           ? SpinKitChasingDots(
               color: Colors.teal,
             )
-          : Column(
-              children: [
-                ChangeNotifierProvider.value(
-                  value: _collection,
-                  child: CollectionDetailsCard(),
-                ),
-                (_loadingArticles == true
-                    ? SpinKitWanderingCubes(
-                        color: Colors.teal,
-                      )
-                    : Flexible(
-                        child: ArticlesList(),
-                      )),
-              ],
+          : SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                children: [
+                  ChangeNotifierProvider.value(
+                    value: _collection,
+                    child: CollectionDetailsCard(),
+                  ),
+                  (_loadingArticles == true
+                      ? SpinKitWanderingCubes(
+                          color: Colors.teal,
+                        )
+                      : Flexible(
+                          child: ArticlesList(),
+                        )),
+                ],
+              ),
             )),
       floatingActionButton: (_loadingCollection == true
           ? null
@@ -229,13 +232,16 @@ class _CollectionScreenState extends State<CollectionScreen>
           actions: <Widget>[
             FlatButton(
               child: Text("YES"),
-                onPressed: () {
-                _collection.deleteCollection(_collection.collection_id).then((_){
+              onPressed: () {
+                _collection
+                    .deleteCollection(_collection.collection_id)
+                    .then((_) {
                   print("Collection deleted");
                 });
                 //Delete the _collection
                 Navigator.of(context).pop();
-                Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
+                Navigator.of(context)
+                    .pushReplacementNamed(ProfilePage.routeName);
               },
             ),
             FlatButton(
