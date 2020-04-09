@@ -25,7 +25,6 @@ class _EditCollectionState extends State<EditCollection> {
 
   final _formKey = new GlobalKey<FormState>();
 
-
   File uploadedImage;
 
   void initState() {
@@ -58,7 +57,7 @@ class _EditCollectionState extends State<EditCollection> {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          autovalidate : true,
+          autovalidate: true,
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
@@ -77,13 +76,13 @@ class _EditCollectionState extends State<EditCollection> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(0.0, 16.0, 16.0, 16.0),
                   child: TextFormField(
-                    decoration: InputDecoration(labelText: 'Collection Name'),
-                    controller: _collectionName,
-                    validator: (value){
-                      if(value.isEmpty) return 'Collection Name required';
-                      return null;
-                    }
-                  ),
+                      decoration: InputDecoration(labelText: 'Collection Name'),
+                      controller: _collectionName,
+                      readOnly: true,
+                      validator: (value) {
+                        if (value.isEmpty) return 'Collection Name required';
+                        return null;
+                      }),
                 ),
                 TextFormField(
                   maxLines: 3,
@@ -100,12 +99,7 @@ class _EditCollectionState extends State<EditCollection> {
   }
 
   void _updateCollection() {
-    if (uploadedImage != null) {
-      print(uploadedImage.path);
-    } else {
-      print("no upload");
-    }
-    String collectionName = _collectionName.text;
+    // String collectionName = _collectionName.text;
     String description = _collectionDescription.text;
     final data = {
       "collectionId": widget.collection.collection_id,
@@ -113,25 +107,24 @@ class _EditCollectionState extends State<EditCollection> {
       "imageUrl": widget.collection.image_url,
       "tags": "",
     };
-    print("form submit");
-    print(collectionName);
-    print(description);
-    Provider.of<Collections>(context).updateCollection(data, uploadedImage)
-    .then((_) {
-      print("Updated");
-      Navigator.of(context).pushReplacementNamed(CollectionScreen.routeName);
-      Toast.show("Updated Successfully!", context, duration:7, gravity:  Toast.BOTTOM);
-    })
-    .catchError((onError){
-    print("Updation Unsuccessful.");
-    Navigator.of(context).pushReplacementNamed(EditCollection.routeName);
-    Toast.show("Updation Unsuccessful!.Please try again", context, duration:7, gravity:  Toast.BOTTOM);
+    Provider.of<Collections>(context)
+        .updateCollection(data, uploadedImage)
+        .then((message) {
+      print(message);
+      // Navigator.of(context).pushReplacementNamed(CollectionScreen.routeName);
+      Toast.show("Updated Successfully!", context,
+          duration: 7, gravity: Toast.BOTTOM);
+    }).catchError((errorMessage) {
+      print(errorMessage);
+      // pop dialog box and stay on page
+      // Navigator.of(context).pushReplacementNamed(EditCollection.routeName);
+      Toast.show(errorMessage, context, duration: 7, gravity: Toast.BOTTOM);
     });
- }
+  }
 
   // Save alert dialog
   void _showSaveDialog() {
-    if(_formKey.currentState.validate()){
+    if (_formKey.currentState.validate()) {
       showDialog(
         barrierDismissible: true,
         context: context,
@@ -159,8 +152,8 @@ class _EditCollectionState extends State<EditCollection> {
                 splashColor: Colors.tealAccent,
                 onPressed: () {
                   _updateCollection();
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
+                  // Navigator.of(context).pop();
+                  // Navigator.of(context).pop();
                 },
               ),
             ],

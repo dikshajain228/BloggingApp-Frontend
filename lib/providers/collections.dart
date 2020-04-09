@@ -144,17 +144,13 @@ class Collections with ChangeNotifier {
     }
   }
 
-// Add new collection
-  Future<void> updateCollection(Map<String, dynamic> data, File image) async {
-    print(data);
+// update collection
+  Future<String> updateCollection(Map<String, dynamic> data, File image) async {
     final token = await storage.read(key: "token");
-
     String collectionId = data["collectionId"];
     String url = baseUrl + "collections/" + collectionId;
-
     var request = http.MultipartRequest('PATCH', Uri.parse(url));
     request.headers["Authorization"] = token;
-
     if (image != null) {
       String filename = image.path;
       request.files.add(await http.MultipartFile.fromPath('image', filename));
@@ -162,12 +158,19 @@ class Collections with ChangeNotifier {
     request.fields["description"] = data["description"];
     request.fields["image_url"] = data["imageUrl"];
     request.fields["tags"] = data["tags"];
-
     try {
-      final response = await request.send();
-      print(response);
+      dynamic response = await request.send();
+      response = await response.stream.bytesToString();
+      final responseJson = json.decode(response);
+      if (responseJson["error"] == false) {
+        return "Successfully updated collection";
+      } else {
+        print(responseJson["message"]);
+        throw "Failed to update collection";
+      }
     } catch (error) {
-      throw error;
+      print(error);
+      throw "Failed to update collection";
     }
   }
 
