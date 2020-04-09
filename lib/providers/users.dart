@@ -87,15 +87,11 @@ class Users with ChangeNotifier {
   }
 
 // Update user profile
-  Future<void> updateProfile(Map<String, dynamic> data, File image) async {
-    print(data);
+  Future<String> updateProfile(Map<String, dynamic> data, File image) async {
     final token = await storage.read(key: "token");
-
     String url = baseUrl + "user";
-
     var request = http.MultipartRequest('PATCH', Uri.parse(url));
     request.headers["Authorization"] = token;
-
     if (image != null) {
       String filename = image.path;
       print(filename);
@@ -104,12 +100,21 @@ class Users with ChangeNotifier {
     request.fields["username"] = data["username"];
     request.fields["about"] = data["about"];
     request.fields["profile_image_url"] = data["imageUrl"];
-
     try {
-      final response = await request.send();
+      dynamic response = await request.send();
+      response = await response.stream.bytesToString();
       print(response);
+      final responseJson = json.decode(response);
+
+      if (responseJson["error"] == false) {
+        return "Successfully updated profile";
+      } else {
+        print(responseJson["message"]);
+        throw "Failed to update profile";
+      }
     } catch (error) {
-      throw error;
+      print(error);
+      throw "Failed to update profile";
     }
   }
 

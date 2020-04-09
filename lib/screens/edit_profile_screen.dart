@@ -18,7 +18,6 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-
   final _formKey = new GlobalKey<FormState>();
 
   final _username = TextEditingController();
@@ -39,7 +38,6 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   void saveChanges() {
-    //Call function to edit changes
     Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
   }
 
@@ -59,14 +57,14 @@ class _EditProfileState extends State<EditProfile> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.done),
-            onPressed:  _showSaveDialog,
+            onPressed: _showSaveDialog,
           )
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
-          key : _formKey,
+          key: _formKey,
           autovalidate: true,
           child: SingleChildScrollView(
             child: Column(
@@ -81,13 +79,12 @@ class _EditProfileState extends State<EditProfile> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(0.0, 16.0, 16.0, 16.0),
                   child: TextFormField(
-                    controller: _username,
-                    decoration: InputDecoration(labelText: 'Username'),
-                    validator: (value){
-                      if(value.isEmpty) return "Username cant be empty";
-                      return null;
-                    }
-                  ),
+                      controller: _username,
+                      decoration: InputDecoration(labelText: 'Username'),
+                      validator: (value) {
+                        if (value.isEmpty) return "Username cant be empty";
+                        return null;
+                      }),
                 ),
                 TextFormField(
                   maxLines: 3,
@@ -115,19 +112,22 @@ class _EditProfileState extends State<EditProfile> {
       "about": about,
       "imageUrl": widget.user.profile_image_url,
     };
-   Provider.of<Users>(context).updateProfile(data, uploadedImage).then((_) {
-        Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
-        Toast.show("User profile edited successfully!", context, duration:7, gravity:  Toast.BOTTOM);
-      })
-       .catchError((onError){
-       print("Unsuccessful.");
-       Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
-       Toast.show("Profile could not be edited.Please try again.", context, duration:7, gravity:  Toast.BOTTOM);
+    Provider.of<Users>(context)
+        .updateProfile(data, uploadedImage)
+        .then((message) {
+      print(message);
+      Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
+      Toast.show(message, context, duration: 7, gravity: Toast.BOTTOM);
+    }).catchError((errorMessage) {
+      print(errorMessage);
+      Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
+      Toast.show("Profile could not be edited.Please try again.", context,
+          duration: 7, gravity: Toast.BOTTOM);
     });
   }
 
   void _showSaveDialog() {
-    if(_formKey.currentState.validate()){
+    if (_formKey.currentState.validate()) {
       showDialog(
         barrierDismissible: true,
         context: context,
