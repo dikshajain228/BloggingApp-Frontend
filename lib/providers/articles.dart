@@ -75,9 +75,10 @@ class Articles with ChangeNotifier {
         url,
         headers: {HttpHeaders.authorizationHeader: token},
       );
-      final responseJson = json.decode(response.body);
-      final data = responseJson[0];
-      Article article = Article(
+      if (response.statusCode == 200) {
+        final responseJson = json.decode(response.body);
+        final data = responseJson["article"];
+        Article article = Article(
           article_id: data["article_id"],
           collection_id: data["collection_id"],
           user_id: data["user_id"],
@@ -89,11 +90,21 @@ class Articles with ChangeNotifier {
           tags: data["tags"],
           is_bookmarked: data["is_bookmarked"] == 0 ? false : true,
           is_author: data["is_author"] == 0 ? false : true,
-          author: "Anjali Nair");
-      print(data);
-      return article;
+          author: data["author"],
+          profile_image_url: data["profile_image_url"],
+        );
+        notifyListeners();
+        return article;
+      } else if (response.statusCode == 404) {
+        print("Article not found");
+        throw "Article not found";
+      } else {
+        print(response.body);
+        throw "Failed to load article";
+      }
     } catch (error) {
-      throw error;
+      print(error);
+      throw "Failed to load article";
     }
   }
 
@@ -280,46 +291,4 @@ class Articles with ChangeNotifier {
       throw error;
     }
   }
-
-  void getArticles() {
-    List<Article> fetchedData = [];
-
-    _articles = fetchedData;
-  }
-
-  // void getCollectionArticles(String collectionId) {
-  //   List<Article> fetchedData = [];
-  //   fetchedData.add(Article(
-  //       article_id: "4",
-  //       collection_id: "2",
-  //       user_id: 1,
-  //       title: "I am happy - collection 1",
-  //       content: "bjhcbjhgfhgdfhvds",
-  //       published: true,
-  //       image_path:
-  //           "https://images.pexels.com/photos/531602/pexels-photo-531602.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-  //       views_count: 0,
-  //       kudos_count: 0,
-  //       date_created: DateTime.parse("1969-07-20 20:18:04Z"),
-  //       date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
-  //       is_bookmarked: false));
-  //   fetchedData.add(Article(
-  //     article_id: "4",
-  //     collection_id: "2",
-  //     user_id: 1,
-  //     title: "I am Collection 1",
-  //     content: "bjhcbjhgfhgdfhvds",
-  //     published: true,
-  //     image_path:
-  //         "https://images.pexels.com/photos/531602/pexels-photo-531602.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-  //     views_count: 0,
-  //     kudos_count: 0,
-  //     date_created: DateTime.parse("1969-07-20 20:18:04Z"),
-  //     date_updated: DateTime.parse("1969-07-20 20:18:04Z"),
-  //     is_bookmarked: false,
-  //   ));
-  //   fetchedData;
-  // }
-
-  void editArticles() {}
 }
