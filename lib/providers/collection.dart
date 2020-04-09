@@ -37,6 +37,20 @@ class Collection with ChangeNotifier {
     this.authors,
   });
 
+    Future<void> deleteCollection(String collectionId) async{
+    final token = await storage.read(key: "token");
+    String url = baseUrl+"collections/"+collectionId;
+    try{
+      final response = await http.delete(
+        url,
+        headers : {HttpHeaders.authorizationHeader : token},
+      );
+      notifyListeners();
+    }catch(error){
+      throw error;
+    }
+  }
+
   // Follow collection
   Future<void> followCollection(String collectionId) async {
     final token = await storage.read(key: "token");

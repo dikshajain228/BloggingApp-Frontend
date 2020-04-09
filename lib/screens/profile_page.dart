@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
 import '../screens/edit_profile_screen.dart';
+import '../screens/change_password.dart';
 
 import '../widgets/collection_list.dart';
 import '../widgets/articles_list.dart';
@@ -18,10 +19,10 @@ class ProfilePage extends StatefulWidget {
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-List<Choice> choices = <Choice>[
-  Choice(title: 'Edit Profile', icon: Icons.person),
-  Choice(title: 'Change Password', icon: Icons.vpn_key),
-];
+// List<Choice> choices = <Choice>[
+//   Choice(title: 'Edit Profile', icon: Icons.person),
+//   Choice(title: 'Change Password', icon: Icons.vpn_key),
+// ];
 
 class _ProfilePageState extends State<ProfilePage>
     with TickerProviderStateMixin {
@@ -67,22 +68,22 @@ class _ProfilePageState extends State<ProfilePage>
     super.didChangeDependencies();
   }
 
-  Choice _selectedChoice = choices[0]; // The app's "state".
-  void _select(Choice choice) {
-    if (_selectedChoice == choices[0]) {
-      Navigator.of(context).pushNamed(
-        EditProfile.routeName,
-        arguments: _user,
-      );
-    }
-    if (_selectedChoice == choices[1]) {
-      //dialog box to change password.
-    }
+  // Choice _selectedChoice = choices[0]; // The app's "state".
+  // void _select(Choice choice) {
+  //   if (_selectedChoice == choices[0]) {
+  //     Navigator.of(context).pushNamed(
+  //       EditProfile.routeName,
+  //       arguments: _user,
+  //     );
+  //   }
+  //   if (_selectedChoice == choices[1]) {
+  //     //dialog box to change password.
+  //   }
 
-    setState(() {
-      _selectedChoice = choice;
-    });
-  }
+  //   setState(() {
+  //     _selectedChoice = choice;
+  //   });
+  // }
 
   @override
   void dispose() {
@@ -96,18 +97,22 @@ class _ProfilePageState extends State<ProfilePage>
         appBar: AppBar(
           title: Text("Profile"),
           actions: <Widget>[
-            PopupMenuButton<Choice>(
-              elevation: 3.2,
-              onCanceled: () {},
-              onSelected: _select,
-              itemBuilder: (BuildContext context) {
-                return choices.skip(0).map((Choice choice) {
-                  return PopupMenuItem<Choice>(
-                    value: choice,
-                    child: Text(choice.title),
-                  );
-                }).toList();
+            PopupMenuButton(
+              onSelected: (int selectedValue){
+                if(selectedValue==0){
+                  Navigator.of(context).pushNamed(EditProfile.routeName,
+                arguments:_user);
+                }else{
+                  Navigator.of(context).pushNamed(ChangePassword.routeName);
+                }
               },
+              icon : Icon(Icons.more_vert,),
+              itemBuilder : (_) => [
+                PopupMenuItem(child: Text('Edit Profile'), value: 0),
+                PopupMenuItem(child: Text('Change Password'), value: 1),
+              ],
+
+              
             ),
           ],
         ),

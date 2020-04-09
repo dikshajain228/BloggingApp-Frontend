@@ -6,6 +6,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import '../screens/collection_edit_screen.dart';
 import '../screens/article_delete_screen.dart';
 import '../screens/article_insert_screen.dart';
+import '../screens/profile_page.dart';
 
 // Widgets
 import '../widgets/collection_details_card.dart';
@@ -228,9 +229,13 @@ class _CollectionScreenState extends State<CollectionScreen>
           actions: <Widget>[
             FlatButton(
               child: Text("YES"),
-              onPressed: () {
+                onPressed: () {
+                _collection.deleteCollection(_collection.collection_id).then((_){
+                  print("Collection deleted");
+                });
                 //Delete the _collection
                 Navigator.of(context).pop();
+                Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
               },
             ),
             FlatButton(

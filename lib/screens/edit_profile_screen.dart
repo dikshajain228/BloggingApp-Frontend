@@ -1,5 +1,6 @@
 import 'dart:io';
-import 'package:bloggingapp/widgets/image_input.dart';
+import 'package:toast/toast.dart';
+import '../widgets/image_input.dart';
 
 import '../screens/profile_page.dart';
 import 'package:flutter/material.dart';
@@ -114,8 +115,14 @@ class _EditProfileState extends State<EditProfile> {
       "about": about,
       "imageUrl": widget.user.profile_image_url,
     };
-    Provider.of<Users>(context).updateProfile(data, uploadedImage).then((_) {
-      print("Updated");
+   Provider.of<Users>(context).updateProfile(data, uploadedImage).then((_) {
+        Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
+        Toast.show("User profile edited successfully!", context, duration:7, gravity:  Toast.BOTTOM);
+      })
+       .catchError((onError){
+       print("Unsuccessful.");
+       Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
+       Toast.show("Profile could not be edited.Please try again.", context, duration:7, gravity:  Toast.BOTTOM);
     });
   }
 
@@ -149,8 +156,7 @@ class _EditProfileState extends State<EditProfile> {
                 onPressed: () {
                   _updateProfile();
                   Navigator.of(context).pop();
-                  Navigator.of(context)
-                      .pushReplacementNamed(ProfilePage.routeName);
+                  //Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
                 },
               ),
             ],

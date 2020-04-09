@@ -1,7 +1,9 @@
-import 'package:bloggingapp/screens/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../providers/user.dart';
+
+import '../screens/user_screen.dart';
 
 class UserPreviewCard extends StatelessWidget {
   Widget build(BuildContext context) {
@@ -57,10 +59,10 @@ class UserPreviewCard extends StatelessWidget {
                           child: Text("Follow"),
                         ),
           onTap: () {
-            //Navigator.of(context).pushNamed(
-             // UserProfilePage.routeName,
-              //arguments: user.user_id,
-           // );
+            Navigator.of(context).pushNamed(
+             UserScreen.routeName,
+              arguments: user.user_id.toString(),
+           );
           },
         ),
       ),

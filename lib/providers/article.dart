@@ -24,6 +24,7 @@ class Article with ChangeNotifier {
   bool is_bookmarked;
   String tags;
   bool is_author;
+  String author;
 
   static const baseUrl = Server.SERVER_IP + "/api/v1/";
   final storage = FlutterSecureStorage();
@@ -43,7 +44,27 @@ class Article with ChangeNotifier {
     this.is_bookmarked,
     this.tags,
     this.is_author,
+    this.author,
   });
+
+  //Delete article
+  Future<void> deleteArticle(String articleId) async{
+    final token  = await storage.read(key : "token");
+    String url = baseUrl+"articles/"+articleId;
+    print(url);
+    try{
+      final response = await http.delete(
+        url,
+        headers : {HttpHeaders.authorizationHeader : token},
+      );
+      print("Delete please babeyy");
+      print(response);
+      notifyListeners();
+    }catch(error){
+      throw error;
+    }
+
+  }
 
   // Add bookmark
   Future<void> addBookmark(String articleId) async {

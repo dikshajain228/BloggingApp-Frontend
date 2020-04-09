@@ -32,6 +32,7 @@ class User with ChangeNotifier {
     this.followingCount,
   });
 
+
   Future<User> getProfile() async {
     // User user = User(user_id: 1, username: 'Ananya', profile_image_url: "lala");
     String url = baseUrl + "user";
@@ -56,6 +57,61 @@ class User with ChangeNotifier {
     } catch (error) {
       throw error;
     }
+  }
+
+  Future<int> changePassword(String oldPassword, String newPassword) async {
+    String url = baseUrl+"user/password";
+    final token = await storage.read(key: "token");
+    print(oldPassword);
+    print(newPassword);
+    try{
+      final response = await http.patch(
+        url,
+        body: {
+          "oldPassword" : oldPassword,
+          "newPassword" : newPassword
+        },
+        headers: {HttpHeaders.authorizationHeader: token},
+      );
+      int statusCode=response.statusCode;
+      print("Status Code");
+      print(statusCode);
+      return statusCode;
+    }catch(error){
+      throw error;
+    }
+
+  }
+
+  Future<void> followUser(String userId) async{
+    final token = await storage.read(key: "token");
+    String url = baseUrl + "followers/"+ userId;
+    try{
+      final response = await http.post(
+        url,
+        headers : {HttpHeaders.authorizationHeader : token},
+      );
+      is_following = true;
+      notifyListeners();
+    }catch(error){
+      throw error;
+    }
+  }
+
+  Future<void> unfollowUser(String userId) async{
+    final token = await storage.read(key: "token");
+    String url = baseUrl + "followers/"+ userId;
+    try{
+      final response = await http.delete(
+        url,
+        headers : {HttpHeaders.authorizationHeader : token},
+      );
+      is_following = false;
+      notifyListeners();
+    }catch(error){
+      throw error;
+    }
+    
   }
 
   void followUnfollow() {

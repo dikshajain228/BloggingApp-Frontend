@@ -1,3 +1,4 @@
+import 'package:bloggingapp/providers/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -8,18 +9,15 @@ import '../screens/article_screen.dart';
 import '../providers/article.dart';
 
 class ArticlePreviewCard extends StatelessWidget {
-//  final String image;
-//  final String article_id;
-//  String title;
-//  DateTime date;
-//  bool is_bookmarked;
-//  ArticlePreviewCard(
-//      this.article_id, this.image, this.title, this.date, this.is_bookmarked);
 
   Widget build(BuildContext context) {
     final article = Provider.of<Article>(context);
+    User user;
 
-    return new Card(
+
+    return new SizedBox(
+      height:150,
+      child:Card(
       elevation: 8.0,
       margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
       child: Container(
@@ -47,48 +45,60 @@ class ArticlePreviewCard extends StatelessWidget {
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
-              fontSize: 18,
+              fontSize: 16,
             ),
             overflow: TextOverflow.ellipsis,
+            maxLines : 3,
           ),
+
           subtitle: article.date_created == null
               ? Text("No date")
-              : Text(
-                  "Published on " +
-                      DateFormat("dd-MM-yyyy").format(article.date_created),
+              : Row(children: <Widget>
+              [
+                Text(
+                  "Published by " +"Anjali"+" on "+DateFormat("dd-MM-yyyy").format(article.date_created),
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 12,
-                  )),
-          trailing: (article.is_bookmarked
-              ? IconButton(
-                  icon: Icon(
-                    Icons.bookmark,
-                    color: Theme.of(context).primaryColor,
+                    fontSize: 13,
                   ),
-                  onPressed: () {
-                    article.removeBookmark(article.article_id).then((_) {
-                      print("Bookmark removed");
-                    });
-                  },
-                )
-              : IconButton(
-                  icon: Icon(
-                    Icons.bookmark_border,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  onPressed: () {
-                    article.addBookmark(article.article_id).then((_) {
-                      print("Bookmark added");
-                    });
-                  },
-                )),
+                ),
+                (
+                  article.is_bookmarked ? 
+                  IconButton(
+                    icon: Icon(
+                      Icons.bookmark,
+                      size: 19,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    onPressed: () {
+                      article.removeBookmark(article.article_id).then((_) {
+                        print("Bookmark removed");
+                      });
+                    },
+                  ) : 
+                  IconButton(
+                    icon: Icon(
+                      Icons.bookmark_border,
+                      size: 19,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    onPressed: () {
+                      article.addBookmark(article.article_id).then((_) {
+                        print("Bookmark added");
+                      });
+                    },
+                  )
+                ),
+              ]
+            ),
+  
           onTap: () {
             Navigator.of(context).pushNamed(ArticleScreen.routeName,
                 arguments: article.article_id);
           },
         ),
       ),
+    ),
     );
   }
 }
