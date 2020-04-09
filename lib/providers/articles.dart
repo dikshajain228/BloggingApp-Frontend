@@ -23,11 +23,12 @@ class Articles with ChangeNotifier {
     return [..._articles];
   }
 
-    Future<void> deleteArticle(String articleId) async{
-      print("Delete from screen");
-      _articles.removeWhere((article) => article.article_id == articleId);
-      notifyListeners();
-    }
+  Future<void> deleteArticle(String articleId) async {
+    print("Delete from screen");
+    _articles.removeWhere((article) => article.article_id == articleId);
+    notifyListeners();
+  }
+
   // Insert Article
   Future<void> addArticle(Map<String, dynamic> data, File image) async {
     String url = baseUrl + "articles";
@@ -77,20 +78,19 @@ class Articles with ChangeNotifier {
       final responseJson = json.decode(response.body);
       final data = responseJson[0];
       Article article = Article(
-        article_id: data["article_id"],
-        collection_id: data["collection_id"],
-        user_id: data["user_id"],
-        title: data["title"],
-        content: data["content"],
-        image_path: data["image_path"],
-        kudos_count: data["kudos_count"],
-        date_created: DateTime.parse(data["date_created"]),
-        date_updated: DateTime.parse(data["date_updated"]),
-        tags: data["tags"],
-        is_bookmarked: data["is_bookmarked"] == 0 ? false : true,
-        is_author: data["is_author"] == 0 ? false : true,
-        author : "Anjali Nair"
-      );
+          article_id: data["article_id"],
+          collection_id: data["collection_id"],
+          user_id: data["user_id"],
+          title: data["title"],
+          content: data["content"],
+          image_path: data["image_path"],
+          kudos_count: data["kudos_count"],
+          date_created: DateTime.parse(data["date_created"]),
+          date_updated: DateTime.parse(data["date_updated"]),
+          tags: data["tags"],
+          is_bookmarked: data["is_bookmarked"] == 0 ? false : true,
+          is_author: data["is_author"] == 0 ? false : true,
+          author: "Anjali Nair");
       print(data);
       return article;
     } catch (error) {
@@ -105,26 +105,36 @@ class Articles with ChangeNotifier {
     final token = await storage.read(key: "token");
     print("Obtained token " + token);
     try {
-      final response = await http.get(
+      await http.get(
         url,
         headers: {HttpHeaders.authorizationHeader: token},
-      );
-      final responseJson = json.decode(response.body);
-      for (final article in responseJson) {
-        fetchedArticles.add(Article(
-          article_id: article["article_id"],
-          user_id: article["user_id"],
-          collection_id: article["collection_id"],
-          title: article["title"],
-          image_path: article["image_path"],
-          is_bookmarked: article["is_bookmarked"] == 0 ? false : true,
-          date_created: DateTime.parse(article["date_created"]),
-          author : "Anjali Nair",
-        ));
-      }
-      _articles = [...fetchedArticles];
+      ).then((response) {
+        if (response.statusCode == 200) {
+          final responseJson = json.decode(response.body);
+          for (final article in responseJson["articles"]) {
+            fetchedArticles.add(Article(
+              article_id: article["article_id"],
+              user_id: article["user_id"],
+              collection_id: article["collection_id"],
+              title: article["title"],
+              image_path: article["image_path"],
+              is_bookmarked: article["is_bookmarked"] == 0 ? false : true,
+              date_created: DateTime.parse(article["date_created"]),
+              author: "Anjali Nair",
+            ));
+          }
+          _articles = [...fetchedArticles];
+        } else {
+          print(response.body);
+          throw "Failed to load feed";
+        }
+      }).catchError((error) {
+        print(error);
+        throw "Failed to load feed";
+      });
     } catch (error) {
-      throw error;
+      print(error);
+      throw "Failed to load feed";
     }
   }
 
@@ -216,7 +226,7 @@ class Articles with ChangeNotifier {
           image_path: article["image_path"],
           is_bookmarked: article["is_bookmarked"] == 0 ? false : true,
           date_created: DateTime.parse(article["date_created"]),
-           author: "Anjali",
+          author: "Anjali",
         ));
       }
       _articles = [...fetchedArticles];
@@ -250,7 +260,7 @@ class Articles with ChangeNotifier {
           image_path: article["image_path"],
           is_bookmarked: article["is_bookmarked"] == 0 ? false : true,
           date_created: DateTime.parse(article["date_created"]),
-           author: "Anjali",
+          author: "Anjali",
         ));
       }
       _articles = [...fetchedArticles];
@@ -300,8 +310,4 @@ class Articles with ChangeNotifier {
   // }
 
   void editArticles() {}
-
-
-
-  
 }
