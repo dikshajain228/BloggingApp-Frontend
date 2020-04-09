@@ -195,13 +195,18 @@ class Articles with ChangeNotifier {
             image_path: article["image_path"],
             is_bookmarked: article["is_bookmarked"] == 0 ? false : true,
             date_created: DateTime.parse(article["date_created"]),
-            author: "Anjali",
+            author: article["author"],
+            profile_image_url: article["profile_image_url"],
           ));
         }
         _articles = [...fetchedArticles];
+      } else {
+        print(response.body);
+        throw "Failed to load articles";
       }
     } catch (error) {
-      throw error;
+      print(error);
+      throw "Failed to load articles";
     }
   }
 

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../widgets/articles_list.dart';
 import '../widgets/drawer.dart';
+import '../widgets/error_dialog.dart';
 
 import '../providers/articles.dart';
 
@@ -16,6 +17,8 @@ class BookmarkScreen extends StatefulWidget {
 
 class _BookmarkScreenState extends State<BookmarkScreen> {
   bool _loading = true;
+  bool _error = false;
+  bool _isInit = true;
 
   @override
   void initState() {
@@ -24,11 +27,28 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
 
   @override
   void didChangeDependencies() {
-    Provider.of<Articles>(context).getBookmarkedArticles().then((_) {
-      setState(() {
-        _loading = false;
+    if (_isInit) {
+      Provider.of<Articles>(context).getBookmarkedArticles().then((_) {
+        setState(() {
+          _loading = false;
+        });
+      }).catchError((errorMessage) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return ErrorDialog(
+                errorMessage: errorMessage,
+              );
+            });
+        setState(() {
+          _error = true;
+        });
       });
-    });
+      setState(() {
+        _isInit = false;
+      });
+    }
+    super.didChangeDependencies();
   }
 
   @override
@@ -37,11 +57,13 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
       appBar: AppBar(
         title: Text('Your Bookmarks'),
       ),
-      body: (_loading == true
-          ? SpinKitPulse(
-              color: Colors.teal,
-            )
-          : ArticlesList()),
+      body: (_error == true
+          ? Text("An error occured")
+          : (_loading == true
+              ? SpinKitPulse(
+                  color: Colors.teal,
+                )
+              : ArticlesList())),
       drawer: MainDrawer(),
     );
   }
