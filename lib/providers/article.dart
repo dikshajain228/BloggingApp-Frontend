@@ -13,18 +13,17 @@ class Article with ChangeNotifier {
   final String article_id;
   final String collection_id;
   final int user_id;
+  final DateTime date_created;
   String title;
   String content;
   bool published;
   String image_path;
-  int views_count;
-  int kudos_count;
-  final DateTime date_created;
   DateTime date_updated;
   bool is_bookmarked;
   String tags;
   bool is_author;
   String author;
+  String profile_image_url;
 
   static const baseUrl = Server.SERVER_IP + "/api/v1/";
   final storage = FlutterSecureStorage();
@@ -37,33 +36,31 @@ class Article with ChangeNotifier {
     this.content,
     this.published,
     this.image_path,
-    this.views_count,
-    this.kudos_count,
     this.date_created,
     this.date_updated,
     this.is_bookmarked,
     this.tags,
     this.is_author,
     this.author,
+    this.profile_image_url,
   });
 
   //Delete article
-  Future<void> deleteArticle(String articleId) async{
-    final token  = await storage.read(key : "token");
-    String url = baseUrl+"articles/"+articleId;
+  Future<void> deleteArticle(String articleId) async {
+    final token = await storage.read(key: "token");
+    String url = baseUrl + "articles/" + articleId;
     print(url);
-    try{
+    try {
       final response = await http.delete(
         url,
-        headers : {HttpHeaders.authorizationHeader : token},
+        headers: {HttpHeaders.authorizationHeader: token},
       );
       print("Delete please babeyy");
       print(response);
       notifyListeners();
-    }catch(error){
+    } catch (error) {
       throw error;
     }
-
   }
 
   // Add bookmark
