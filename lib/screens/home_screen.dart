@@ -20,6 +20,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool _loading = true;
   bool _isInit = true;
+  bool _error = false;
 
   final storage = FlutterSecureStorage();
 
@@ -52,6 +53,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             );
           });
+      setState(() {
+        _error = true;
+      });
     });
 
     super.didChangeDependencies();
@@ -60,13 +64,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home Screen'),
+        title: Text('Feed'),
       ),
-      body: (_loading == true
-          ? SpinKitWanderingCubes(
-              color: Theme.of(context).primaryColor,
-            )
-          : ArticlesList()),
+      body: (_error == false
+          ? (_loading == true
+              ? SpinKitWanderingCubes(
+                  color: Theme.of(context).primaryColor,
+                )
+              : ArticlesList())
+          : Text("An error occured...")),
       drawer: MainDrawer(),
     );
   }
