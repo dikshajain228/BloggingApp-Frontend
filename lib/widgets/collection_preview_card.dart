@@ -49,6 +49,7 @@ class CollectionPreviewCard extends StatelessWidget {
           subtitle: Text(
             _collection.description,
             overflow: TextOverflow.ellipsis,
+            maxLines: 1,
           ),
           // Is owner
           trailing: _collection.is_owner
