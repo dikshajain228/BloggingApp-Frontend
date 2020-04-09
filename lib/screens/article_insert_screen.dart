@@ -119,20 +119,6 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
     );
   }
 
-  // NotusDocument _loadDocument() {
-  //   final Delta delta = Delta()..insert("Zefyr Quick Start\n");
-  //   return NotusDocument.fromDelta(delta);
-  // }
-
-  // void _saveDocument(BuildContext context) {
-  //   final content = jsonEncode(_controller.document);
-  //   String contentString = content.toString();
-  //   final String title = _titleController.text;
-  //   // print("Title " + title);
-  //   // print(contentString);
-  //   _showSaveDialog();
-  // }
-
   // Save alert dialog
   void _showSaveDialog() {
     showDialog(
@@ -188,23 +174,24 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
     String title = _titleController.text;
     final content = jsonEncode((_controller.document).toJson());
     String tags = _tags.join(",");
-    print("Tags string: " + tags);
     final data = {
       "collectionId": widget.collection_id,
       "title": title,
       "content": content,
       "tags": tags,
     };
-   Provider.of<Articles>(context).addArticle(data, uploadedImage)
-      .then((_) {
-      print("Added article");
-      Navigator.of(context).pushReplacementNamed(ArticleScreen.routeName);
-      Toast.show("New article added!", context, duration:7, gravity:  Toast.BOTTOM);
-    })
-    .catchError((_) {
-      print("Unsuccessful");
+    Provider.of<Articles>(context)
+        .addArticle(data, uploadedImage)
+        .then((message) {
+      print(message);
+      // Navigator.of(context).pushReplacementNamed(ArticleScreen.routeName);
+      // pass article id?
+      Toast.show("New article added!", context,
+          duration: 7, gravity: Toast.BOTTOM);
+    }).catchError((errorMessage) {
+      print(errorMessage);
       Navigator.of(context).pushReplacementNamed(ArticleInsertScreen.routeName);
-      Toast.show("Article could not be added.Please try again.", context, duration:7, gravity:  Toast.BOTTOM);
+      Toast.show(errorMessage, context, duration: 7, gravity: Toast.BOTTOM);
     });
   }
 }

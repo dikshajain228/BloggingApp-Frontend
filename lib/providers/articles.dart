@@ -30,9 +30,8 @@ class Articles with ChangeNotifier {
   }
 
   // Insert Article
-  Future<void> addArticle(Map<String, dynamic> data, File image) async {
+  Future<String> addArticle(Map<String, dynamic> data, File image) async {
     String url = baseUrl + "articles";
-    print(data);
     final token = await storage.read(key: "token");
     final userId = await storage.read(key: "userId");
 
@@ -52,17 +51,24 @@ class Articles with ChangeNotifier {
     request.fields["user_id"] = userId;
     request.fields["title"] = data["title"];
     request.fields["content"] = data["content"];
-    request.fields["image_path"] = "";
+    request.fields["image_path"] = " ";
     request.fields["views_count"] = "0";
     request.fields["date_created"] = dateCreated;
     request.fields["date_updated"] = dateCreated;
     request.fields["tags"] = data["tags"];
-
     try {
-      final response = await request.send();
-      print(response);
+      dynamic response = await request.send();
+      response = await response.stream.bytesToString();
+      final responseJson = json.decode(response);
+      if (responseJson["error"] == false) {
+        return "Successfully added article";
+      } else {
+        print(responseJson["message"]);
+        throw "Failed to add article";
+      }
     } catch (error) {
-      throw error;
+      print(error);
+      throw "Failed to add article";
     }
   }
 
@@ -136,12 +142,10 @@ class Articles with ChangeNotifier {
         notifyListeners();
       } else {
         print(response.body);
-        print("in else");
         throw "Failed to load feed";
       }
     }).catchError((error) {
       print(error);
-      print("in catch err");
       throw "Failed to load feed";
     });
   }
