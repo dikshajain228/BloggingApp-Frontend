@@ -63,11 +63,13 @@ class _ExploreScreenState extends State<ExploreScreen>
       _errorCollections = true;
     });
     // Search articles
-    // Provider.of<Articles>(context).searchArticles(_query).then((_) {
-    //   setState(() {
-    //     _loadingArticles = false;
-    //   });
-    // });
+    Provider.of<Articles>(context).searchArticles(_query).then((_) {
+      setState(() {
+        _loadingArticles = false;
+      });
+    }).catchError((errorMessage) {
+      _errorArticles = true;
+    });
     // Provider.of<Users>(context).searchUsers(_query).then((_) {
     //   setState(() {
     //     _loadingUsers = false;
@@ -153,16 +155,20 @@ class _ExploreScreenState extends State<ExploreScreen>
                               color: Colors.teal,
                             )
                           : CollectionList())),
-                  (_loadingArticles == true
-                      ? SpinKitWanderingCubes(
-                          color: Colors.teal,
-                        )
-                      : ArticlesList()),
-                  (_loadingUsers == true
-                      ? SpinKitWanderingCubes(
-                          color: Colors.teal,
-                        )
-                      : UserList()),
+                  (_errorArticles == true
+                      ? Text("An error occured")
+                      : (_loadingArticles == true
+                          ? SpinKitWanderingCubes(
+                              color: Colors.teal,
+                            )
+                          : ArticlesList())),
+                  (_errorUsers == true
+                      ? Text("An error occured")
+                      : (_loadingUsers == true
+                          ? SpinKitWanderingCubes(
+                              color: Colors.teal,
+                            )
+                          : UserList())),
                 ],
               ))),
         drawer: MainDrawer());
