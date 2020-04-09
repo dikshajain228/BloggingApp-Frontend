@@ -8,6 +8,24 @@ class CollectionDetailsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _collection = Provider.of<Collection>(context);
+
+    List<Widget> authorChips = [];
+    for (final author in _collection.authors) {
+      print(author.user_id);
+      print(author.username);
+      print(author.image_url);
+      authorChips.add(
+        Chip(
+          avatar: CircleAvatar(
+            backgroundColor: Theme.of(context).primaryColor,
+            // backgroundImage: NetworkImage(author.image_url),
+            child: Text("A"),
+          ),
+          label: Text(author.username),
+        ),
+      );
+    }
+
     return Container(
       color: Colors.teal[50],
       child: (Column(
@@ -70,8 +88,11 @@ class CollectionDetailsCard extends StatelessWidget {
               ),
             ),
           ),
+          // Authors row
+          Row(
+            children: authorChips,
+          ),
           Container(
-            // color: Colors.blueGrey[100],
             child: Padding(
               padding: EdgeInsets.all(10.0),
               child: Row(
