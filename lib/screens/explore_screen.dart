@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'dart:async';
-
-import '../providers/collections.dart';
-import '../providers/articles.dart';
-import '../providers/users.dart';
 
 import '../widgets/drawer.dart';
 import '../widgets/collection_list.dart';
 import '../widgets/articles_list.dart';
 import '../widgets/user_list.dart';
+import '../widgets/error_dialog.dart';
+
+import '../providers/collections.dart';
+import '../providers/articles.dart';
+import '../providers/users.dart';
 
 class ExploreScreen extends StatefulWidget {
   static const routeName = "/explore";
@@ -24,6 +24,9 @@ class _ExploreScreenState extends State<ExploreScreen>
   bool _loadingArticles = true;
   bool _loadingCollections = true;
   bool _loadingUsers = true;
+  bool _errorArticles = false;
+  bool _errorCollections = false;
+  bool _errorUsers = false;
   String _query = "";
   TabController tabController;
   TextEditingController searchController;
@@ -56,18 +59,20 @@ class _ExploreScreenState extends State<ExploreScreen>
       setState(() {
         _loadingCollections = false;
       });
+    }).catchError((errorMessage) {
+      _errorCollections = true;
     });
     // Search articles
-    Provider.of<Articles>(context).searchArticles(_query).then((_) {
-      setState(() {
-        _loadingArticles = false;
-      });
-    });
-    Provider.of<Users>(context).searchUsers(_query).then((_){
-      setState(() {
-        _loadingUsers = false;
-      });
-    });
+    // Provider.of<Articles>(context).searchArticles(_query).then((_) {
+    //   setState(() {
+    //     _loadingArticles = false;
+    //   });
+    // });
+    // Provider.of<Users>(context).searchUsers(_query).then((_) {
+    //   setState(() {
+    //     _loadingUsers = false;
+    //   });
+    // });
   }
 
   @override
@@ -95,13 +100,11 @@ class _ExploreScreenState extends State<ExploreScreen>
             ),
             textInputAction: TextInputAction.search,
             onSubmitted: (text) {
-              // send a query
               setState(() {
                 _query = searchController.text;
                 _queryEntered = true;
                 search();
               });
-              print(text);
             },
           ),
           actions: <Widget>[
@@ -134,8 +137,7 @@ class _ExploreScreenState extends State<ExploreScreen>
                   height: 300,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image:
-                          ExactAssetImage("assets/images/person_search.png"),
+                      image: ExactAssetImage("assets/images/person_search.png"),
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -144,11 +146,13 @@ class _ExploreScreenState extends State<ExploreScreen>
             : (TabBarView(
                 controller: tabController,
                 children: <Widget>[
-                  (_loadingCollections == true
-                      ? SpinKitWanderingCubes(
-                          color: Colors.teal,
-                        )
-                      : CollectionList()),
+                  (_errorCollections == true
+                      ? Text("An error occured")
+                      : (_loadingCollections == true
+                          ? SpinKitWanderingCubes(
+                              color: Colors.teal,
+                            )
+                          : CollectionList())),
                   (_loadingArticles == true
                       ? SpinKitWanderingCubes(
                           color: Colors.teal,

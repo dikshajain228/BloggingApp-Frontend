@@ -169,33 +169,35 @@ class Collections with ChangeNotifier {
     List<Collection> fetchedCollections = [];
     final token = await storage.read(key: "token");
 
-    String base = Server.base;
-    String path = "/api/v1/collections";
-    var queryParams = {"q": query};
-    var url = Uri.http(base, path, queryParams);
+    String url = baseUrl + "collections?q=" + query;
+    print(url);
     try {
       final response = await http.get(
         url,
         headers: {HttpHeaders.authorizationHeader: token},
       );
-      print("meowmoew" + url.toString());
-      // print(response.body);
-      final responseJson = json.decode(response.body);
-      for (final collection in responseJson) {
-        fetchedCollections.add(Collection(
-          collection_id: collection["collection_id"],
-          user_id: collection["user_id"],
-          collection_name: collection["collection_name"],
-          image_url: collection["image_url"],
-          description: collection["description"],
-          is_owner: collection["is_owner"] == 0 ? false : true,
-          is_author: collection["is_author"] == 0 ? false : true,
-          is_following: collection["is_following"] == 0 ? false : true,
-        ));
+      if (response.statusCode == 200) {
+        final responseJson = json.decode(response.body);
+        for (final collection in responseJson["collections"]) {
+          fetchedCollections.add(Collection(
+            collection_id: collection["collection_id"],
+            user_id: collection["user_id"],
+            collection_name: collection["collection_name"],
+            image_url: collection["image_url"],
+            description: collection["description"],
+            is_owner: collection["is_owner"] == 0 ? false : true,
+            is_author: collection["is_author"] == 0 ? false : true,
+            is_following: collection["is_following"] == 0 ? false : true,
+          ));
+        }
+        _collections = [...fetchedCollections];
+      } else {
+        print(response.body);
+        throw "Failed to load collections";
       }
-      _collections = [...fetchedCollections];
     } catch (error) {
-      throw error;
+      print("Failed to load collections");
+      throw "Failed to load collections";
     }
   }
 
