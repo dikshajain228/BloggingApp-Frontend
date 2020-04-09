@@ -20,12 +20,44 @@ class Users with ChangeNotifier {
     return [..._users];
   }
 
-  Future<User> fetchUserById(String userId) async{
+  Future<User> getProfile() async {
+    String url = baseUrl + "user";
+    final token = await storage.read(key: "token");
+    try {
+      final response = await http.get(
+        url,
+        headers: {HttpHeaders.authorizationHeader: token},
+      );
+      if (response.statusCode == 200) {
+        final responseJson = json.decode(response.body);
+        final data = responseJson["user"];
+        User user = User(
+          user_id: data["user_id"],
+          username: data["username"],
+          email: data["email"],
+          about: data["about"],
+          profile_image_url: data["profile_image_url"],
+          followerCount: data["followercount"],
+          followingCount: data["followingcount"],
+        );
+        print("Fetched user profile");
+        return user;
+      } else {
+        print(response.body);
+        throw "Failed to load Profile";
+      }
+    } catch (error) {
+      print(error);
+      throw "Failed to load Profile";
+    }
+  }
+
+  Future<User> fetchUserById(String userId) async {
     print("what is the about error");
     final token = await storage.read(key: "token");
     String url = baseUrl + "users/" + userId;
-    print("check"+url);
-    try{
+    print("check" + url);
+    try {
       final response = await http.get(
         url,
         headers: {HttpHeaders.authorizationHeader: token},
@@ -37,7 +69,7 @@ class Users with ChangeNotifier {
       final userData = responseJson[0];
       print(userData);
       print("mynamyna");
-      print(userData["about"]+"please bro");
+      print(userData["about"] + "please bro");
       User user = User(
         username: userData["username"],
         user_id: userData["user_id"],
@@ -46,12 +78,10 @@ class Users with ChangeNotifier {
         profile_image_url: userData["profile_image_url"],
         followerCount: userData["followercount"],
         followingCount: userData["followingcount"],
-        is_following: userData["is_following"] == 0 ? false:true,
-
-
+        is_following: userData["is_following"] == 0 ? false : true,
       );
       return user;
-    }catch(error){
+    } catch (error) {
       throw error;
     }
   }
@@ -82,11 +112,6 @@ class Users with ChangeNotifier {
       throw error;
     }
   }
-
-
-
-
-
 
   User getUserProfile() {
     return User(

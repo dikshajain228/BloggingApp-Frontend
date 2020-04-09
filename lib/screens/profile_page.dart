@@ -7,6 +7,7 @@ import '../screens/change_password.dart';
 
 import '../widgets/collection_list.dart';
 import '../widgets/articles_list.dart';
+import '../widgets/error_dialog.dart';
 
 import '../providers/users.dart';
 import '../providers/user.dart';
@@ -19,16 +20,15 @@ class ProfilePage extends StatefulWidget {
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-// List<Choice> choices = <Choice>[
-//   Choice(title: 'Edit Profile', icon: Icons.person),
-//   Choice(title: 'Change Password', icon: Icons.vpn_key),
-// ];
-
 class _ProfilePageState extends State<ProfilePage>
     with TickerProviderStateMixin {
   bool _loadingProfile = true;
   bool _loadingArticles = true;
   bool _loadingCollections = true;
+  bool _isInit = true;
+  bool _errorProfile = false;
+  bool _errorArticle = false;
+  bool _errorCollections = false;
   User _user;
 
   TabController _tabController;
@@ -42,48 +42,55 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   void didChangeDependencies() {
-    // Get profile details
-    Provider.of<User>(context).getProfile().then((data) {
-      setState(() {
-        _loadingProfile = false;
-        _user = data;
+    if (_isInit) {
+      // Get profile details
+      Provider.of<Users>(context).getProfile().then((data) {
+        setState(() {
+          _loadingProfile = false;
+          _user = data;
+        });
+      }).catchError((errorMessage) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return ErrorDialog(
+                errorMessage: errorMessage,
+              );
+            });
+        setState(() {
+          _errorProfile = true;
+        });
       });
-    });
 
-    // Get authored articles
-    Provider.of<Articles>(context).getUserArticles().then((_) {
-      setState(() {
-        _loadingArticles = false;
+      // Get authored articles
+      Provider.of<Articles>(context).getUserArticles().then((_) {
+        setState(() {
+          _loadingArticles = false;
+        });
+      }).catchError((errorMessage) {
+        setState(() {
+          _errorArticle = true;
+        });
       });
-    });
 
-    // Get owned / authored collections
-    Provider.of<Collections>(context).getUserCollections().then((_) {
-      setState(() {
-        _loadingCollections = false;
+      // Get owned / authored collections
+      Provider.of<Collections>(context).getUserCollections().then((_) {
+        setState(() {
+          _loadingCollections = false;
+        });
+      }).catchError((errorMessage) {
+        setState(() {
+          _errorCollections = true;
+        });
       });
-      print("Got collections");
-    });
+
+      setState(() {
+        _isInit = false;
+      });
+    }
 
     super.didChangeDependencies();
   }
-
-  // Choice _selectedChoice = choices[0]; // The app's "state".
-  // void _select(Choice choice) {
-  //   if (_selectedChoice == choices[0]) {
-  //     Navigator.of(context).pushNamed(
-  //       EditProfile.routeName,
-  //       arguments: _user,
-  //     );
-  //   }
-  //   if (_selectedChoice == choices[1]) {
-  //     //dialog box to change password.
-  //   }
-
-  //   setState(() {
-  //     _selectedChoice = choice;
-  //   });
-  // }
 
   @override
   void dispose() {
@@ -98,142 +105,149 @@ class _ProfilePageState extends State<ProfilePage>
           title: Text("Profile"),
           actions: <Widget>[
             PopupMenuButton(
-              onSelected: (int selectedValue){
-                if(selectedValue==0){
-                  Navigator.of(context).pushNamed(EditProfile.routeName,
-                arguments:_user);
-                }else{
+              onSelected: (int selectedValue) {
+                if (selectedValue == 0) {
+                  Navigator.of(context)
+                      .pushNamed(EditProfile.routeName, arguments: _user);
+                } else {
                   Navigator.of(context).pushNamed(ChangePassword.routeName);
                 }
               },
-              icon : Icon(Icons.more_vert,),
-              itemBuilder : (_) => [
+              icon: Icon(
+                Icons.more_vert,
+              ),
+              itemBuilder: (_) => [
                 PopupMenuItem(child: Text('Edit Profile'), value: 0),
                 PopupMenuItem(child: Text('Change Password'), value: 1),
               ],
-
-              
             ),
           ],
         ),
-        body: (_loadingProfile == true
-            ? SpinKitChasingDots(
-                color: Colors.teal,
-              )
-            : Column(
-                children: <Widget>[
-                  Row(
+        body: (_errorProfile == true
+            ? Text("An error occured")
+            : (_loadingProfile == true
+                ? SpinKitChasingDots(
+                    color: Colors.teal,
+                  )
+                : Column(
                     children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        child: CircleAvatar(
-                          backgroundImage:
-                              NetworkImage(_user.profile_image_url),
-                          radius: 60,
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            child: CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(_user.profile_image_url),
+                              radius: 60,
+                            ),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.fromLTRB(10, 10, 10, 2),
+                                child: Text(
+                                  _user.username,
+                                  style: TextStyle(
+                                    fontSize: 25.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.fromLTRB(10, 2, 10, 10),
+                                child: Text(
+                                  _user.email,
+                                  style: TextStyle(
+                                      fontSize: 17.0,
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.grey),
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Text(
+                          _user.about,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 18.0),
                         ),
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.fromLTRB(10, 10, 10, 2),
-                            child: Text(
-                              _user.username,
-                              style: TextStyle(
-                                fontSize: 25.0,
-                                fontWeight: FontWeight.bold,
+                      Container(
+                        color: Colors.teal[100],
+                        child: Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                flex: 1,
+                                child: Column(
+                                  children: <Widget>[
+                                    Text(
+                                      _user.followerCount.toString() +
+                                          " followers",
+                                      style: TextStyle(
+                                        fontSize: 17.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
+                              Expanded(
+                                flex: 1,
+                                child: Column(
+                                  children: <Widget>[
+                                    Text(
+                                      _user.followingCount.toString() +
+                                          " following",
+                                      style: TextStyle(
+                                        fontSize: 17.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                          Container(
-                            padding: EdgeInsets.fromLTRB(10, 2, 10, 10),
-                            child: Text(
-                              _user.email,
-                              style: TextStyle(
-                                  fontSize: 17.0,
-                                  fontWeight: FontWeight.normal,
-                                  color: Colors.grey),
-                            ),
-                          ),
-                        ],
+                        ),
+                      ),
+                      new Container(
+                        decoration: new BoxDecoration(
+                            color: Theme.of(context).primaryColor),
+                        child: new TabBar(controller: _tabController, tabs: [
+                          Tab(text: "Articles"),
+                          Tab(text: "Collections"),
+                        ]),
+                      ),
+                      new Expanded(
+                        child: TabBarView(
+                            controller: _tabController,
+                            children: <Widget>[
+                              (_errorArticle == true
+                                  ? Text("An error occured")
+                                  : (_loadingArticles == true
+                                      ? SpinKitDoubleBounce(
+                                          color: Colors.teal,
+                                        )
+                                      : ArticlesList())),
+                              (_errorCollections == true
+                                  ? Text("An error occured")
+                                  : (_loadingArticles == true
+                                      ? SpinKitDoubleBounce(
+                                          color: Colors.teal,
+                                        )
+                                      : CollectionList())),
+                            ]),
                       )
                     ],
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Text(
-                      _user.about,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 18.0),
-                    ),
-                  ),
-                  Container(
-                    color: Colors.teal[100],
-                    child: Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: Column(
-                              children: <Widget>[
-                                Text(
-                                  _user.followerCount.toString() + " followers",
-                                  style: TextStyle(
-                                    fontSize: 17.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Column(
-                              children: <Widget>[
-                                Text(
-                                  _user.followingCount.toString() +
-                                      " following",
-                                  style: TextStyle(
-                                    fontSize: 17.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  new Container(
-                    decoration: new BoxDecoration(
-                        color: Theme.of(context).primaryColor),
-                    child: new TabBar(controller: _tabController, tabs: [
-                      Tab(text: "Articles"),
-                      Tab(text: "Collections"),
-                    ]),
-                  ),
-                  new Expanded(
-                    child: TabBarView(
-                        controller: _tabController,
-                        children: <Widget>[
-                          (_loadingArticles == true
-                              ? SpinKitDoubleBounce(
-                                  color: Colors.teal,
-                                )
-                              : ArticlesList()),
-                          (_loadingCollections == true
-                              ? SpinKitFadingGrid(
-                                  color: Colors.teal,
-                                )
-                              : CollectionList()),
-                        ]),
-                  )
-                ],
-              )));
+                  ))));
   }
 }
 

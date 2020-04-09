@@ -24,7 +24,6 @@ class Collections with ChangeNotifier {
   Future<void> getUserCollections() async {
     List<Collection> fetchedCollections = [];
     final token = await storage.read(key: "token");
-    print("Obtained token user collection");
     final userId = await storage.read(key: "userId");
 
     String url = baseUrl + "user/" + userId.toString() + "/collections";
@@ -34,22 +33,29 @@ class Collections with ChangeNotifier {
         url,
         headers: {HttpHeaders.authorizationHeader: token},
       );
-      final responseJson = json.decode(response.body);
-      for (final collection in responseJson) {
-        fetchedCollections.add(Collection(
-          collection_id: collection["collection_id"],
-          user_id: collection["user_id"],
-          collection_name: collection["collection_name"],
-          image_url: collection["image_url"],
-          description: collection["description"],
-          is_owner: collection["is_owner"] == 0 ? false : true,
-          is_author: collection["is_author"] == 0 ? false : true,
-          is_following: false,
-        ));
+      if (response.statusCode == 200) {
+        final responseJson = json.decode(response.body);
+        for (final collection in responseJson["collections"]) {
+          fetchedCollections.add(Collection(
+            collection_id: collection["collection_id"],
+            user_id: collection["user_id"],
+            collection_name: collection["collection_name"],
+            image_url: collection["image_url"],
+            description: collection["description"],
+            is_owner: collection["is_owner"] == 0 ? false : true,
+            is_author: collection["is_author"] == 0 ? false : true,
+            is_following: false,
+          ));
+        }
+        _collections = [...fetchedCollections];
+        notifyListeners();
+      } else {
+        print(response.body);
+        throw "Failed to load collections";
       }
-      _collections = [...fetchedCollections];
     } catch (error) {
-      throw error;
+      print(error);
+      throw "Failed to load collections";
     }
   }
 

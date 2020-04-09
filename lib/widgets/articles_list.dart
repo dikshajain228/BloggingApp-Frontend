@@ -8,9 +8,6 @@ class ArticlesList extends StatelessWidget {
   Widget build(BuildContext context) {
     final articles = Provider.of<Articles>(context).articles;
 
-    print("Article list");
-    // print(articles);
-
     return (articles.length == 0
         ? Center(
             child: Container(
