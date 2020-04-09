@@ -111,7 +111,7 @@ class Collections with ChangeNotifier {
   }
 
   // Add new collection
-  Future<void> addCollection(Map<String, dynamic> data, File image) async {
+  Future<String> addCollection(Map<String, dynamic> data, File image) async {
     print(data);
     final token = await storage.read(key: "token");
     final userId = await storage.read(key: "userId");
@@ -128,12 +128,19 @@ class Collections with ChangeNotifier {
     request.fields["user_id"] = userId;
     request.fields["collection_name"] = data["collectionName"];
     request.fields["description"] = data["description"];
-    request.fields["image_url"] = "";
+    request.fields["image_url"] = " ";
     try {
-      final response = await request.send();
-      print(response);
+      dynamic response = await request.send();
+      response = await response.stream.bytesToString();
+      final responseJson = json.decode(response);
+      if (responseJson["error"] == false) {
+        return "Successfully created collection";
+      } else {
+        print(responseJson["message"]);
+        throw "Failed to create collection";
+      }
     } catch (error) {
-      throw error;
+      throw "Failed to create collection";
     }
   }
 

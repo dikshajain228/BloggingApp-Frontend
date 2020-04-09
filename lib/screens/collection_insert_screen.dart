@@ -51,7 +51,7 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
-          key : _formKey,
+          key: _formKey,
           autovalidate: true,
           child: SingleChildScrollView(
             child: Column(
@@ -70,13 +70,12 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(0.0, 16.0, 16.0, 16.0),
                   child: TextFormField(
-                    decoration: InputDecoration(labelText: 'Collection Name'),
-                    controller: _collectionName,
-                    validator: (value){
-                      if(value.isEmpty) return 'Collection Name required';
-                      return null;
-                    }
-                  ),
+                      decoration: InputDecoration(labelText: 'Collection Name'),
+                      controller: _collectionName,
+                      validator: (value) {
+                        if (value.isEmpty) return 'Collection Name required';
+                        return null;
+                      }),
                 ),
                 TextFormField(
                   maxLines: 3,
@@ -93,7 +92,7 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
   }
 
   void _insertCollection() {
-    if(_formKey.currentState.validate()){
+    if (_formKey.currentState.validate()) {
       if (uploadedImage != null) {
         print(uploadedImage.path);
       } else {
@@ -101,20 +100,26 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
       }
       String collectionName = _collectionName.text;
       String description = _collectionDescription.text;
-      final data = {"collectionName": collectionName, "description": description};
+      final data = {
+        "collectionName": collectionName,
+        "description": description
+      };
       print("form submit");
       Provider.of<Collections>(context)
           .addCollection(data, uploadedImage)
-          .then((_) {
-        print("Inserted");
+          .then((message) {
+        print(message);
+        // Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
+        // route wrong
+        Toast.show("New collection added!", context,
+            duration: 7, gravity: Toast.BOTTOM);
+      }).catchError((errorMessage) {
+        print(errorMessage);
         Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
-        Toast.show("New collection added!", context, duration:7, gravity:  Toast.BOTTOM);
-      })
-      .catchError((onError){
-       print("Unsuccessful.");
-       Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
-       Toast.show("A new collection could not be created.Please try again.", context, duration:7, gravity:  Toast.BOTTOM);
-    });
+        Toast.show(
+            "A new collection could not be created.Please try again.", context,
+            duration: 7, gravity: Toast.BOTTOM);
+      });
     }
   }
 }
