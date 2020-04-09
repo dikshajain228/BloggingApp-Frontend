@@ -32,32 +32,36 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void didChangeDependencies() {
-    Provider.of<Articles>(context).getFeedArticles().then((_) {
-      setState(() {
-        _loading = false;
+    if (_isInit) {
+      Provider.of<Articles>(context).getFeedArticles().then((_) {
+        setState(() {
+          _loading = false;
+        });
+      }).catchError((errorMessage) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text("Error"),
+                content: Text(errorMessage),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text("OK"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              );
+            });
+        setState(() {
+          _error = true;
+        });
       });
-    }).catchError((errorMessage) {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text("Error"),
-              content: Text(errorMessage),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text("OK"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            );
-          });
       setState(() {
-        _error = true;
+        _isInit = false;
       });
-    });
-
+    }
     super.didChangeDependencies();
   }
 

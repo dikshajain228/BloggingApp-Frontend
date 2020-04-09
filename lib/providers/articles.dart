@@ -103,39 +103,36 @@ class Articles with ChangeNotifier {
     List<Article> fetchedArticles = [];
     String url = baseUrl + "user/feed";
     final token = await storage.read(key: "token");
-    print("Obtained token " + token);
-    try {
-      await http.get(
-        url,
-        headers: {HttpHeaders.authorizationHeader: token},
-      ).then((response) {
-        if (response.statusCode == 200) {
-          final responseJson = json.decode(response.body);
-          for (final article in responseJson["articles"]) {
-            fetchedArticles.add(Article(
-              article_id: article["article_id"],
-              user_id: article["user_id"],
-              collection_id: article["collection_id"],
-              title: article["title"],
-              image_path: article["image_path"],
-              is_bookmarked: article["is_bookmarked"] == 0 ? false : true,
-              date_created: DateTime.parse(article["date_created"]),
-              author: "Anjali Nair",
-            ));
-          }
-          _articles = [...fetchedArticles];
-        } else {
-          print(response.body);
-          throw "Failed to load feed";
+    await http.get(
+      url,
+      headers: {HttpHeaders.authorizationHeader: token},
+    ).then((response) {
+      if (response.statusCode == 200) {
+        final responseJson = json.decode(response.body);
+        for (final article in responseJson["articles"]) {
+          fetchedArticles.add(Article(
+            article_id: article["article_id"],
+            user_id: article["user_id"],
+            collection_id: article["collection_id"],
+            title: article["title"],
+            image_path: article["image_path"],
+            is_bookmarked: article["is_bookmarked"] == 0 ? false : true,
+            date_created: DateTime.parse(article["date_created"]),
+            author: "Anjali Nair",
+          ));
         }
-      }).catchError((error) {
-        print(error);
+        _articles = [...fetchedArticles];
+        notifyListeners();
+      } else {
+        print(response.body);
+        print("in else");
         throw "Failed to load feed";
-      });
-    } catch (error) {
+      }
+    }).catchError((error) {
       print(error);
+      print("in catch err");
       throw "Failed to load feed";
-    }
+    });
   }
 
   // Get User authored articles
