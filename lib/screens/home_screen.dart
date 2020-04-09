@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../route_observer.dart' as route_observer;
 
 import '../widgets/articles_list.dart';
 import '../widgets/drawer.dart';
 import '../widgets/error_dialog.dart';
 
 import '../providers/articles.dart';
-
-import '../route_observer.dart' as route_observer;
 
 class HomeScreen extends StatefulWidget {
   static const routeName = "/home-page";
@@ -24,8 +22,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
 
   final routeObserver = route_observer.routeObserver;
 
-  final storage = FlutterSecureStorage();
-
   @override
   void initState() {
     super.initState();
@@ -36,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
   void didChangeDependencies() {
     routeObserver.subscribe(this, ModalRoute.of(context));
     if (_isInit) {
-      _loaddata();
+      _loadData();
       setState(() {
         _isInit = false;
       });
@@ -47,11 +43,11 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
 
   @override
   void didPopNext() {
-    _loaddata();
+    _loadData();
     super.didPopNext();
   }
 
-  void _loaddata() {
+  void _loadData() {
     Provider.of<Articles>(context).getFeedArticles().then((_) {
       setState(() {
         _loading = false;

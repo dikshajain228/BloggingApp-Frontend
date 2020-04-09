@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import '../route_observer.dart' as route_observer;
 
 import '../widgets/articles_list.dart';
 import '../widgets/drawer.dart';
@@ -15,10 +16,12 @@ class BookmarkScreen extends StatefulWidget {
   _BookmarkScreenState createState() => _BookmarkScreenState();
 }
 
-class _BookmarkScreenState extends State<BookmarkScreen> {
+class _BookmarkScreenState extends State<BookmarkScreen> with RouteAware {
   bool _loading = true;
   bool _error = false;
   bool _isInit = true;
+
+  final routeObserver = route_observer.routeObserver;
 
   @override
   void initState() {
@@ -27,28 +30,39 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
 
   @override
   void didChangeDependencies() {
+    routeObserver.subscribe(this, ModalRoute.of(context));
     if (_isInit) {
-      Provider.of<Articles>(context).getBookmarkedArticles().then((_) {
-        setState(() {
-          _loading = false;
-        });
-      }).catchError((errorMessage) {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return ErrorDialog(
-                errorMessage: errorMessage,
-              );
-            });
-        setState(() {
-          _error = true;
-        });
-      });
+      _loadData();
       setState(() {
         _isInit = false;
       });
     }
     super.didChangeDependencies();
+  }
+
+  @override
+  void didPopNext() {
+    _loadData();
+    super.didPopNext();
+  }
+
+  void _loadData() {
+    Provider.of<Articles>(context).getBookmarkedArticles().then((_) {
+      setState(() {
+        _loading = false;
+      });
+    }).catchError((errorMessage) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return ErrorDialog(
+              errorMessage: errorMessage,
+            );
+          });
+      setState(() {
+        _error = true;
+      });
+    });
   }
 
   @override

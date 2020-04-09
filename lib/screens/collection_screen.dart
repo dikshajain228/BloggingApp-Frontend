@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import '../route_observer.dart' as route_observer;
 
 import '../screens/collection_edit_screen.dart';
 import '../screens/article_delete_screen.dart';
@@ -28,7 +29,7 @@ class CollectionScreen extends StatefulWidget {
 }
 
 class _CollectionScreenState extends State<CollectionScreen>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, RouteAware {
   Collection _collection;
 
   bool _isInit = true;
@@ -41,6 +42,8 @@ class _CollectionScreenState extends State<CollectionScreen>
   //should be deleted
   List<bool> inputs = new List<bool>();
 
+  final routeObserver = route_observer.routeObserver;
+
   @override
   void initState() {
     super.initState();
@@ -48,48 +51,57 @@ class _CollectionScreenState extends State<CollectionScreen>
 
   @override
   void didChangeDependencies() {
+    routeObserver.subscribe(this, ModalRoute.of(context));
     if (_isInit) {
-      // Get collection details
-      Provider.of<Collections>(context)
-          .fetchCollectionById(widget.collectionId)
-          .then((data) {
-        setState(() {
-          _loadingCollection = false;
-          _collection = data;
-          _authors = data.authors;
-        });
-      }).catchError((errorMessage) {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return ErrorDialog(
-                errorMessage: errorMessage,
-              );
-            });
-        setState(() {
-          _errorCollection = true;
-        });
-      });
-
-      // Get articles of this collection
-      Provider.of<Articles>(context)
-          .getCollectionArticles(widget.collectionId)
-          .then((_) {
-        setState(() {
-          _loadingArticles = false;
-        });
-      }).catchError((errorMessage) {
-        setState(() {
-          _errorArticles = true;
-        });
-      });
-
+      _loadData();
       setState(() {
         _isInit = false;
       });
     }
-
     super.didChangeDependencies();
+  }
+
+  @override
+  void didPopNext() {
+    _loadData();
+    super.didPopNext();
+  }
+
+  void _loadData() {
+    // Get collection details
+    Provider.of<Collections>(context)
+        .fetchCollectionById(widget.collectionId)
+        .then((data) {
+      setState(() {
+        _loadingCollection = false;
+        _collection = data;
+        _authors = data.authors;
+      });
+    }).catchError((errorMessage) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return ErrorDialog(
+              errorMessage: errorMessage,
+            );
+          });
+      setState(() {
+        _errorCollection = true;
+      });
+    });
+
+    // Get articles of this collection
+    Provider.of<Articles>(context)
+        .getCollectionArticles(widget.collectionId)
+        .then((_) {
+      setState(() {
+        _loadingArticles = false;
+      });
+    }).catchError((errorMessage) {
+      setState(() {
+        _errorArticles = true;
+      });
+    });
   }
 
   @override

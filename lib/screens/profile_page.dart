@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import '../route_observer.dart' as route_observer;
 
 import '../screens/edit_profile_screen.dart';
 import '../screens/change_password.dart';
@@ -21,7 +22,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, RouteAware {
   bool _loadingProfile = true;
   bool _loadingArticles = true;
   bool _loadingCollections = true;
@@ -30,8 +31,9 @@ class _ProfilePageState extends State<ProfilePage>
   bool _errorArticle = false;
   bool _errorCollections = false;
   User _user;
-
   TabController _tabController;
+
+  final routeObserver = route_observer.routeObserver;
 
   @override
   void initState() {
@@ -42,48 +44,9 @@ class _ProfilePageState extends State<ProfilePage>
 
   @override
   void didChangeDependencies() {
+    routeObserver.subscribe(this, ModalRoute.of(context));
     if (_isInit) {
-      // Get profile details
-      Provider.of<Users>(context).getProfile().then((data) {
-        setState(() {
-          _loadingProfile = false;
-          _user = data;
-        });
-      }).catchError((errorMessage) {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return ErrorDialog(
-                errorMessage: errorMessage,
-              );
-            });
-        setState(() {
-          _errorProfile = true;
-        });
-      });
-
-      // Get authored articles
-      Provider.of<Articles>(context).getUserArticles().then((_) {
-        setState(() {
-          _loadingArticles = false;
-        });
-      }).catchError((errorMessage) {
-        setState(() {
-          _errorArticle = true;
-        });
-      });
-
-      // Get owned / authored collections
-      Provider.of<Collections>(context).getUserCollections().then((_) {
-        setState(() {
-          _loadingCollections = false;
-        });
-      }).catchError((errorMessage) {
-        setState(() {
-          _errorCollections = true;
-        });
-      });
-
+      _loadData();
       setState(() {
         _isInit = false;
       });
@@ -96,6 +59,55 @@ class _ProfilePageState extends State<ProfilePage>
   void dispose() {
     _tabController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    _loadData();
+    super.didPopNext();
+  }
+
+  void _loadData() {
+// Get profile details
+    Provider.of<Users>(context).getProfile().then((data) {
+      setState(() {
+        _loadingProfile = false;
+        _user = data;
+      });
+    }).catchError((errorMessage) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return ErrorDialog(
+              errorMessage: errorMessage,
+            );
+          });
+      setState(() {
+        _errorProfile = true;
+      });
+    });
+
+    // Get authored articles
+    Provider.of<Articles>(context).getUserArticles().then((_) {
+      setState(() {
+        _loadingArticles = false;
+      });
+    }).catchError((errorMessage) {
+      setState(() {
+        _errorArticle = true;
+      });
+    });
+
+    // Get owned / authored collections
+    Provider.of<Collections>(context).getUserCollections().then((_) {
+      setState(() {
+        _loadingCollections = false;
+      });
+    }).catchError((errorMessage) {
+      setState(() {
+        _errorCollections = true;
+      });
+    });
   }
 
   @override
@@ -239,7 +251,7 @@ class _ProfilePageState extends State<ProfilePage>
                                       : ArticlesList())),
                               (_errorCollections == true
                                   ? Text("An error occured")
-                                  : (_loadingArticles == true
+                                  : (_loadingCollections == true
                                       ? SpinKitDoubleBounce(
                                           color: Colors.teal,
                                         )

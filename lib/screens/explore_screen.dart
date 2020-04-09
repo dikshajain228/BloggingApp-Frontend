@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import '../route_observer.dart' as route_observer;
 
 import '../widgets/drawer.dart';
 import '../widgets/collection_list.dart';
 import '../widgets/articles_list.dart';
 import '../widgets/user_list.dart';
-import '../widgets/error_dialog.dart';
 
 import '../providers/collections.dart';
 import '../providers/articles.dart';
@@ -19,7 +19,7 @@ class ExploreScreen extends StatefulWidget {
 }
 
 class _ExploreScreenState extends State<ExploreScreen>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, RouteAware {
   bool _queryEntered = false;
   bool _loadingArticles = true;
   bool _loadingCollections = true;
@@ -30,6 +30,8 @@ class _ExploreScreenState extends State<ExploreScreen>
   String _query = "";
   TabController tabController;
   TextEditingController searchController;
+
+  final routeObserver = route_observer.routeObserver;
 
   @override
   void initState() {
@@ -44,6 +46,7 @@ class _ExploreScreenState extends State<ExploreScreen>
 
   @override
   void didChangeDependencies() {
+    routeObserver.subscribe(this, ModalRoute.of(context));
     super.didChangeDependencies();
   }
 
@@ -51,6 +54,14 @@ class _ExploreScreenState extends State<ExploreScreen>
   void dispose() {
     tabController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    setState(() {
+      _queryEntered = false;
+    });
+    super.didPopNext();
   }
 
   void search() {

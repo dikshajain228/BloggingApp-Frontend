@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:zefyr/zefyr.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import '../route_observer.dart' as route_observer;
 
 import './article_edit_screen.dart';
 
@@ -26,12 +27,14 @@ class ArticleScreen extends StatefulWidget {
 }
 
 class _ArticleScreenState extends State<ArticleScreen>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, RouteAware {
   Article _article;
   bool _loading = true;
   bool _error = false;
   bool _isInit = true;
   NotusDocument _content;
+
+  final routeObserver = route_observer.routeObserver;
 
   @override
   void initState() {
@@ -40,27 +43,10 @@ class _ArticleScreenState extends State<ArticleScreen>
 
   @override
   void didChangeDependencies() {
+    routeObserver.subscribe(this, ModalRoute.of(context));
+
     if (_isInit) {
-      Provider.of<Articles>(context)
-          .getArticleById(widget.articleId)
-          .then((article) {
-        setState(() {
-          _loading = false;
-          _article = article;
-          _content = getContent();
-        });
-      }).catchError((errorMessage) {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return ErrorDialog(
-                errorMessage: errorMessage,
-              );
-            });
-        setState(() {
-          _error = true;
-        });
-      });
+      _loadData();
       setState(() {
         _isInit = false;
       });
@@ -69,8 +55,37 @@ class _ArticleScreenState extends State<ArticleScreen>
     super.didChangeDependencies();
   }
 
+  @override
+  void didPopNext() {
+    _loadData();
+    super.didPopNext();
+  }
+
+  void _loadData() {
+    Provider.of<Articles>(context)
+        .getArticleById(widget.articleId)
+        .then((article) {
+      setState(() {
+        _loading = false;
+        _article = article;
+        _content = _loadContent();
+      });
+    }).catchError((errorMessage) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return ErrorDialog(
+              errorMessage: errorMessage,
+            );
+          });
+      setState(() {
+        _error = true;
+      });
+    });
+  }
+
 // Rename
-  NotusDocument getContent() {
+  NotusDocument _loadContent() {
     var data = jsonDecode(_article.content);
     return NotusDocument.fromJson(data);
   }
