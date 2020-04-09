@@ -9,6 +9,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../server_util.dart' as Server;
 
 import './collection.dart';
+import '../models/author.dart';
 
 class Collections with ChangeNotifier {
   static const baseUrl = Server.SERVER_IP + "/api/v1/";
@@ -69,28 +70,43 @@ class Collections with ChangeNotifier {
         url,
         headers: {HttpHeaders.authorizationHeader: token},
       );
-      print(response.body);
-      final responseJson = json.decode(response.body);
-      print("jsonnnnnnnnnnnnnnnnnnnnnn");
-      print(responseJson);
-      final collectionData = responseJson["collection"][0];
-      final authorData = responseJson["authors"];
-      Collection collection = Collection(
-        collection_id: collectionData["collection_id"],
-        collection_name: collectionData["collection_name"],
-        user_id: collectionData["user_id"],
-        image_url: collectionData["image_url"],
-        description: collectionData["description"],
-        is_owner: collectionData["is_owner"] == 0 ? false : true,
-        is_author: collectionData["is_author"] == 0 ? false : true,
-        is_following: collectionData["is_following"] == 0 ? false : true,
-        authors: authorData,
-      );
-      print("Authors");
-      print(collection.authors);
-      return collection;
+      if (response.statusCode == 200) {
+        List<Author> authors = [];
+        final responseJson = json.decode(response.body);
+        final collectionData = responseJson["collection"];
+        final authorData = responseJson["authors"];
+        for (final author in authorData) {
+          authors.add(Author(
+            author["user_id"],
+            author["username"],
+            author["email"],
+            author["image_url"],
+          ));
+        }
+        Collection collection = Collection(
+          collection_id: collectionData["collection_id"],
+          collection_name: collectionData["collection_name"],
+          user_id: collectionData["user_id"],
+          image_url: collectionData["image_url"],
+          description: collectionData["description"],
+          is_owner: collectionData["is_owner"] == 0 ? false : true,
+          is_author: collectionData["is_author"] == 0 ? false : true,
+          is_following: collectionData["is_following"] == 0 ? false : true,
+          authors: authors,
+        );
+        print("Collection Authors");
+        print(collection.authors);
+        return collection;
+      } else if (response.statusCode == 404) {
+        print("Collection not found");
+        throw "Collection not found";
+      } else {
+        print(response.body);
+        throw "Failed to load collection";
+      }
     } catch (error) {
-      throw error;
+      print(error);
+      throw "Failed to load collection";
     }
   }
 

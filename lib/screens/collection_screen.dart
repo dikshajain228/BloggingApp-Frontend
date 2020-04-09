@@ -12,6 +12,7 @@ import '../screens/profile_page.dart';
 import '../widgets/collection_details_card.dart';
 import '../widgets/articles_list.dart';
 import '../widgets/author_input.dart';
+import '../widgets/error_dialog.dart';
 
 // Providers
 import '../providers/collections.dart';
@@ -29,8 +30,12 @@ class CollectionScreen extends StatefulWidget {
 class _CollectionScreenState extends State<CollectionScreen>
     with SingleTickerProviderStateMixin {
   Collection _collection;
+
+  bool _isInit = true;
   bool _loadingCollection = true;
   bool _loadingArticles = true;
+  bool _errorCollection = false;
+  bool _errorArticles = false;
   List<dynamic> authors = [];
   List<dynamic> _authors = [];
   //should be deleted
@@ -39,32 +44,51 @@ class _CollectionScreenState extends State<CollectionScreen>
   @override
   void initState() {
     super.initState();
-    print("Collection screen");
-    print(widget.collectionId);
   }
 
   @override
   void didChangeDependencies() {
-    // Get collection details
-    Provider.of<Collections>(context)
-        .fetchCollectionById(widget.collectionId)
-        .then((data) {
-      setState(() {
-        _loadingCollection = false;
-        _collection = data;
-        _authors = data.authors;
+    if (_isInit) {
+      // Get collection details
+      Provider.of<Collections>(context)
+          .fetchCollectionById(widget.collectionId)
+          .then((data) {
+        setState(() {
+          _loadingCollection = false;
+          _collection = data;
+          _authors = data.authors;
+        });
+      }).catchError((errorMessage) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return ErrorDialog(
+                errorMessage: errorMessage,
+              );
+            });
+        setState(() {
+          _errorCollection = true;
+        });
       });
-      print(_authors);
-    });
 
-    // Get articles of this collection
-    Provider.of<Articles>(context)
-        .getCollectionArticles(widget.collectionId)
-        .then((_) {
-      setState(() {
-        _loadingArticles = false;
+      // Get articles of this collection
+      Provider.of<Articles>(context)
+          .getCollectionArticles(widget.collectionId)
+          .then((_) {
+        setState(() {
+          _loadingArticles = false;
+        });
+      }).catchError((errorMessage) {
+        setState(() {
+          _errorArticles = true;
+        });
       });
-    });
+
+      setState(() {
+        _isInit = false;
+      });
+    }
+
     super.didChangeDependencies();
   }
 
@@ -75,28 +99,29 @@ class _CollectionScreenState extends State<CollectionScreen>
       appBar: AppBar(
         title: Text("Collection Screen"),
       ),
-      body: (_loadingCollection == true
-          ? SpinKitChasingDots(
-              color: Colors.teal,
-            )
-          : SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Column(
-                children: [
-                  ChangeNotifierProvider.value(
-                    value: _collection,
-                    child: CollectionDetailsCard(),
-                  ),
-                  (_loadingArticles == true
-                      ? SpinKitWanderingCubes(
-                          color: Colors.teal,
-                        )
-                      : Flexible(
-                          child: ArticlesList(),
-                        )),
-                ],
-              ),
-            )),
+      body: (_errorCollection == true
+          ? Text("An error occured")
+          : (_loadingCollection == true
+              ? SpinKitChasingDots(
+                  color: Colors.teal,
+                )
+              : Column(
+                  children: [
+                    ChangeNotifierProvider.value(
+                      value: _collection,
+                      child: CollectionDetailsCard(),
+                    ),
+                    (_errorArticles == true
+                        ? Text("An error occured")
+                        : (_loadingArticles == true
+                            ? SpinKitWanderingCubes(
+                                color: Colors.teal,
+                              )
+                            : Flexible(
+                                child: ArticlesList(),
+                              ))),
+                  ],
+                ))),
       floatingActionButton: (_loadingCollection == true
           ? null
           : this._collection.is_owner

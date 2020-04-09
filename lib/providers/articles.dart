@@ -213,32 +213,37 @@ class Articles with ChangeNotifier {
   // Get articles of a collection
   Future<void> getCollectionArticles(String collectionId) async {
     List<Article> fetchedArticles = [];
-
     final token = await storage.read(key: "token");
-    print("Obtained token ");
-
     String url = baseUrl + "collections/" + collectionId + "/articles";
     try {
       final response = await http.get(
         url,
         headers: {HttpHeaders.authorizationHeader: token},
       );
-      final responseJson = json.decode(response.body);
-      for (final article in responseJson) {
-        fetchedArticles.add(Article(
-          article_id: article["article_id"],
-          user_id: article["user_id"],
-          collection_id: article["collection_id"],
-          title: article["title"],
-          image_path: article["image_path"],
-          is_bookmarked: article["is_bookmarked"] == 0 ? false : true,
-          date_created: DateTime.parse(article["date_created"]),
-          author: "Anjali",
-        ));
+      if (response.statusCode == 200) {
+        final responseJson = json.decode(response.body);
+        for (final article in responseJson["articles"]) {
+          fetchedArticles.add(Article(
+            article_id: article["article_id"],
+            user_id: article["user_id"],
+            collection_id: article["collection_id"],
+            title: article["title"],
+            image_path: article["image_path"],
+            is_bookmarked: article["is_bookmarked"] == 0 ? false : true,
+            date_created: DateTime.parse(article["date_created"]),
+            author: article["author"],
+            profile_image_url: article["profile_image_url"],
+          ));
+        }
+        _articles = [...fetchedArticles];
+      } else {
+        print(response.body);
+        throw "Failed to load articles";
       }
-      _articles = [...fetchedArticles];
     } catch (error) {
-      throw error;
+      print(error);
+      ;
+      throw "Failed to load articles";
     }
   }
 

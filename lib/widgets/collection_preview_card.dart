@@ -10,11 +10,6 @@ class CollectionPreviewCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final _collection = Provider.of<Collection>(context);
 
-    print("COllection card");
-    print(_collection.collection_id);
-    print(_collection.collection_name);
-    print(_collection.description);
-
     return new Card(
       elevation: 8.0,
       margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
