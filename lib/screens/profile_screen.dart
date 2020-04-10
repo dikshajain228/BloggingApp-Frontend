@@ -115,6 +115,18 @@ class _ProfileScreenState extends State<ProfileScreen>
     return Scaffold(
         appBar: AppBar(
           title: Text("Profile"),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xff191654),
+                    Color(0xff43c6ac),
+                    Color(0xff6dffe1),
+                  ]),
+            ),
+          ),
           actions: <Widget>[
             PopupMenuButton(
               onSelected: (int selectedValue) {
@@ -148,6 +160,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                           Container(
                             padding: EdgeInsets.all(10),
                             child: CircleAvatar(
+                              backgroundColor: Color(0xee191654),
                               backgroundImage:
                                   NetworkImage(_user.profile_image_url),
                               radius: 60,
@@ -181,7 +194,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                         ],
                       ),
                       Padding(
-                        padding: EdgeInsets.all(10.0),
+                        padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
                         child: Text(
                           _user.about,
                           textAlign: TextAlign.center,
@@ -189,7 +202,6 @@ class _ProfileScreenState extends State<ProfileScreen>
                         ),
                       ),
                       Container(
-                        color: Colors.teal[100],
                         child: Padding(
                           padding: EdgeInsets.all(16.0),
                           child: Row(
@@ -202,10 +214,10 @@ class _ProfileScreenState extends State<ProfileScreen>
                                       _user.followerCount.toString() +
                                           " followers",
                                       style: TextStyle(
-                                        fontSize: 17.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                      ),
+                                          fontSize: 17.0,
+                                          fontWeight: FontWeight.bold,
+                                          color:
+                                              Theme.of(context).primaryColor),
                                     ),
                                   ],
                                 ),
@@ -220,7 +232,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                       style: TextStyle(
                                         fontSize: 17.0,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.black,
+                                        color: Theme.of(context).primaryColor,
                                       ),
                                     ),
                                   ],

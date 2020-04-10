@@ -18,26 +18,30 @@ class CollectionPreviewCard extends StatelessWidget {
         child: ListTile(
           contentPadding:
               EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-          leading: ClipOval(
-            child: CachedNetworkImage(
-              imageUrl: _collection.image_url,
-              placeholder: (context, url) => Image.network(
-                "http://via.placeholder.com/640x360",
-                fit: BoxFit.cover,
-                height: 50.0,
-                width: 50.0,
-              ),
-              errorWidget: (context, url, error) => Image.network(
-                "http://via.placeholder.com/640x360",
-                fit: BoxFit.cover,
-                height: 50.0,
-                width: 50.0,
-              ),
-              fit: BoxFit.cover,
-              height: 50.0,
-              width: 50.0,
-            ),
+          leading: CircleAvatar(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            backgroundImage: NetworkImage(_collection.image_url),
           ),
+          // ClipOval(
+          //   child: CachedNetworkImage(
+          //     imageUrl: _collection.image_url,
+          //     placeholder: (context, url) => Image.network(
+          //       "http://via.placeholder.com/640x360",
+          //       fit: BoxFit.cover,
+          //       height: 50.0,
+          //       width: 50.0,
+          //     ),
+          //     errorWidget: (context, url, error) => Image.network(
+          //       "http://via.placeholder.com/640x360",
+          //       fit: BoxFit.cover,
+          //       height: 50.0,
+          //       width: 50.0,
+          //     ),
+          //     fit: BoxFit.cover,
+          //     height: 50.0,
+          //     width: 50.0,
+          //   ),
+          // ),
           title: Text(
             _collection.collection_name,
             style: TextStyle(
@@ -54,8 +58,7 @@ class CollectionPreviewCard extends StatelessWidget {
           // Is owner
           trailing: _collection.is_owner
               ? FlatButton(
-                  color: Colors.purple,
-                  disabledColor: Colors.deepOrange,
+                  disabledColor: Theme.of(context).colorScheme.primary,
                   disabledTextColor: Colors.white,
                   textColor: Colors.white,
                   padding: EdgeInsets.all(10.0),
@@ -65,8 +68,7 @@ class CollectionPreviewCard extends StatelessWidget {
               // Is author
               : _collection.is_author
                   ? FlatButton(
-                      color: Colors.purple,
-                      disabledColor: Colors.purple,
+                      disabledColor: Theme.of(context).colorScheme.secondary,
                       disabledTextColor: Colors.white,
                       textColor: Colors.white,
                       padding: EdgeInsets.all(10.0),
