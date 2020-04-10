@@ -33,7 +33,6 @@ class _ArticleScreenState extends State<ArticleScreen>
   bool _error = false;
   bool _isInit = true;
   NotusDocument _content;
-
   final routeObserver = route_observer.routeObserver;
 
   @override
@@ -44,7 +43,6 @@ class _ArticleScreenState extends State<ArticleScreen>
   @override
   void didChangeDependencies() {
     routeObserver.subscribe(this, ModalRoute.of(context));
-
     if (_isInit) {
       _loadData();
       setState(() {
@@ -57,6 +55,7 @@ class _ArticleScreenState extends State<ArticleScreen>
 
   @override
   void didPopNext() {
+    print("pop next");
     _loadData();
     super.didPopNext();
   }
@@ -94,10 +93,24 @@ class _ArticleScreenState extends State<ArticleScreen>
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Article"),
+          title: Text("Article..."),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xff191654),
+                    Color(0xff43c6ac),
+                    Color(0xff6dffe1),
+                  ]),
+            ),
+          ),
         ),
         body: (_error == true
-            ? Text("Some error occured")
+            ? Center(
+                child: Text("Some error occured"),
+              )
             : (_loading == true
                 ? SpinKitChasingDots(
                     color: Colors.teal,
