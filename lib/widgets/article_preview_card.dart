@@ -56,16 +56,16 @@ class ArticlePreviewCard extends StatelessWidget {
             subtitle: article.date_created == null
                 ? Text("No date")
                 : Row(children: <Widget>[
-                    Text(
+                    Expanded(child:Text(
                       "Published by " +
-                          "Anjali" +
+                          article.author +
                           " on " +
                           DateFormat("dd-MM-yyyy").format(article.date_created),
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 13,
                       ),
-                    ),
+                    )),
                     (article.is_bookmarked
                         ? IconButton(
                             icon: Icon(

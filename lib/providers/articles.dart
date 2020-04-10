@@ -99,6 +99,7 @@ class Articles with ChangeNotifier {
           author: data["author"],
           profile_image_url: data["profile_image_url"],
         );
+        print(data["author"]);
         notifyListeners();
         return article;
       } else if (response.statusCode == 404) {
