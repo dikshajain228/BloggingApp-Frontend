@@ -17,13 +17,9 @@ class UserPreviewCard extends StatelessWidget {
         child: ListTile(
           contentPadding:
               EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-          leading: ClipOval(
-            child: Image.network(
-              user.profile_image_url,
-              fit: BoxFit.cover,
-              height: 50.0,
-              width: 50.0,
-            ),
+           leading: CircleAvatar(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            backgroundImage: NetworkImage(user.profile_image_url),
           ),
           title: Text(
             user.username,
@@ -37,24 +33,32 @@ class UserPreviewCard extends StatelessWidget {
                       ?
                       // is following
                       FlatButton(
-                          color: Colors.blue,
-                          textColor: Colors.white,
+                          color: Theme.of(context).colorScheme.primary,
+                          textColor: Theme.of(context).colorScheme.onPrimary,
                           padding: EdgeInsets.all(10.0),
                           onPressed: () {
-                            user.followUnfollow();
+                            user.
+                          unfollowUser(user.user_id.toString())
+                              .then((_) {
+                            print("Unfollowed user");
+                          });
                           },
                           child: Text("Following"),
                         )
                       // Follower
                       : OutlineButton(
-                          color: Colors.blue,
+                          color: Theme.of(context).colorScheme.primary,
                           borderSide: BorderSide(
-                            color: Colors.blue,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
-                          textColor: Colors.blue,
+                          textColor: Theme.of(context).colorScheme.primary,
                           padding: EdgeInsets.all(10.0),
                           onPressed: () {
-                            user.followUnfollow();
+                            user
+                              .followUser(user.user_id.toString())
+                              .then((_) {
+                            print("Followed user");
+                            });
                           },
                           child: Text("Follow"),
                         ),
