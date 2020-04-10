@@ -144,7 +144,7 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
           title: Container(
             padding: EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
+              color: Theme.of(context).colorScheme.secondary,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20),
                 topRight: Radius.circular(20),
@@ -152,7 +152,8 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
             ),
             child: Text(
               'Post Article...',
-              style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+              style:
+                  TextStyle(color: Theme.of(context).colorScheme.onSecondary),
             ),
           ),
           content: SingleChildScrollView(

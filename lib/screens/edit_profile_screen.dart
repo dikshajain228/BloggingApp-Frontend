@@ -19,7 +19,6 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   final _formKey = new GlobalKey<FormState>();
-
   final _username = TextEditingController();
   final _about = TextEditingController();
   File uploadedImage;
@@ -37,23 +36,23 @@ class _EditProfileState extends State<EditProfile> {
     });
   }
 
-  void saveChanges() {
-    Navigator.of(context).pushReplacementNamed(ProfileScreen.routeName);
-  }
-
-  void cancelChanges() {
-    Navigator.of(context).pushReplacementNamed((ProfileScreen.routeName));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // leading: IconButton(
-        //   icon: Icon(Icons.arrow_back),
-        //   onPressed: cancelChanges,
-        // ),
         title: Text('Edit Profile...'),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xff191654),
+                  Color(0xff43c6ac),
+                  Color(0xff6dffe1),
+                ]),
+          ),
+        ),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.done),
@@ -116,11 +115,13 @@ class _EditProfileState extends State<EditProfile> {
         .updateProfile(data, uploadedImage)
         .then((message) {
       print(message);
-      Navigator.of(context).pushReplacementNamed(ProfileScreen.routeName);
+      // Use pop
+      // Navigator.of(context).pushReplacementNamed(ProfileScreen.routeName);
       Toast.show(message, context, duration: 7, gravity: Toast.BOTTOM);
     }).catchError((errorMessage) {
       print(errorMessage);
-      Navigator.of(context).pushReplacementNamed(ProfileScreen.routeName);
+      // use pop
+      // Navigator.of(context).pushReplacementNamed(ProfileScreen.routeName);
       Toast.show("Profile could not be edited.Please try again.", context,
           duration: 7, gravity: Toast.BOTTOM);
     });
@@ -133,29 +134,41 @@ class _EditProfileState extends State<EditProfile> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text(
-              "Confirm changes ?",
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            titlePadding: EdgeInsets.all(0),
+            title: Container(
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.secondary,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
+              child: Text(
+                'Update Profile...',
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.onSecondary),
               ),
             ),
+            content: Text("Save changes made to your profile?"),
             actions: [
               FlatButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
                 child: Text("No"),
-                color: Colors.red,
-                splashColor: Colors.redAccent,
+                textColor: Theme.of(context).colorScheme.error,
+                splashColor: Theme.of(context).colorScheme.error,
               ),
               FlatButton(
-                child: Text("Yes"),
-                color: Colors.teal,
-                splashColor: Colors.tealAccent,
+                child: Text("Save"),
+                textColor: Theme.of(context).colorScheme.secondary,
+                splashColor: Theme.of(context).colorScheme.secondary,
                 onPressed: () {
                   _updateProfile();
-                  Navigator.of(context).pop();
+                  // Navigator.of(context).pop();
                   //Navigator.of(context).pushReplacementNamed(ProfileScreen.routeName);
                 },
               ),

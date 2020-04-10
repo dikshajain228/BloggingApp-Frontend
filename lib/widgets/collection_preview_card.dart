@@ -38,7 +38,7 @@ class CollectionPreviewCard extends StatelessWidget {
           // Is owner
           trailing: _collection.is_owner
               ? FlatButton(
-                  disabledColor: Color(0xffbd6b73),
+                  disabledColor: Color(0xffFFC922),
                   disabledTextColor: Colors.white,
                   textColor: Colors.white,
                   padding: EdgeInsets.all(10.0),
