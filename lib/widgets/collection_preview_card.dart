@@ -38,7 +38,7 @@ class CollectionPreviewCard extends StatelessWidget {
           // Is owner
           trailing: _collection.is_owner
               ? FlatButton(
-                  disabledColor: Theme.of(context).colorScheme.primary,
+                  disabledColor: Color(0xffbd6b73),
                   disabledTextColor: Colors.white,
                   textColor: Colors.white,
                   padding: EdgeInsets.all(10.0),
@@ -49,7 +49,8 @@ class CollectionPreviewCard extends StatelessWidget {
               : _collection.is_author
                   ? FlatButton(
                       disabledColor: Theme.of(context).colorScheme.secondary,
-                      disabledTextColor: Colors.white,
+                      disabledTextColor:
+                          Theme.of(context).colorScheme.onSecondary,
                       textColor: Colors.white,
                       padding: EdgeInsets.all(10.0),
                       onPressed: null,
@@ -59,8 +60,8 @@ class CollectionPreviewCard extends StatelessWidget {
                       ?
                       // is following
                       FlatButton(
-                          color: Colors.blue,
-                          textColor: Colors.white,
+                          color: Theme.of(context).colorScheme.primary,
+                          textColor: Theme.of(context).colorScheme.onPrimary,
                           padding: EdgeInsets.all(10.0),
                           onPressed: () {
                             _collection
@@ -73,11 +74,11 @@ class CollectionPreviewCard extends StatelessWidget {
                         )
                       // Follower
                       : OutlineButton(
-                          color: Colors.blue,
+                          color: Theme.of(context).colorScheme.primary,
                           borderSide: BorderSide(
-                            color: Colors.blue,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
-                          textColor: Colors.blue,
+                          textColor: Theme.of(context).colorScheme.primary,
                           padding: EdgeInsets.all(10.0),
                           onPressed: () {
                             _collection
