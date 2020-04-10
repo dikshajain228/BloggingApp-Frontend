@@ -68,8 +68,21 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xfff3f7f6),
       appBar: AppBar(
         title: Text('Feed'),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xff191654),
+                  Color(0xff43c6ac),
+                  Color(0xff6dffe1),
+                ]),
+          ),
+        ),
       ),
       body: (_error == false
           ? (_loading == true
@@ -77,7 +90,9 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                   color: Theme.of(context).primaryColor,
                 )
               : ArticlesList())
-          : Text("An error occured...")),
+          : Center(
+              child: Text("An error occured..."),
+            )),
       drawer: MainDrawer(),
     );
   }

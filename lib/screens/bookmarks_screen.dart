@@ -70,6 +70,18 @@ class _BookmarkScreenState extends State<BookmarkScreen> with RouteAware {
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Bookmarks'),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xff191654),
+                  Color(0xff43c6ac),
+                  Color(0xff6dffe1),
+                ]),
+          ),
+        ),
       ),
       body: (_error == true
           ? Text("An error occured")

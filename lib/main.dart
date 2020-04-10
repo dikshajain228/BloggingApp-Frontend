@@ -26,6 +26,7 @@ import './providers/user.dart';
 import './providers/userAuthentication.dart';
 
 import './route_observer.dart' as route_observer;
+import './app_theme.dart';
 
 void main() => runApp(MyApp());
 
@@ -54,11 +55,12 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         navigatorObservers: <NavigatorObserver>[routeObserver],
         title: "Blogging App",
-        theme: ThemeData(
-          primaryColor: Colors.teal,
-          accentColor: Colors.white60,
-          primarySwatch: Colors.purple,
-        ),
+        theme: AppTheme.lightTheme,
+        // ThemeData(
+        //   // primaryColor: Colors.teal,
+        //   // accentColor: Colors.white60,
+        //   // primarySwatch: Colors.purple,
+        // ),
         home: LoginScreen(),
         routes: {
           ChangePassword.routeName: (context) => ChangePassword(),
