@@ -111,7 +111,7 @@ class _AuthorInputState extends State<AuthorInput> {
                         )
                       : CircleAvatar(
                           backgroundColor:
-                              Theme.of(context).colorScheme.secondary,
+                              Theme.of(context).colorScheme.primary,
                           backgroundImage: NetworkImage(profile.image_url),
                         )),
               onDeleted: () => state.deleteChip(profile),
@@ -121,23 +121,18 @@ class _AuthorInputState extends State<AuthorInput> {
           suggestionBuilder: (context, state, profile) {
             return ListTile(
               key: ObjectKey(profile),
-              leading: ClipOval(
-                child: CachedNetworkImage(
-                  imageUrl: (profile.image_url != null
-                      ? profile.image_url
-                      : "http://via.placeholder.com/640x360"),
-                  placeholder: (context, url) => Image.network(
-                    "http://via.placeholder.com/640x360",
-                    fit: BoxFit.cover,
-                    height: 50.0,
-                    width: 50.0,
-                  ),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                  fit: BoxFit.cover,
-                  height: 50.0,
-                  width: 50.0,
-                ),
-              ),
+              leading: (
+                  // to be removed
+                  profile.image_url == null
+                      ? CircleAvatar(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
+                        )
+                      : CircleAvatar(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
+                          backgroundImage: NetworkImage(profile.image_url),
+                        )),
               title: Text(profile.username),
               subtitle: Text(profile.email),
               onTap: () => state.selectSuggestion(profile),
