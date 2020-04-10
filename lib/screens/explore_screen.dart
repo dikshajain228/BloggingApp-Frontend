@@ -93,14 +93,26 @@ class _ExploreScreenState extends State<ExploreScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomPadding: false,
         appBar: AppBar(
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xff191654),
+                    Color(0xff43c6ac),
+                    Color(0xff6dffe1),
+                  ]),
+            ),
+          ),
           title: TextField(
             autofocus: false,
             controller: searchController,
-            cursorColor: Colors.white,
             decoration: InputDecoration(
               filled: true,
-              fillColor: Colors.teal[400],
+              fillColor: Color(0x44ffffff),
               hintText: "Search...",
               hintStyle: TextStyle(
                 color: Colors.white,
