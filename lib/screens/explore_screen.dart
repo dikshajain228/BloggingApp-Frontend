@@ -174,21 +174,27 @@ class _ExploreScreenState extends State<ExploreScreen>
                 controller: tabController,
                 children: <Widget>[
                   (_errorCollections == true
-                      ? Text("An error occured")
+                      ? Center(
+                          child: Text("An error occured"),
+                        )
                       : (_loadingCollections == true
                           ? SpinKitWanderingCubes(
                               color: Colors.teal,
                             )
                           : CollectionList())),
                   (_errorArticles == true
-                      ? Text("An error occured")
+                      ? Center(
+                          child: Text("An error occured"),
+                        )
                       : (_loadingArticles == true
                           ? SpinKitWanderingCubes(
                               color: Colors.teal,
                             )
                           : ArticlesList())),
                   (_errorUsers == true
-                      ? Text("An error occured")
+                      ? Center(
+                          child: Text("An error occured"),
+                        )
                       : (_loadingUsers == true
                           ? SpinKitWanderingCubes(
                               color: Colors.teal,
