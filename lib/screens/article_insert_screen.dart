@@ -102,6 +102,18 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xff191654),
+                  Color(0xff43c6ac),
+                  Color(0xff6dffe1),
+                ]),
+          ),
+        ),
         title: Text("New Article"),
         centerTitle: true,
         actions: <Widget>[
@@ -126,11 +138,21 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(
-            "Post Article...",
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          titlePadding: EdgeInsets.all(0),
+          title: Container(
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            child: Text(
+              'Post Article...',
+              style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
             ),
           ),
           content: SingleChildScrollView(
@@ -138,23 +160,26 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
             child: Column(
               children: <Widget>[
                 TagsInput(_tags, setTags),
+                SizedBox(
+                  height: 10,
+                ),
                 ImageInput(uploadedImage, setImage, image_url),
               ],
             ),
           ),
           actions: [
             FlatButton(
+              child: Text("Cancel"),
+              textColor: Theme.of(context).colorScheme.error,
+              splashColor: Theme.of(context).colorScheme.error,
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text("Close"),
-              color: Colors.red,
-              splashColor: Colors.redAccent,
             ),
             FlatButton(
               child: Text("Post"),
-              color: Colors.teal,
-              splashColor: Colors.tealAccent,
+              textColor: Theme.of(context).colorScheme.primary,
+              splashColor: Theme.of(context).colorScheme.primary,
               onPressed: () {
                 _insertArticle();
               },
