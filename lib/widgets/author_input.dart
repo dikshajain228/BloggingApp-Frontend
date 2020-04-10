@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_chips_input/flutter_chips_input.dart';
 
 import '../models/author.dart';
-// import '../widgets/chips_input.dart';
 
 class AuthorInput extends StatefulWidget {
   List<dynamic> authors;
@@ -24,51 +22,14 @@ class _AuthorInputState extends State<AuthorInput> {
   @override
   void initState() {
     super.initState();
-    // List<Author> _tempList = [];
-    // for (final data in widget.authors) {
-    //   _tempList.add(Author(
-    //     data["user_id"],
-    //     data["username"],
-    //     data["email"],
-    //     data["image_url"],
-    //   ));
-    // }
     setState(() {
       _initialAuthors = [...widget.authors];
       _selectedAuthors = [...widget.authors];
     });
-    print(widget.authors);
   }
 
   @override
   Widget build(BuildContext context) {
-    var mockResults = <Author>[
-      Author(100, 'John Doe', 'jdoe@flutter.io',
-          'https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX4057996.jpg'),
-      Author(102, 'Paul', 'paul@google.com',
-          'https://mbtskoudsalg.com/images/person-stock-image-png.png'),
-      Author(101, 'Fred', 'fred@google.com',
-          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-      Author(103, 'Brian', 'brian@flutter.io',
-          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-      Author(104, 'John', 'john@flutter.io',
-          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-      Author(105, 'Thomas', 'thomas@flutter.io',
-          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-      Author(111, 'Nelly', 'nelly@flutter.io',
-          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-      Author(112, 'Marie', 'marie@flutter.io',
-          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-      Author(1221, 'Charlie', 'charlie@flutter.io',
-          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-      Author(121, 'Diana', 'diana@flutter.io',
-          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-      Author(132, 'Ernie', 'ernie@flutter.io',
-          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-      Author(133, 'Gina', 'fred@flutter.io',
-          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'),
-    ];
-
     return Column(
       children: <Widget>[
         ChipsInput(
@@ -144,14 +105,14 @@ class _AuthorInputState extends State<AuthorInput> {
           children: <Widget>[
             FlatButton(
               textColor: Theme.of(context).colorScheme.primary,
-              child: Text("YES"),
+              child: Text("Edit Authors"),
               onPressed: () {
                 _editAuthors();
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: Text("NO"),
+              child: Text("Cancel"),
               textColor: Theme.of(context).colorScheme.error,
               onPressed: () {
                 Navigator.of(context).pop();
