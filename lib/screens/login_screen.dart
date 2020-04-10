@@ -6,6 +6,8 @@ import 'dart:convert';
 
 import '../providers/userAuthentication.dart';
 
+import '../app_theme.dart';
+
 import '../screens/home_screen.dart';
 
 class LoginScreenState extends State<LoginScreen> {
@@ -121,7 +123,7 @@ class LoginScreenState extends State<LoginScreen> {
         new RaisedButton(
           child: new Text("Login", style: TextStyle(fontSize: 20.0)),
           textColor: Colors.white,
-          color: Colors.purple,
+          color: Theme.of(context).colorScheme.primary,
           onPressed: () async {
             final form = formKey.currentState;
             if (form.validate()) {
@@ -161,7 +163,7 @@ class LoginScreenState extends State<LoginScreen> {
         new RaisedButton(
           child: new Text("Create account", style: TextStyle(fontSize: 20.0)),
           textColor: Colors.white,
-          color: Colors.purple,
+          color: Theme.of(context).colorScheme.primary,
           onPressed: () async {
             if (formKey.currentState.validate()) {
               var email = _emailController.text;
