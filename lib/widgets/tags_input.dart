@@ -44,6 +44,9 @@ class _TagsInputState extends State<TagsInput> {
         );
       },
       findSuggestions: (String tag) {
+        if (tag.length == 0) {
+          return <String>[];
+        }
         return [tag];
       },
       suggestionBuilder: (context, state, tag) {
