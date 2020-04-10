@@ -24,19 +24,20 @@ class _AuthorInputState extends State<AuthorInput> {
   @override
   void initState() {
     super.initState();
-    List<Author> _tempList = [];
-    for (final data in widget.authors) {
-      _tempList.add(Author(
-        data["user_id"],
-        data["username"],
-        data["email"],
-        data["image_url"],
-      ));
-    }
+    // List<Author> _tempList = [];
+    // for (final data in widget.authors) {
+    //   _tempList.add(Author(
+    //     data["user_id"],
+    //     data["username"],
+    //     data["email"],
+    //     data["image_url"],
+    //   ));
+    // }
     setState(() {
-      _initialAuthors = [..._tempList];
-      _selectedAuthors = [..._tempList];
+      _initialAuthors = [...widget.authors];
+      _selectedAuthors = [...widget.authors];
     });
+    print(widget.authors);
   }
 
   @override
@@ -74,7 +75,10 @@ class _AuthorInputState extends State<AuthorInput> {
           initialValue: _initialAuthors,
           enabled: true,
           maxChips: 6,
-          textStyle: TextStyle(height: 1.5, fontFamily: "Roboto", fontSize: 16),
+          textStyle: TextStyle(
+            height: 1.5,
+            fontSize: 16,
+          ),
           decoration: InputDecoration(
             labelText: "Select People",
           ),
@@ -98,23 +102,18 @@ class _AuthorInputState extends State<AuthorInput> {
             return InputChip(
               key: ObjectKey(profile),
               label: Text(profile.username),
-              avatar: ClipOval(
-                child: CachedNetworkImage(
-                  imageUrl: (profile.image_url != null
-                      ? profile.image_url
-                      : "http://via.placeholder.com/640x360"),
-                  placeholder: (context, url) => Image.network(
-                    "http://via.placeholder.com/640x360",
-                    fit: BoxFit.cover,
-                    height: 50.0,
-                    width: 50.0,
-                  ),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                  fit: BoxFit.cover,
-                  height: 50.0,
-                  width: 50.0,
-                ),
-              ),
+              avatar: (
+                  // to be removed
+                  profile.image_url == null
+                      ? CircleAvatar(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
+                        )
+                      : CircleAvatar(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
+                          backgroundImage: NetworkImage(profile.image_url),
+                        )),
               onDeleted: () => state.deleteChip(profile),
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             );
@@ -149,49 +148,16 @@ class _AuthorInputState extends State<AuthorInput> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             FlatButton(
+              textColor: Theme.of(context).colorScheme.primary,
               child: Text("YES"),
               onPressed: () {
-                print("selected");
-                print(_selectedAuthors);
-                List<Author> temp;
-                // _newAuthors = _selectedAuthors - _initialAuthors
-                temp = (_selectedAuthors.where(
-                    (element) => !_initialAuthors.contains(element))).toList();
-                for (var data in temp) {
-                  _newAuthors.add(data.user_id);
-                }
-                temp = [];
-                // _deletedAuthors = _initialAuthors - _selectedAuthors
-                temp = (_initialAuthors.where(
-                    (element) => !_selectedAuthors.contains(element))).toList();
-                for (var data in temp) {
-                  _deletedAuthors.add(data.user_id);
-                }
-                print("New authors: " + _newAuthors.toString());
-                print("Deleted authors: " + _deletedAuthors.toString());
-
-                print(widget.collectionId);
-
-                if (_newAuthors.length != 0) {
-                  Author.addAuthors(_newAuthors, widget.collectionId)
-                      .then((reply) {
-                    print("Added");
-                    print(reply);
-                  });
-                }
-                if (_deletedAuthors.length != 0) {
-                  Author.deleteAuthors(_deletedAuthors, widget.collectionId)
-                      .then((reply) {
-                    print("Deleted authors");
-                    print(reply);
-                  });
-                }
-
+                _editAuthors();
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
               child: Text("NO"),
+              textColor: Theme.of(context).colorScheme.error,
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -200,5 +166,37 @@ class _AuthorInputState extends State<AuthorInput> {
         )
       ],
     );
+  }
+
+  void _editAuthors() {
+    List<Author> temp;
+    // _newAuthors = _selectedAuthors - _initialAuthors
+    temp = (_selectedAuthors
+        .where((element) => !_initialAuthors.contains(element))).toList();
+    for (var data in temp) {
+      _newAuthors.add(data.user_id);
+    }
+    temp = [];
+    // _deletedAuthors = _initialAuthors - _selectedAuthors
+    temp = (_initialAuthors
+        .where((element) => !_selectedAuthors.contains(element))).toList();
+    for (var data in temp) {
+      _deletedAuthors.add(data.user_id);
+    }
+    print("New authors: " + _newAuthors.toString());
+    print("Deleted authors: " + _deletedAuthors.toString());
+
+    if (_newAuthors.length != 0) {
+      Author.addAuthors(_newAuthors, widget.collectionId).then((reply) {
+        print("Added");
+        print(reply);
+      });
+    }
+    if (_deletedAuthors.length != 0) {
+      Author.deleteAuthors(_deletedAuthors, widget.collectionId).then((reply) {
+        print("Deleted authors");
+        print(reply);
+      });
+    }
   }
 }

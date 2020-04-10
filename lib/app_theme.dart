@@ -22,6 +22,7 @@ class AppTheme {
         secondary: Color(0xff43c6ac),
         secondaryVariant: Color(0xffcbefe8),
         onSecondary: Color(0xfff3f7f6),
+        error: Color(0xffa01111),
       )
       // primarySwatch: Colors.purple,
       // appBarTheme: AppBarTheme(

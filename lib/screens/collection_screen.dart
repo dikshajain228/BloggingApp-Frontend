@@ -237,7 +237,23 @@ class _CollectionScreenState extends State<CollectionScreen>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Edit Authors...'),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          titlePadding: EdgeInsets.all(0),
+          title: Container(
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            child: Text(
+              'Edit Authors...',
+              style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+            ),
+          ),
           content: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(
