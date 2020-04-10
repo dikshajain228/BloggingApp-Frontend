@@ -32,21 +32,24 @@ class User with ChangeNotifier {
     this.followingCount,
   });
 
-  Future<int> changePassword(String oldPassword, String newPassword) async {
+  Future<void> changePassword(String oldPassword, String newPassword) async {
     String url = baseUrl + "user/password";
     final token = await storage.read(key: "token");
-    print(oldPassword);
-    print(newPassword);
     try {
-      final response = await http.patch(
+      var response = await http.patch(
         url,
         body: {"oldPassword": oldPassword, "newPassword": newPassword},
         headers: {HttpHeaders.authorizationHeader: token},
       );
+      final responseJson = json.decode(response.body);
+      if(responseJson["error"]==false){
+        return "Changed password successfully";
+      }else{
+        throw responseJson["message"];
+      }
       int statusCode = response.statusCode;
       print("Status Code");
       print(statusCode);
-      return statusCode;
     } catch (error) {
       throw error;
     }

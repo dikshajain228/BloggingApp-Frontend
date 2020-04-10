@@ -41,6 +41,12 @@ class ChangePasswordState extends State<ChangePassword> {
     return Scaffold(
         appBar: new AppBar(
           title: new Text("Change Password"),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.done),
+              onPressed: _showSaveDialog,
+            )
+          ],
         ),
         body: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -90,42 +96,73 @@ class ChangePasswordState extends State<ChangePassword> {
                     return null;
                   },
                 ),
-                RaisedButton(
-                  onPressed: () async {
-                    int status;
-                    if (_formKey.currentState.validate()) {
-                      String oldPassword = _oldPasswordController.text;
-                      String newPassword = _newPassword1Controller.text;
-                      status = await Provider.of<User>(context)
-                          .changePassword(oldPassword, newPassword);
-
-                      print(status);
-                      if (status == 401)
-                        Toast.show(
-                            "Invalid password.Check your current password.",
-                            context,
-                            duration: 7,
-                            gravity: Toast.BOTTOM);
-                      else if (status == 200) {
-                        print("Password changed successfully");
-                        Navigator.of(context)
-                            .pushReplacementNamed(ProfileScreen.routeName);
-                        Toast.show("Password changed successfully.", context,
-                            duration: 7, gravity: Toast.BOTTOM);
-                      } else
-                        displayDialog(
-                          context,
-                          "Error",
-                          "Unknown error occurred",
-                        );
-                      // Toast.show("Unknown error occurred.Please try agin.", context, duration:7, gravity:  Toast.BOTTOM);
-                    }
-                  },
-                  child: Text("Confirm Change"),
-                  color: Colors.white,
-                  splashColor: Colors.blueAccent,
-                ),
               ]),
             )));
+  }
+
+  void _updatePassword() async {
+    if (_formKey.currentState.validate()) {
+      String oldPassword = _oldPasswordController.text;
+      String newPassword = _newPassword1Controller.text;
+      Provider.of<User>(context)
+          .changePassword(oldPassword, newPassword)
+          .then((message) {
+        Navigator.of(context).pushReplacementNamed(ProfileScreen.routeName);
+        Toast.show("Password changed successfully.", context,
+            duration: 7, gravity: Toast.BOTTOM);
+      }).catchError((errorMessage) {
+        print(errorMessage);
+        Navigator.of(context).pop();
+        Toast.show(errorMessage, context, duration: 7, gravity: Toast.BOTTOM);
+      });
+    }
+  }
+
+  void _showSaveDialog() {
+    if (_formKey.currentState.validate()) {
+      showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            titlePadding: EdgeInsets.all(0),
+            title: Container(
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.secondary,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
+              child: Text(
+                'Save Changes',
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.onSecondary),
+              ),
+            ),
+            content: Text("Change password?"),
+            actions: [
+              FlatButton(
+                textColor: Theme.of(context).colorScheme.error,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text("Cancel"),
+              ),
+              FlatButton(
+                child: Text("Save"),
+                textColor: Theme.of(context).colorScheme.secondary,
+                onPressed: () {
+                  _updatePassword();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }
