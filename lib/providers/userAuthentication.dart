@@ -11,6 +11,7 @@ import '../server_util.dart' as Server;
 class Authentication with ChangeNotifier {
   static const SERVER_IP = Server.SERVER_IP;
   final storage = FlutterSecureStorage();
+  String _username, _email, _profile_image_url;
 
   Future<int> attemptSignUp(
       String email, String password, String username) async {
@@ -32,11 +33,29 @@ class Authentication with ChangeNotifier {
       );
       final resJson = json.decode(res.body);
       if (res.statusCode==200) {
-        return resJson["token"];
+        String token = resJson["token"];
+        final tokenPayload = token.split(".");
+        final payloadMap = jsonDecode(utf8.decode(base64Url.decode(base64Url.normalize(tokenPayload[1]))));
+        _username = payloadMap["username"];
+        _email = payloadMap["email"];
+        _profile_image_url = payloadMap["profile_image_url"];
+        return token;
       }
       return null;
     } catch (error) {
       throw error;
     }
+  }
+
+  String getUsername(){
+    return _username;
+  }
+
+  String getEmail(){
+    return _email;
+  }
+
+  String getProfileImage(){
+    return _profile_image_url;
   }
 }

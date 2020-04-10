@@ -34,7 +34,7 @@ class LoginScreenState extends State<LoginScreen> {
     final tokenPayload = token.split(".");
     final payloadMap = jsonDecode(
         utf8.decode(base64Url.decode(base64Url.normalize(tokenPayload[1]))));
-    print(payloadMap);
+    //print(payloadMap);
     await storage.write(key: "userId", value: payloadMap["user_id"].toString());
     await storage.write(key: "email", value: payloadMap["email"]);
   }
@@ -130,6 +130,8 @@ class LoginScreenState extends State<LoginScreen> {
 
               var token = await Provider.of<Authentication>(context)
                   .attemptLogin(email, password);
+              String username = Provider.of<Authentication>(context).getUsername();
+              //print("hello" + username);
               if (token != null) {
                 _writeToken(token);
                 Navigator.of(context).pushNamed(HomeScreen.routeName);
