@@ -43,9 +43,21 @@ class ImageInputState extends State<ImageInput> {
         SizedBox(
           height: 20.0,
         ),
-        OutlineButton(
+        FlatButton(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18.0),
+            side: BorderSide(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
           onPressed: selectImage,
-          child: Text("Select Image"),
+          splashColor: Theme.of(context).colorScheme.primaryVariant,
+          child: Text(
+            "Select Image",
+            style: TextStyle(
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
         ),
       ],
     ));
