@@ -15,6 +15,7 @@ class AppTheme {
       primaryColor: Color(0xff424073),
       accentColor: Color(0xffededf2),
       cursorColor: Color(0xff424073),
+      textSelectionHandleColor: Color(0xff424073),
       colorScheme: ColorScheme.light(
         primary: Color(0xff424073),
         onPrimary: Color(0xfff3f7f6),
