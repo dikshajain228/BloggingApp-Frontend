@@ -109,10 +109,24 @@ class _CollectionScreenState extends State<CollectionScreen>
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Text("Collection Screen"),
+        title: Text("Collection..."),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xff191654),
+                  Color(0xff43c6ac),
+                  Color(0xff6dffe1),
+                ]),
+          ),
+        ),
       ),
       body: (_errorCollection == true
-          ? Text("An error occured")
+          ? Center(
+              child: Text("An error occured"),
+            )
           : (_loadingCollection == true
               ? SpinKitChasingDots(
                   color: Colors.teal,
@@ -124,7 +138,9 @@ class _CollectionScreenState extends State<CollectionScreen>
                       child: CollectionDetailsCard(),
                     ),
                     (_errorArticles == true
-                        ? Text("An error occured")
+                        ? Center(
+                            child: Text("An error occured"),
+                          )
                         : (_loadingArticles == true
                             ? SpinKitWanderingCubes(
                                 color: Colors.teal,
@@ -148,23 +164,6 @@ class _CollectionScreenState extends State<CollectionScreen>
                     )
                   : null),
     );
-  }
-
-  void cancelChanges() {
-    Navigator.of(context).pop();
-    print("cancel");
-  }
-
-  void saveChanges() {
-    //Call function to delete
-    Navigator.of(context).pop();
-    print("save");
-  }
-
-  void itemChange(bool val, int index) {
-    setState(() {
-      inputs[index] = val;
-    });
   }
 
 // Floating button for owners
@@ -206,7 +205,7 @@ class _CollectionScreenState extends State<CollectionScreen>
         SpeedDialChild(
           child: Icon(Icons.delete),
           backgroundColor: Colors.tealAccent,
-          label: 'Delete Article',
+          label: 'Delete Articles',
           labelStyle: TextStyle(fontSize: 18.0),
           onTap: () {
             Navigator.of(context).pushNamed(ArticleDeleteScreen.routeName);
@@ -225,16 +224,9 @@ class _CollectionScreenState extends State<CollectionScreen>
         SpeedDialChild(
           child: Icon(Icons.person),
           backgroundColor: Colors.tealAccent,
-          label: 'Edit Authors',
+          label: 'Authors',
           labelStyle: TextStyle(fontSize: 18.0),
           onTap: _showEditAuthorDialog,
-        ),
-        SpeedDialChild(
-          child: Icon(Icons.person),
-          backgroundColor: Colors.tealAccent,
-          label: 'View Author',
-          labelStyle: TextStyle(fontSize: 18.0),
-          onTap: _showViewAuthorDialog,
         ),
       ],
     ));
@@ -298,87 +290,5 @@ class _CollectionScreenState extends State<CollectionScreen>
     setState(() {
       authors = [...authorsData];
     });
-  }
-
-  _showViewAuthorDialog() {
-    //data = _getAuthorsofCollection
-    final data = List<List<int>>.generate(
-        5, (i) => List<int>.generate(2, (j) => i * 5 + j));
-    print(data);
-    showDialog(
-        barrierDismissible: true,
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(
-              "View Authors",
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            content: SingleChildScrollView(
-              child: Table(
-                columnWidths: {
-                  0: FixedColumnWidth(50.0),
-                  1: FixedColumnWidth(250.0),
-                },
-                border: TableBorder.all(width: 1.0),
-                children: data.map((item) {
-                  return TableRow(
-                      children: item.map((row) {
-                    return Container(
-                      color: Colors.white24,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          row.toString(),
-                          style: TextStyle(fontSize: 16.0),
-                        ),
-                      ),
-                    );
-                  }).toList());
-                }).toList(),
-              ),
-            ),
-            actions: [
-              FlatButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text("Ok"),
-                color: Colors.red,
-                splashColor: Colors.redAccent,
-              ),
-            ],
-          );
-        });
-  }
-
-  _showDeleteAuthorDialog() {
-    showDialog(
-        barrierDismissible: true,
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(
-              "Delete Authors",
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            content: SingleChildScrollView(
-                // child: Column(children: <Widget>[
-
-                // DropdownButton<String>(
-                //   value: dropdownValue,
-                //   icon: Icon(Icons.arrow_drop_down),
-                //   iconSize: 24,
-                //   elevation: 16,
-
-                ),
-          );
-        });
   }
 }

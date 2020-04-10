@@ -9,25 +9,25 @@ class CollectionDetailsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final _collection = Provider.of<Collection>(context);
 
-    List<Widget> authorChips = [];
-    for (final author in _collection.authors) {
-      print(author.user_id);
-      print(author.username);
-      print(author.image_url);
-      authorChips.add(
-        Chip(
-          avatar: CircleAvatar(
-            backgroundColor: Theme.of(context).primaryColor,
-            // backgroundImage: NetworkImage(author.image_url),
-            child: Text("A"),
-          ),
-          label: Text(author.username),
-        ),
-      );
-    }
+    // List<Widget> authorChips = [];
+    // for (final author in _collection.authors) {
+    //   print(author.user_id);
+    //   print(author.username);
+    //   print(author.image_url);
+    //   authorChips.add(
+    //     Chip(
+    //       avatar: CircleAvatar(
+    //         backgroundColor: Theme.of(context).primaryColor,
+    //         // backgroundImage: NetworkImage(author.image_url),
+    //         child: Text("A"),
+    //       ),
+    //       label: Text(author.username),
+    //     ),
+    //   );
+    // }
 
     return Container(
-      color: Colors.teal[50],
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: (Column(
         children: [
           Container(
@@ -76,7 +76,6 @@ class CollectionDetailsCard extends StatelessWidget {
           ),
           Container(
             alignment: Alignment.center,
-            // color: Colors.blueGrey[100],
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Text(
@@ -89,9 +88,9 @@ class CollectionDetailsCard extends StatelessWidget {
             ),
           ),
           // Authors row
-          Row(
-            children: authorChips,
-          ),
+          // Row(
+          //   children: authorChips,
+          // ),
           Container(
             child: Padding(
               padding: EdgeInsets.all(10.0),
@@ -100,8 +99,8 @@ class CollectionDetailsCard extends StatelessWidget {
                 children: <Widget>[
                   _collection.is_following
                       ? FlatButton(
-                          color: Colors.blue,
-                          textColor: Colors.white,
+                          color: Theme.of(context).colorScheme.primary,
+                          textColor: Theme.of(context).colorScheme.onPrimary,
                           padding: EdgeInsets.all(10.0),
                           onPressed: () {
                             _collection
@@ -115,9 +114,9 @@ class CollectionDetailsCard extends StatelessWidget {
                       : OutlineButton(
                           color: Colors.blue,
                           borderSide: BorderSide(
-                            color: Colors.blue,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
-                          textColor: Colors.blue,
+                          textColor: Theme.of(context).colorScheme.primary,
                           padding: EdgeInsets.all(10.0),
                           onPressed: () {
                             _collection
