@@ -128,14 +128,9 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
               CollectionScreen.routeName,
               arguments: collection_id,
             );
-        // Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
-        // route wrong
-        Toast.show("New collection added!", context,
-            duration: 7, gravity: Toast.BOTTOM);
-      }).catchError((errorMessage) {
+            Toast.show("New collection added!", context,duration: 7, gravity: Toast.BOTTOM);
+        }).catchError((errorMessage) {
         print(errorMessage);
-        // wrong route
-        // Navigator.of(context).pushReplacementNamed(ProfileScreen.routeName);
         Toast.show(
             "A new collection could not be created.Please try again.", context,
             duration: 7, gravity: Toast.BOTTOM);
