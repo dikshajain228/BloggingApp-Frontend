@@ -81,7 +81,6 @@ class Collections with ChangeNotifier {
         print("Author data");
         print(authorData);
         for (final author in authorData) {
-          print("ehool");
           authors.add(Author(
             author["user_id"],
             author["username"],
@@ -89,8 +88,6 @@ class Collections with ChangeNotifier {
             author["image_url"],
           ));
         }
-        print("hello");
-        print(collectionData["collection_id"]);
         Collection collection = Collection(
           collection_id: collectionData["collection_id"],
           collection_name: collectionData["collection_name"],
@@ -142,7 +139,7 @@ class Collections with ChangeNotifier {
       response = await response.stream.bytesToString();
       final responseJson = json.decode(response);
       if (responseJson["error"] == false) {
-        return "Successfully created collection";
+        return collectionId;
       } else {
         print(responseJson["message"]);
         throw "Failed to create collection";

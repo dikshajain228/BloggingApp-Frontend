@@ -8,6 +8,8 @@ import '../widgets/image_input.dart';
 
 import '../providers/collections.dart';
 
+import '../screens/collection_screen.dart';
+
 class CollectionInsertScreen extends StatefulWidget {
   static const routeName = "/collection/insert";
   @override
@@ -120,8 +122,12 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
       print("form submit");
       Provider.of<Collections>(context)
           .addCollection(data, uploadedImage)
-          .then((message) {
-        print(message);
+          .then((collection_id) {
+        print("CollectionId "+ collection_id);
+        Navigator.of(context).pushNamed(
+              CollectionScreen.routeName,
+              arguments: collection_id,
+            );
         // Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
         // route wrong
         Toast.show("New collection added!", context,
