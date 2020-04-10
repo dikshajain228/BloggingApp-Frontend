@@ -148,7 +148,9 @@ class _ProfileScreenState extends State<ProfileScreen>
           ],
         ),
         body: (_errorProfile == true
-            ? Text("An error occured")
+            ? Center(
+                child: Text("An error occured"),
+              )
             : (_loadingProfile == true
                 ? SpinKitChasingDots(
                     color: Colors.teal,
@@ -244,25 +246,36 @@ class _ProfileScreenState extends State<ProfileScreen>
                       ),
                       new Container(
                         decoration: new BoxDecoration(
-                            color: Theme.of(context).primaryColor),
-                        child: new TabBar(controller: _tabController, tabs: [
-                          Tab(text: "Articles"),
-                          Tab(text: "Collections"),
-                        ]),
+                            color: Theme.of(context).colorScheme.primary),
+                        child: new TabBar(
+                          indicatorColor:
+                              Theme.of(context).colorScheme.onPrimary,
+                          controller: _tabController,
+                          tabs: [
+                            Tab(
+                              text: "Articles",
+                            ),
+                            Tab(text: "Collections"),
+                          ],
+                        ),
                       ),
                       new Expanded(
                         child: TabBarView(
                             controller: _tabController,
                             children: <Widget>[
                               (_errorArticle == true
-                                  ? Text("An error occured")
+                                  ? Center(
+                                      child: Text("An error occured"),
+                                    )
                                   : (_loadingArticles == true
                                       ? SpinKitDoubleBounce(
                                           color: Colors.teal,
                                         )
                                       : ArticlesList())),
                               (_errorCollections == true
-                                  ? Text("An error occured")
+                                  ? Center(
+                                      child: Text("An error occured"),
+                                    )
                                   : (_loadingCollections == true
                                       ? SpinKitDoubleBounce(
                                           color: Colors.teal,

@@ -17,7 +17,11 @@ class AppTheme {
       cursorColor: Color(0xff424073),
       colorScheme: ColorScheme.light(
         primary: Color(0xff424073),
+        onPrimary: Color(0xfff3f7f6),
+        primaryVariant: Color(0xff757499),
         secondary: Color(0xff43c6ac),
+        secondaryVariant: Color(0xffcbefe8),
+        onSecondary: Color(0xfff3f7f6),
       )
       // primarySwatch: Colors.purple,
       // appBarTheme: AppBarTheme(
