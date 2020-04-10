@@ -7,7 +7,6 @@ import 'package:toast/toast.dart';
 import '../widgets/image_input.dart';
 
 import '../providers/collections.dart';
-import '../screens/profile_screen.dart';
 
 class CollectionInsertScreen extends StatefulWidget {
   static const routeName = "/collection/insert";
@@ -40,9 +39,24 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Add New Collection'),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xff191654),
+                  Color(0xff43c6ac),
+                  Color(0xff6dffe1),
+                ]),
+          ),
+        ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.done),
+            icon: Icon(
+              Icons.done,
+              color: Theme.of(context).colorScheme.primary,
+            ),
             onPressed: _insertCollection,
           )
         ],
