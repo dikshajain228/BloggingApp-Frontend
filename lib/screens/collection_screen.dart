@@ -89,7 +89,6 @@ class _CollectionScreenState extends State<CollectionScreen>
         _errorCollection = true;
       });
     });
-
     // Get articles of this collection
     Provider.of<Articles>(context)
         .getCollectionArticles(widget.collectionId)
@@ -158,7 +157,11 @@ class _CollectionScreenState extends State<CollectionScreen>
                   ? FloatingActionButton(
                       backgroundColor: Theme.of(context).primaryColor,
                       foregroundColor: Colors.white,
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                            ArticleInsertScreen.routeName,
+                            arguments: _collection.collection_id);
+                      },
                       child: Icon(Icons.add),
                       tooltip: "Add Articles",
                     )
@@ -186,7 +189,7 @@ class _CollectionScreenState extends State<CollectionScreen>
           backgroundColor: Colors.tealAccent,
           label: 'Delete Collection',
           labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () => showAlert(context),
+          onTap: () => _showDeleteCollectionDialog(context),
         ),
         SpeedDialChild(
           child: Icon(Icons.edit),
@@ -267,32 +270,63 @@ class _CollectionScreenState extends State<CollectionScreen>
     );
   }
 
-  showAlert(BuildContext context) {
+  _showDeleteCollectionDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Alert'),
-          content: Text("Are You Sure Want To Delete?"),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          titlePadding: EdgeInsets.all(0),
+          title: Container(
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.error,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            child: Text(
+              'Confirm Delete',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onError,
+              ),
+            ),
+          ),
+          content: Text(
+              "You are about to delete this collection and all articles associated with it. This action cannot be undone."),
           actions: <Widget>[
             FlatButton(
-              child: Text("YES"),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                side: BorderSide(
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              ),
+              child: Text("DELETE"),
+              textColor: Theme.of(context).colorScheme.error,
               onPressed: () {
                 _collection
                     .deleteCollection(_collection.collection_id)
                     .then((_) {
                   print("Collection deleted");
                 });
-                //Delete the _collection
                 Navigator.of(context).pop();
-                Navigator.of(context)
-                    .pushReplacementNamed(ProfileScreen.routeName);
+                // Navigator.of(context)
+                //     .pushReplacementNamed(ProfileScreen.routeName);
               },
             ),
             FlatButton(
-              child: Text("NO"),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                side: BorderSide(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              ),
+              child: Text("CANCEL"),
+              textColor: Theme.of(context).colorScheme.secondary,
               onPressed: () {
-                //Stay on the same page
                 Navigator.of(context).pop();
               },
             ),
