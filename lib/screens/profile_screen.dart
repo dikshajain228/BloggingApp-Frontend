@@ -15,13 +15,13 @@ import '../providers/user.dart';
 import '../providers/articles.dart';
 import '../providers/collections.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProfileScreen extends StatefulWidget {
   static const routeName = "/profile";
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _ProfilePageState extends State<ProfilePage>
+class _ProfileScreenState extends State<ProfileScreen>
     with TickerProviderStateMixin, RouteAware {
   bool _loadingProfile = true;
   bool _loadingArticles = true;

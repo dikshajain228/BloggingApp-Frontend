@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 
-import '../screens/profile_page.dart';
+import '../screens/profile_screen.dart';
 
 import '../providers/user.dart';
 
@@ -19,13 +19,12 @@ class ChangePasswordState extends State<ChangePassword> {
   final TextEditingController _newPassword1Controller = TextEditingController();
   final TextEditingController _newPassword2Controller = TextEditingController();
 
-
   void displayDialog(context, title, text) => showDialog(
         context: context,
         builder: (context) =>
             AlertDialog(title: Text(title), content: Text(text)),
       );
-      
+
   @override
   void dispose() {
     super.dispose();
@@ -50,7 +49,7 @@ class ChangePasswordState extends State<ChangePassword> {
               autovalidate: true,
               child: Column(children: <Widget>[
                 TextFormField(
-                  controller : _oldPasswordController,
+                  controller: _oldPasswordController,
                   decoration: new InputDecoration(
                       labelText: '   Enter current Password'),
                   validator: (value) {
@@ -61,7 +60,7 @@ class ChangePasswordState extends State<ChangePassword> {
                   },
                 ),
                 TextFormField(
-                  controller : _newPassword1Controller,
+                  controller: _newPassword1Controller,
                   decoration:
                       new InputDecoration(labelText: '   Enter new Password'),
                   validator: (value1) {
@@ -75,7 +74,7 @@ class ChangePasswordState extends State<ChangePassword> {
                   },
                 ),
                 TextFormField(
-                  controller : _newPassword2Controller,
+                  controller: _newPassword2Controller,
                   decoration: new InputDecoration(
                       labelText: '   Re-enter new Password'),
                   //hintText: "Enter current Password",
@@ -84,7 +83,8 @@ class ChangePasswordState extends State<ChangePassword> {
                     if (value2.length == 0) {
                       return 'This feild cannot be empty ';
                     }
-                    if (_newPassword1Controller.text.toString() != _newPassword2Controller.text.toString()) {
+                    if (_newPassword1Controller.text.toString() !=
+                        _newPassword2Controller.text.toString()) {
                       return "New password and conform password dont match";
                     }
                     return null;
@@ -96,25 +96,30 @@ class ChangePasswordState extends State<ChangePassword> {
                     if (_formKey.currentState.validate()) {
                       String oldPassword = _oldPasswordController.text;
                       String newPassword = _newPassword1Controller.text;
-                          status = await Provider.of<User>(context).changePassword(oldPassword,newPassword);
-                          
-                          print(status);
+                      status = await Provider.of<User>(context)
+                          .changePassword(oldPassword, newPassword);
+
+                      print(status);
                       if (status == 401)
-                          Toast.show("Invalid password.Check your current password.", context, duration:7, gravity:  Toast.BOTTOM);
-                        
-                      else if (status == 200){
+                        Toast.show(
+                            "Invalid password.Check your current password.",
+                            context,
+                            duration: 7,
+                            gravity: Toast.BOTTOM);
+                      else if (status == 200) {
                         print("Password changed successfully");
-                        Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
-                        Toast.show("Password changed successfully.", context, duration:7, gravity:  Toast.BOTTOM);
-                      }
-                      else
+                        Navigator.of(context)
+                            .pushReplacementNamed(ProfileScreen.routeName);
+                        Toast.show("Password changed successfully.", context,
+                            duration: 7, gravity: Toast.BOTTOM);
+                      } else
                         displayDialog(
-                          context,"Error",
+                          context,
+                          "Error",
                           "Unknown error occurred",
                         );
-                       // Toast.show("Unknown error occurred.Please try agin.", context, duration:7, gravity:  Toast.BOTTOM);
+                      // Toast.show("Unknown error occurred.Please try agin.", context, duration:7, gravity:  Toast.BOTTOM);
                     }
-                   
                   },
                   child: Text("Confirm Change"),
                   color: Colors.white,

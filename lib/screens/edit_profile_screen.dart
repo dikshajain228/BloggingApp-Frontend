@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:toast/toast.dart';
 import '../widgets/image_input.dart';
 
-import '../screens/profile_page.dart';
+import '../screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/user.dart';
@@ -38,11 +38,11 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   void saveChanges() {
-    Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
+    Navigator.of(context).pushReplacementNamed(ProfileScreen.routeName);
   }
 
   void cancelChanges() {
-    Navigator.of(context).pushReplacementNamed((ProfilePage.routeName));
+    Navigator.of(context).pushReplacementNamed((ProfileScreen.routeName));
   }
 
   @override
@@ -116,11 +116,11 @@ class _EditProfileState extends State<EditProfile> {
         .updateProfile(data, uploadedImage)
         .then((message) {
       print(message);
-      Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
+      Navigator.of(context).pushReplacementNamed(ProfileScreen.routeName);
       Toast.show(message, context, duration: 7, gravity: Toast.BOTTOM);
     }).catchError((errorMessage) {
       print(errorMessage);
-      Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
+      Navigator.of(context).pushReplacementNamed(ProfileScreen.routeName);
       Toast.show("Profile could not be edited.Please try again.", context,
           duration: 7, gravity: Toast.BOTTOM);
     });
@@ -156,7 +156,7 @@ class _EditProfileState extends State<EditProfile> {
                 onPressed: () {
                   _updateProfile();
                   Navigator.of(context).pop();
-                  //Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
+                  //Navigator.of(context).pushReplacementNamed(ProfileScreen.routeName);
                 },
               ),
             ],

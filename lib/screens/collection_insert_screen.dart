@@ -7,8 +7,7 @@ import 'package:toast/toast.dart';
 import '../widgets/image_input.dart';
 
 import '../providers/collections.dart';
-import '../providers/collection.dart';
-import '../screens/profile_page.dart';
+import '../screens/profile_screen.dart';
 
 class CollectionInsertScreen extends StatefulWidget {
   static const routeName = "/collection/insert";
@@ -115,7 +114,8 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
             duration: 7, gravity: Toast.BOTTOM);
       }).catchError((errorMessage) {
         print(errorMessage);
-        Navigator.of(context).pushReplacementNamed(ProfilePage.routeName);
+        // wrong route
+        // Navigator.of(context).pushReplacementNamed(ProfileScreen.routeName);
         Toast.show(
             "A new collection could not be created.Please try again.", context,
             duration: 7, gravity: Toast.BOTTOM);

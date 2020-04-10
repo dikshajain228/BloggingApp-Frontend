@@ -9,7 +9,7 @@ import './screens/article_screen.dart';
 import './screens/collection_screen.dart';
 import './screens/bookmarks_screen.dart';
 import './screens/explore_screen.dart';
-import './screens/profile_page.dart';
+import './screens/profile_screen.dart';
 import './screens/article_insert_screen.dart';
 import './screens/article_edit_screen.dart';
 import './screens/collection_edit_screen.dart';
@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
           ChangePassword.routeName: (context) => ChangePassword(),
           LoginScreen.routeName: (context) => LoginScreen(),
           HomeScreen.routeName: (context) => HomeScreen(),
-          ProfilePage.routeName: (context) => ProfilePage(),
+          ProfileScreen.routeName: (context) => ProfileScreen(),
           //EditProfile.routeName: (context) => EditProfile(),
           BookmarkScreen.routeName: (context) => BookmarkScreen(),
           ExploreScreen.routeName: (context) => ExploreScreen(),

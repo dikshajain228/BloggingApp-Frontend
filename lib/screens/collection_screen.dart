@@ -7,7 +7,7 @@ import '../route_observer.dart' as route_observer;
 import '../screens/collection_edit_screen.dart';
 import '../screens/article_delete_screen.dart';
 import '../screens/article_insert_screen.dart';
-import '../screens/profile_page.dart';
+import '../screens/profile_screen.dart';
 
 // Widgets
 import '../widgets/collection_details_card.dart';
@@ -278,7 +278,7 @@ class _CollectionScreenState extends State<CollectionScreen>
                 //Delete the _collection
                 Navigator.of(context).pop();
                 Navigator.of(context)
-                    .pushReplacementNamed(ProfilePage.routeName);
+                    .pushReplacementNamed(ProfileScreen.routeName);
               },
             ),
             FlatButton(

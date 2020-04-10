@@ -1,14 +1,13 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import '../screens/collection_insert_screen.dart';
 import '../screens/bookmarks_screen.dart';
 import '../screens/explore_screen.dart';
 import '../screens/home_screen.dart';
-import '../screens/login_screen.dart';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 // Screens
-import '../screens/profile_page.dart';
+import '../screens/profile_screen.dart';
 
 class MainDrawer extends StatelessWidget {
   final storage = FlutterSecureStorage();
@@ -31,7 +30,7 @@ class MainDrawer extends StatelessWidget {
               leading: Icon(Icons.person),
               title: new Text("Profile"),
               onTap: () {
-                Navigator.of(context).pushNamed(ProfilePage.routeName);
+                Navigator.of(context).pushNamed(ProfileScreen.routeName);
               }),
           new ListTile(
               leading: Icon(Icons.home),
@@ -64,7 +63,8 @@ class MainDrawer extends StatelessWidget {
               trailing: new Icon(Icons.cancel),
               onTap: () {
                 storage.delete(key: "token");
-                Navigator.of(context).pushNamedAndRemoveUntil('/login-screen', (Route<dynamic> route) => false);
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/login-screen', (Route<dynamic> route) => false);
               }),
         ],
       ),
