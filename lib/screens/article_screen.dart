@@ -10,6 +10,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../route_observer.dart' as route_observer;
 
 import './article_edit_screen.dart';
+import './profile_screen.dart';
 
 import '../widgets/error_dialog.dart';
 
@@ -106,6 +107,25 @@ class _ArticleScreenState extends State<ArticleScreen>
                   ]),
             ),
           ),
+          actions: <Widget>[
+            _article.is_author?PopupMenuButton(
+              onSelected: (int selectedValue) {
+                if (selectedValue == 0) {
+                  showAlert(context, _article.article_id);
+                } else {
+                  Navigator.of(context).pushNamed(ArticleEditScreen.routeName);
+                }
+              },
+              icon: Icon(
+                Icons.more_vert,
+              ),
+              itemBuilder: (_) => [
+                PopupMenuItem(child: Text('Delete Article'), value: 0),
+                PopupMenuItem(child: Text('Edit Article'), value: 1),
+              ],
+            ):null,
+          ],
+          
         ),
         body: (_error == true
             ? Center(
@@ -171,57 +191,168 @@ class _ArticleScreenState extends State<ArticleScreen>
                             document: _content,
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              Text("Published on  "),
-                              Text(DateFormat("dd-MM-yyyy")
-                                  .format(_article.date_created)),
-                            ],
-                          ),
-                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.only(right: 10),
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.end,
+                        //     children: <Widget>[
+                        //       Text("Published on  "),
+                        //       Text(DateFormat("dd-MM-yyyy")
+                        //           .format(_article.date_created)),
+                        //     ],
+                        //   ),
+                        // ),
+                        Authorcard(),
                       ],
                     ),
                   ))),
-        floatingActionButton: (_error || _loading)
-            ? null
-            : (_article.is_author ? plusFloatingButton() : null));
+    );
+        // floatingActionButton: (_error || _loading)
+        //     ? null
+        //     : (_article.is_author ? plusFloatingButton() : null));
+  }
+
+  Widget Authorcard(){
+        return new Card(
+          color : Colors.teal[50],
+          shape : RoundedRectangleBorder(borderRadius : BorderRadius.circular(10.0),),
+      //elevation: 8.0,
+      //margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+      child: Container(
+        //decoration: BoxDecoration(),
+        child: ListTile(
+          contentPadding:
+              EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+          leading: ClipOval(
+            child: CachedNetworkImage(
+              imageUrl: _article.profile_image_url,
+              placeholder: (context, url) => Image.network(
+                "http://via.placeholder.com/640x360",
+                fit: BoxFit.cover,
+                height: 50.0,
+                width: 50.0,
+              ),
+              errorWidget: (context, url, error) => Icon(Icons.error),
+              fit: BoxFit.cover,
+              height: 50.0,
+              width: 50.0,
+            ),
+          ),
+          title: Text(
+            _article.author,
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+            softWrap: true,
+          ),         
+          onTap: () {
+            Navigator.of(context).pushNamed(ProfileScreen.routeName,
+                arguments: _article.user_id);
+          },
+        ),
+      ),
+    );
+  }
+
+    showAlert(BuildContext context, article_id) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          titlePadding: EdgeInsets.all(0),
+          title: Container(
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.error,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            child: Text(
+              'Confirm Delete',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onError,
+              ),
+            ),
+          ),
+          content: Text(
+              "Delete article "),
+          actions: <Widget>[
+            FlatButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                side: BorderSide(
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              ),
+              child: Text("DELETE"),
+              textColor: Theme.of(context).colorScheme.error,
+              onPressed: () {
+                _article.deleteArticle(article_id).then((_){
+                  print("Article deleted");
+                });
+                Provider.of<Articles>(context).deleteArticle(article_id).then((_) {
+                  print("Deleted from list article");
+                });
+                Navigator.of(context).pop();
+                },
+            ),
+            FlatButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                side: BorderSide(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              ),
+              child: Text("CANCEL"),
+              textColor: Theme.of(context).colorScheme.secondary,
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   // Floating button for authors
-  Widget plusFloatingButton() {
-    return (SpeedDial(
-      animatedIcon: AnimatedIcons.menu_close,
-      animatedIconTheme: IconThemeData(),
-      curve: Curves.bounceIn,
-      overlayColor: Colors.black,
-      overlayOpacity: 0.5,
-      onOpen: () => {},
-      onClose: () => {},
-      tooltip: 'Options',
-      backgroundColor: Colors.teal,
-      foregroundColor: Colors.white,
-      elevation: 10.0,
-      children: [
-        SpeedDialChild(
-          child: Icon(Icons.delete_sweep),
-          backgroundColor: Colors.tealAccent,
-          label: 'Delete Article',
-          labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () => {},
-        ),
-        SpeedDialChild(
-          child: Icon(Icons.edit),
-          backgroundColor: Colors.tealAccent,
-          label: 'Edit Article',
-          labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () {
-            Navigator.of(context).pushNamed(ArticleEditScreen.routeName);
-          },
-        ),
-      ],
-    ));
-  }
+  // Widget plusFloatingButton() {
+  //   return (SpeedDial(
+  //     animatedIcon: AnimatedIcons.menu_close,
+  //     animatedIconTheme: IconThemeData(),
+  //     curve: Curves.bounceIn,
+  //     overlayColor: Colors.black,
+  //     overlayOpacity: 0.5,
+  //     onOpen: () => {},
+  //     onClose: () => {},
+  //     tooltip: 'Options',
+  //     backgroundColor: Colors.teal,
+  //     foregroundColor: Colors.white,
+  //     elevation: 10.0,
+  //     children: [
+  //       SpeedDialChild(
+  //         child: Icon(Icons.delete_sweep),
+  //         backgroundColor: Colors.tealAccent,
+  //         label: 'Delete Article',
+  //         labelStyle: TextStyle(fontSize: 18.0),
+  //         onTap: () => {},
+  //       ),
+  //       SpeedDialChild(
+  //         child: Icon(Icons.edit),
+  //         backgroundColor: Colors.tealAccent,
+  //         label: 'Edit Article',
+  //         labelStyle: TextStyle(fontSize: 18.0),
+  //         onTap: () {
+  //           Navigator.of(context).pushNamed(ArticleEditScreen.routeName);
+  //         },
+  //       ),
+  //     ],
+  //   ));
+  // }
 }
