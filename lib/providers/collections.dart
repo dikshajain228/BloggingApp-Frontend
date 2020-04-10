@@ -73,9 +73,15 @@ class Collections with ChangeNotifier {
       if (response.statusCode == 200) {
         List<Author> authors = [];
         final responseJson = json.decode(response.body);
+        print(responseJson);
         final collectionData = responseJson["collection"];
         final authorData = responseJson["authors"];
+        print("Collection data");
+        print(collectionData);
+        print("Author data");
+        print(authorData);
         for (final author in authorData) {
+          print("ehool");
           authors.add(Author(
             author["user_id"],
             author["username"],
@@ -83,6 +89,8 @@ class Collections with ChangeNotifier {
             author["image_url"],
           ));
         }
+        print("hello");
+        print(collectionData["collection_id"]);
         Collection collection = Collection(
           collection_id: collectionData["collection_id"],
           collection_name: collectionData["collection_name"],

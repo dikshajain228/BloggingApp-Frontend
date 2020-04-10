@@ -46,6 +46,7 @@ class _CollectionScreenState extends State<CollectionScreen>
 
   @override
   void initState() {
+    print("I am in collection screen");
     super.initState();
   }
 
@@ -73,6 +74,8 @@ class _CollectionScreenState extends State<CollectionScreen>
         .fetchCollectionById(widget.collectionId)
         .then((data) {
       setState(() {
+        print("data");
+        print(data);
         _loadingCollection = false;
         _collection = data;
         _authors = data.authors;
@@ -121,6 +124,32 @@ class _CollectionScreenState extends State<CollectionScreen>
                 ]),
           ),
         ),
+        actions: <Widget>[
+          PopupMenuButton(
+              onSelected: (int selectedValue){
+                if(selectedValue==0){
+                  _showDeleteCollectionDialog(context);
+                }else if(selectedValue==1){
+                  Navigator.of(context).pushNamed(EditCollection.routeName,arguments: _collection,);
+                }else if(selectedValue==2){
+                  Navigator.of(context).pushNamed(ArticleDeleteScreen.routeName);
+                }else if(selectedValue==3){
+                  _showEditAuthorDialog();
+                }
+              },
+              icon : Icon(Icons.more_vert,),
+              itemBuilder : (_) => [
+                PopupMenuItem(child: Text('Delete Collection'), value: 0),
+                PopupMenuItem(child: Text('Edit Collection'), value: 1),
+                PopupMenuItem(child: Text('Delete Article'), value: 2),
+                PopupMenuItem(child: Text('Authors'), value: 3),
+              ],
+
+              
+            ),
+
+        ]        
+
       ),
       body: (_errorCollection == true
           ? Center(
@@ -151,10 +180,7 @@ class _CollectionScreenState extends State<CollectionScreen>
                 ))),
       floatingActionButton: (_loadingCollection == true
           ? null
-          : this._collection.is_owner
-              ? plusFloatingButton()
-              : this._collection.is_author
-                  ? FloatingActionButton(
+          :FloatingActionButton(
                       backgroundColor: Theme.of(context).primaryColor,
                       foregroundColor: Colors.white,
                       onPressed: () {
@@ -165,75 +191,12 @@ class _CollectionScreenState extends State<CollectionScreen>
                       child: Icon(Icons.add),
                       tooltip: "Add Articles",
                     )
-                  : null),
+                  ),
     );
   }
 
 // Floating button for owners
-  Widget plusFloatingButton() {
-    return (SpeedDial(
-      animatedIcon: AnimatedIcons.menu_close,
-      animatedIconTheme: IconThemeData(),
-      curve: Curves.bounceIn,
-      overlayColor: Colors.black,
-      overlayOpacity: 0.5,
-      onOpen: () => {},
-      onClose: () => {},
-      tooltip: 'Options',
-      backgroundColor: Colors.teal,
-      foregroundColor: Colors.white,
-      elevation: 10.0,
-      children: [
-        SpeedDialChild(
-          child: Icon(Icons.delete_sweep),
-          backgroundColor: Colors.tealAccent,
-          label: 'Delete Collection',
-          labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () => _showDeleteCollectionDialog(context),
-        ),
-        SpeedDialChild(
-          child: Icon(Icons.edit),
-          backgroundColor: Colors.tealAccent,
-          label: 'Edit Collection',
-          labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () {
-            {
-              Navigator.of(context).pushNamed(
-                EditCollection.routeName,
-                arguments: _collection,
-              );
-            }
-          },
-        ),
-        SpeedDialChild(
-          child: Icon(Icons.delete),
-          backgroundColor: Colors.tealAccent,
-          label: 'Delete Articles',
-          labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () {
-            Navigator.of(context).pushNamed(ArticleDeleteScreen.routeName);
-          },
-        ),
-        SpeedDialChild(
-          child: Icon(Icons.add),
-          backgroundColor: Colors.tealAccent,
-          label: 'Add Article',
-          labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () {
-            Navigator.of(context).pushNamed(ArticleInsertScreen.routeName,
-                arguments: _collection.collection_id);
-          },
-        ),
-        SpeedDialChild(
-          child: Icon(Icons.person),
-          backgroundColor: Colors.tealAccent,
-          label: 'Authors',
-          labelStyle: TextStyle(fontSize: 18.0),
-          onTap: _showEditAuthorDialog,
-        ),
-      ],
-    ));
-  }
+
 
   _showEditAuthorDialog() {
     showDialog(
@@ -312,6 +275,7 @@ class _CollectionScreenState extends State<CollectionScreen>
                     .then((_) {
                   print("Collection deleted");
                 });
+                Navigator.of(context).pop();
                 Navigator.of(context).pop();
                 // Navigator.of(context)
                 //     .pushReplacementNamed(ProfileScreen.routeName);

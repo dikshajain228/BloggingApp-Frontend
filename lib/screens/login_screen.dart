@@ -18,6 +18,11 @@ class LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  void initState() {
+    print("I am in login screen");
+    super.initState();
+  }
+
   void displayDialog(context, title, text) => showDialog(
         context: context,
         builder: (context) =>
