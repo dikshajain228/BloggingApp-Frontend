@@ -1,14 +1,15 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
+
+import '../screens/collection_screen.dart';
 
 import '../widgets/image_input.dart';
 
 import '../providers/collection.dart';
 import '../providers/collections.dart';
-
-import '../screens/collection_screen.dart';
 
 class EditCollection extends StatefulWidget {
   static const routeName = '/collection/edit';
@@ -46,6 +47,18 @@ class _EditCollectionState extends State<EditCollection> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Collection...'),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xff191654),
+                  Color(0xff43c6ac),
+                  Color(0xff6dffe1),
+                ]),
+          ),
+        ),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.done),
@@ -89,6 +102,7 @@ class _EditCollectionState extends State<EditCollection> {
                   decoration:
                       InputDecoration(labelText: 'Collection Description'),
                   controller: _collectionDescription,
+                  cursorColor: Theme.of(context).cursorColor,
                 ),
               ],
             ),
@@ -111,11 +125,14 @@ class _EditCollectionState extends State<EditCollection> {
         .updateCollection(data, uploadedImage)
         .then((message) {
       print(message);
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
       // Navigator.of(context).pushReplacementNamed(CollectionScreen.routeName);
       Toast.show("Updated Successfully!", context,
           duration: 7, gravity: Toast.BOTTOM);
     }).catchError((errorMessage) {
       print(errorMessage);
+      Navigator.of(context).pop();
       // pop dialog box and stay on page
       // Navigator.of(context).pushReplacementNamed(EditCollection.routeName);
       Toast.show(errorMessage, context, duration: 7, gravity: Toast.BOTTOM);
@@ -130,30 +147,38 @@ class _EditCollectionState extends State<EditCollection> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text(
-              "Confirm changes ?",
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            titlePadding: EdgeInsets.all(0),
+            title: Container(
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.secondary,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
+              child: Text(
+                'Save Changes',
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.onSecondary),
               ),
             ),
+            content: Text("Save changes made to the collection?"),
             actions: [
               FlatButton(
+                textColor: Theme.of(context).colorScheme.error,
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text("No"),
-                color: Colors.red,
-                splashColor: Colors.redAccent,
+                child: Text("Cancel"),
               ),
               FlatButton(
-                child: Text("Yes"),
-                color: Colors.teal,
-                splashColor: Colors.tealAccent,
+                child: Text("Save"),
+                textColor: Theme.of(context).colorScheme.secondary,
                 onPressed: () {
                   _updateCollection();
-                  // Navigator.of(context).pop();
-                  // Navigator.of(context).pop();
                 },
               ),
             ],
