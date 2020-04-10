@@ -59,29 +59,57 @@ class ArticleDeleteCard extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Alert'),
-          content: Text("Are You Sure Want To Delete?"),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          titlePadding: EdgeInsets.all(0),
+          title: Container(
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.error,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            child: Text(
+              'Confirm Delete',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onError,
+              ),
+            ),
+          ),
+          content: Text(
+              "Delete article "),
           actions: <Widget>[
             FlatButton(
-              child: Text("YES"),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                side: BorderSide(
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              ),
+              child: Text("DELETE"),
+              textColor: Theme.of(context).colorScheme.error,
               onPressed: () {
-                print(article_id);
-                //Delete the article
                 article.deleteArticle(article_id).then((_){
                   print("Article deleted");
-                  // article.remove(article_id);
-                  // notifyListeners();
                 });
                 Provider.of<Articles>(context).deleteArticle(article_id).then((_) {
-      print("Deleted from list article");
-    });
+                  print("Deleted from list article");
+                });
                 Navigator.of(context).pop();
-              },
+                },
             ),
             FlatButton(
-              child: Text("NO"),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                side: BorderSide(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              ),
+              child: Text("CANCEL"),
+              textColor: Theme.of(context).colorScheme.secondary,
               onPressed: () {
-                //Stay on the same page
                 Navigator.of(context).pop();
               },
             ),
