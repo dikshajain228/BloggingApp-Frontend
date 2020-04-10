@@ -61,7 +61,7 @@ class Articles with ChangeNotifier {
       response = await response.stream.bytesToString();
       final responseJson = json.decode(response);
       if (responseJson["error"] == false) {
-        return "Successfully added article";
+        return articleId;
       } else {
         print(responseJson["message"]);
         throw "Failed to add article";

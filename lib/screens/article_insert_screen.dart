@@ -208,10 +208,14 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
     };
     Provider.of<Articles>(context)
         .addArticle(data, uploadedImage)
-        .then((message) {
-      print(message);
-      // Navigator.of(context).pushReplacementNamed(ArticleScreen.routeName);
-      // pass article id?
+        .then((article_id) {
+      print(article_id);
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+      Navigator.of(context).pushNamed(
+              ArticleScreen.routeName,
+              arguments: article_id,
+            );
       Toast.show("New article added!", context,
           duration: 7, gravity: Toast.BOTTOM);
     }).catchError((errorMessage) {
