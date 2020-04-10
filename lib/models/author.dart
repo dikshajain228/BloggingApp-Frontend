@@ -36,34 +36,31 @@ class Author {
 
   static Future<List<Author>> getSuggestions(String query) async {
     List<Author> fetchedAuthors = [];
-
     final token = await storage.read(key: "token");
-
-    String base = Server.base;
-    String path = "/api/v1/users";
-    var queryParams = {"prompt": query};
-    var url = Uri.http(base, path, queryParams);
-
+    String url = baseUrl + "users?prompt=" + query;
     try {
       final response = await http.get(
         url,
         headers: {HttpHeaders.authorizationHeader: token},
       );
-      final responseJson = json.decode(response.body);
-      // print(responseJson);
-      for (final author in responseJson) {
-        fetchedAuthors.add(Author(
-          author["user_id"],
-          author["username"],
-          author["email"],
-          author["profile_image_url"],
-        ));
+      if (response.statusCode == 200) {
+        final responseJson = json.decode(response.body);
+        for (final author in responseJson["users"]) {
+          fetchedAuthors.add(Author(
+            author["user_id"],
+            author["username"],
+            author["email"],
+            author["profile_image_url"],
+          ));
+        }
+        return fetchedAuthors;
+      } else {
+        print(response.body);
+        throw "Failed to get suggestions";
       }
-      print("api call");
-      print(fetchedAuthors);
-      return fetchedAuthors;
     } catch (error) {
-      throw error;
+      print(error);
+      throw "Failed to get suggestions";
     }
   }
 
