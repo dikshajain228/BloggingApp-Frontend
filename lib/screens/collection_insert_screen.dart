@@ -14,6 +14,8 @@ class CollectionInsertScreen extends StatefulWidget {
   static const routeName = "/collection/insert";
   @override
   CollectionInsertScreenState createState() => CollectionInsertScreenState();
+  //String collectionId;
+  //CollectionInsertScreen(this.collectionId);
 }
 
 class CollectionInsertScreenState extends State<CollectionInsertScreen> {
@@ -35,6 +37,12 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
       uploadedImage = image;
     });
   }
+
+  void displayDialog(context, title, text) => showDialog(
+        context: context,
+        builder: (context) =>
+            AlertDialog(title: Text(title), content: Text(text)),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -122,19 +130,22 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
       print("form submit");
       Provider.of<Collections>(context)
           .addCollection(data, uploadedImage)
-          .then((collection_id) {
-        print("CollectionId "+ collection_id);
+          .then((collectionId) {
+        print("CollectionId "+ collectionId);
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
         Navigator.of(context).pushNamed(
               CollectionScreen.routeName,
-              arguments: collection_id,
+              arguments: collectionId,
             );
             Toast.show("New collection added!", context,duration: 7, gravity: Toast.BOTTOM);
         }).catchError((errorMessage) {
         print(errorMessage);
-        Toast.show(
-            "A new collection could not be created.Please try again.", context,
-            duration: 7, gravity: Toast.BOTTOM);
-      });
+         displayDialog(
+                          context,"Error",
+                          errorMessage,
+                        );
+    });
     }
   }
 }
