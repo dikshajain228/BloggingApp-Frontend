@@ -112,9 +112,11 @@ class ChangePasswordState extends State<ChangePassword> {
             duration: 7, gravity: Toast.BOTTOM);
       }).catchError((errorMessage) {
         print(errorMessage);
-        Navigator.of(context).pop();
-        Toast.show(errorMessage, context, duration: 7, gravity: Toast.BOTTOM);
-      });
+         displayDialog(
+                          context,"Error",
+                          errorMessage,
+                        );
+    });
     }
   }
 

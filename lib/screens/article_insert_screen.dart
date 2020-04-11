@@ -54,6 +54,12 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
     });
   }
 
+  void displayDialog(context, title, text) => showDialog(
+        context: context,
+        builder: (context) =>
+            AlertDialog(title: Text(title), content: Text(text)),
+      );
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -208,20 +214,22 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
     };
     Provider.of<Articles>(context)
         .addArticle(data, uploadedImage)
-        .then((article_id) {
-      print(article_id);
+        .then((articleId) {
+      print(articleId);
       Navigator.of(context).pop();
       Navigator.of(context).pop();
       Navigator.of(context).pushNamed(
               ArticleScreen.routeName,
-              arguments: article_id,
+              arguments: articleId,
             );
       Toast.show("New article added!", context,
           duration: 7, gravity: Toast.BOTTOM);
     }).catchError((errorMessage) {
-      print(errorMessage);
-      Navigator.of(context).pushReplacementNamed(ArticleInsertScreen.routeName);
-      Toast.show(errorMessage, context, duration: 7, gravity: Toast.BOTTOM);
+       print(errorMessage);
+         displayDialog(
+                          context,"Error",
+                          errorMessage,
+                        );
     });
   }
 }
