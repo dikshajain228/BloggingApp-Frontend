@@ -71,7 +71,7 @@ class MyApp extends StatelessWidget {
           BookmarkScreen.routeName: (context) => BookmarkScreen(),
           ExploreScreen.routeName: (context) => ExploreScreen(),
           // ArticleInsertScreen.routeName: (context) => ArticleInsertScreen(),
-          ArticleEditScreen.routeName: (context) => ArticleEditScreen(),
+          //ArticleEditScreen.routeName: (context) => ArticleEditScreen(),
           //EditCollection.routeName: (context) => EditCollection(),
           CollectionInsertScreen.routeName: (context) =>
               CollectionInsertScreen(),
@@ -84,6 +84,8 @@ class MyApp extends StatelessWidget {
                 CollectionScreen(settings.arguments),
             EditCollection.routeName: (context) =>
                 EditCollection(settings.arguments),
+            ArticleEditScreen.routeName:(context)=>
+                ArticleEditScreen(settings.arguments),
             ArticleScreen.routeName: (context) =>
                 ArticleScreen(settings.arguments),
             ArticleInsertScreen.routeName: (context) =>
