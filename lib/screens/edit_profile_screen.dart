@@ -115,13 +115,12 @@ class _EditProfileState extends State<EditProfile> {
         .updateProfile(data, uploadedImage)
         .then((message) {
       print(message);
-      // Use pop
-      // Navigator.of(context).pushReplacementNamed(ProfileScreen.routeName);
-      Toast.show(message, context, duration: 7, gravity: Toast.BOTTOM);
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+      Toast.show("Updated successfully!", context, duration: 7, gravity: Toast.BOTTOM);
     }).catchError((errorMessage) {
       print(errorMessage);
-      // use pop
-      // Navigator.of(context).pushReplacementNamed(ProfileScreen.routeName);
+      Navigator.of(context).pop();
       Toast.show("Profile could not be edited.Please try again.", context,
           duration: 7, gravity: Toast.BOTTOM);
     });

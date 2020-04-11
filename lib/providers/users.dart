@@ -62,27 +62,29 @@ class Users with ChangeNotifier {
         url,
         headers: {HttpHeaders.authorizationHeader: token},
       );
-      print("whats rge provlem");
-      final responseJson = json.decode(response.body);
-      print(responseJson);
-      print("jajaja");
-      final userData = responseJson[0];
-      print(userData);
-      print("mynamyna");
-      print(userData["about"] + "please bro");
-      User user = User(
-        username: userData["username"],
-        user_id: userData["user_id"],
-        email: userData["email"],
-        about: userData["about"],
-        profile_image_url: userData["profile_image_url"],
-        followerCount: userData["followercount"],
-        followingCount: userData["followingcount"],
-        is_following: userData["is_following"] == 0 ? false : true,
-      );
-      return user;
+      if(response.statusCode == 200){
+        final responseJson = json.decode(response.body);
+        print(responseJson);
+        final userData = responseJson["user"];
+        User user = User(
+          username: userData["username"],
+          user_id: userData["user_id"],
+          email: userData["email"],
+          about: userData["about"],
+          profile_image_url: userData["profile_image_url"],
+          followerCount: userData["followercount"],
+          followingCount: userData["followingcount"],
+          is_following: userData["is_following"] == 0 ? false : true,
+        );
+        return user;
+    }else if(response.statusCode == 404){
+      throw "User not found";
+    }else{
+      throw "Failed to load user";
+    }
     } catch (error) {
-      throw error;
+      print(error);
+      throw "error";
     }
   }
 

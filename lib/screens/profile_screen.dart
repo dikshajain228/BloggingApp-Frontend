@@ -198,7 +198,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                       Padding(
                         padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
                         child: Text(
-                          _user.about,
+                          _user.about??' ',
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 18.0),
                         ),

@@ -39,6 +39,7 @@ class Authentication with ChangeNotifier {
         _username = payloadMap["username"];
         _email = payloadMap["email"];
         _profile_image_url = payloadMap["profile_image_url"];
+        print("obtained token" + token);
         return token;
       }
       return null;

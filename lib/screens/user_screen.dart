@@ -1,5 +1,6 @@
 import '../widgets/collection_list.dart';
 import '../widgets/articles_list.dart';
+import '../widgets/error_dialog.dart';
 
 import '../providers/users.dart';
 import '../providers/user.dart';
@@ -7,42 +8,77 @@ import '../providers/user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import '../route_observer.dart' as route_observer;
 
 class UserScreen extends StatefulWidget {
   static const routeName = "/user";
+
   final String userId;
   UserScreen(this.userId);
+
   @override
   _UserScreenState createState() => _UserScreenState();
 }
 
 class _UserScreenState extends State<UserScreen>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, RouteAware {
 
   User user;
   TabController _tabController;
-   bool _loadingUser = true;
+
+  bool _loadingUser = true;
+  bool _error = false;
+  bool _isInit = true;
+
+  final routeObserver = route_observer.routeObserver;
+  
 
   @override
   void initState() {
     _tabController = new TabController(vsync: this, length: 2);
     super.initState();
     print("I am in view profile page");
-    print(widget.userId.toString());
   }
 
   @override
   void didChangeDependencies(){
-    print("hello");
+    routeObserver.subscribe(this, ModalRoute.of(context));
+    if(_isInit){
+      _loadData();
+      setState((){
+        _isInit = false;
+      });
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
+  void didPopNext(){
+    print("pop next");
+    _loadData();
+    super.didPopNext();
+  }
+
+  void _loadData(){
     Provider.of<Users>(context).fetchUserById(widget.userId).then((data){
       setState(() {
        _loadingUser = false;
        user = data; 
       });
+    }).catchError((errorMessage){
+            showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return ErrorDialog(
+              errorMessage: errorMessage,
+            );
+          });
+      setState((){
+      _error = true;
+      });
     });
-    super.didChangeDependencies();
+    
   }
-
   
 
   @override

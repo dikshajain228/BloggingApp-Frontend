@@ -32,7 +32,7 @@ class User with ChangeNotifier {
     this.followingCount,
   });
 
-  Future<void> changePassword(String oldPassword, String newPassword) async {
+  Future<String> changePassword(String oldPassword, String newPassword) async {
     String url = baseUrl + "user/password";
     final token = await storage.read(key: "token");
     try {
@@ -47,9 +47,6 @@ class User with ChangeNotifier {
       }else{
         throw responseJson["message"];
       }
-      int statusCode = response.statusCode;
-      print("Status Code");
-      print(statusCode);
     } catch (error) {
       throw error;
     }
