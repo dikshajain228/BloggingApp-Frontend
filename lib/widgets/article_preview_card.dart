@@ -1,4 +1,3 @@
-import 'package:bloggingapp/providers/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -11,38 +10,40 @@ import '../providers/article.dart';
 class ArticlePreviewCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final article = Provider.of<Article>(context);
-    User user;
 
     return new SizedBox(
       height: 150,
-      child: Card(
-        elevation: 8.0,
-        margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
-        child: Container(
-          decoration: BoxDecoration(),
-          child: ListTile(
-            contentPadding:
-                EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-            leading: CircleAvatar(
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              backgroundImage: NetworkImage(article.image_path),
-            ),
-            // ClipOval(
-            //   child: CachedNetworkImage(
-            //     imageUrl: article.image_path,
-            //     placeholder: (context, url) => Image.network(
-            //       "http://via.placeholder.com/640x360",
-            //       fit: BoxFit.cover,
-            //       height: 50.0,
-            //       width: 50.0,
-            //     ),
-            //     errorWidget: (context, url, error) => Icon(Icons.error),
-            //     fit: BoxFit.cover,
-            //     height: 50.0,
-            //     width: 50.0,
-            //   ),
-            // ),
-            title: Text(
+      child: GestureDetector(
+        onTap: () {
+              Navigator.of(context).pushNamed(ArticleScreen.routeName,
+                  arguments: article.article_id);
+        },
+        child:Card(
+        child : new Stack(
+          children : <Widget>[
+            Container(
+              margin : new EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 10.0),
+            child :ClipOval(
+              child: CachedNetworkImage(
+                imageUrl: article.image_path,
+                placeholder: (context, url) => Image.network(
+                  "http://via.placeholder.com/640x360",
+                  fit: BoxFit.cover,
+                  height: 100.0,
+                  width: 100.0,
+                ),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+                fit: BoxFit.cover,
+                height: 100.0,
+                width: 100.0,
+              ),
+            )),
+            Container(
+              margin : new EdgeInsets.fromLTRB(110.0, 10.0, 10.0, 10.0),
+              child:new Stack(
+             
+                children : <Widget>[
+                  Text(
               article.title,
               style: TextStyle(
                 color: Colors.black,
@@ -52,10 +53,12 @@ class ArticlePreviewCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               maxLines: 3,
             ),
-
-            subtitle: article.date_created == null
+                  article.date_created == null
                 ? Text("No date")
-                : Row(children: <Widget>[
+                : Container(
+                  alignment : Alignment(1, 1),
+                  //margin : new EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 10.0),
+                  child : Row(children: <Widget>[
                     Expanded(child:Text(
                       "Published by " +
                           article.author +
@@ -93,14 +96,16 @@ class ArticlePreviewCard extends StatelessWidget {
                               });
                             },
                           )),
-                  ]),
+                  ]),),
 
-            onTap: () {
-              Navigator.of(context).pushNamed(ArticleScreen.routeName,
-                  arguments: article.article_id);
-            },
-          ),
-        ),
+                ]
+              )
+            )
+
+
+          ],
+        )
+      ),
       ),
     );
   }
