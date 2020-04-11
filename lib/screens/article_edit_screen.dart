@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quill_delta/quill_delta.dart';
+import 'package:toast/toast.dart';
 import 'package:zefyr/zefyr.dart';
 import 'dart:io';
 import 'dart:convert';
@@ -13,6 +14,8 @@ import '../providers/article.dart';
 
 class ArticleEditScreen extends StatefulWidget {
   static const routeName = "/article/edit";
+   Article article;
+  ArticleEditScreen(this.article);
   @override
   ArticleEditScreenState createState() => ArticleEditScreenState();
 }
@@ -53,6 +56,12 @@ class ArticleEditScreenState extends State<ArticleEditScreen> {
       tags = [...tagsData];
     });
   }
+
+  void displayDialog(context, title, text) => showDialog(
+        context: context,
+        builder: (context) =>
+            AlertDialog(title: Text(title), content: Text(text)),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -134,12 +143,38 @@ class ArticleEditScreenState extends State<ArticleEditScreen> {
     final content = jsonEncode(_controller.document);
     String contentString = content.toString();
     final String title = _titleController.text;
+
     print(contentString);
+
     if (uploadedImage != null) {
       print(uploadedImage.path);
     } else {
       print("no upload");
     }
+
+     final data = {
+     
+    };
+
+    /** Provider.of<Articles>(context)
+        .updateArticle(data, uploadedImage)
+        .then((message) {
+      print(message);
+      Navigator.of(context).pop();
+      Navigator.of(context).pushNamed(
+              ArticleEditScreen.routeName,
+              arguments: widget.article.article_id);
+      Toast.show("Updated Successfully!", context,
+          duration: 7, gravity: Toast.BOTTOM);
+    }).catchError((errorMessage) {
+      print(errorMessage);
+       Navigator.of(context).pop();
+      displayDialog(
+                          context,"Error",
+                          errorMessage,
+                        );
+    });
+    **/
   }
 
   // Save alert dialog
