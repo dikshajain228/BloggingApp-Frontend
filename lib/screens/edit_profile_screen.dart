@@ -120,7 +120,9 @@ class _EditProfileState extends State<EditProfile> {
       Toast.show("Updated successfully!", context, duration: 7, gravity: Toast.BOTTOM);
     }).catchError((errorMessage) {
       print(errorMessage);
-      Navigator.of(context).pop();
+      // use pop
+            Navigator.of(context).pop();
+      
       Toast.show("Profile could not be edited.Please try again.", context,
           duration: 7, gravity: Toast.BOTTOM);
     });
