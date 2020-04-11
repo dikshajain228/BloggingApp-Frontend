@@ -42,6 +42,12 @@ class _EditCollectionState extends State<EditCollection> {
     });
   }
 
+  void displayDialog(context, title, text) => showDialog(
+        context: context,
+        builder: (context) =>
+            AlertDialog(title: Text(title), content: Text(text)),
+      );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,7 +133,9 @@ class _EditCollectionState extends State<EditCollection> {
       print(message);
       Navigator.of(context).pop();
       Navigator.of(context).pop();
-      // Navigator.of(context).pushReplacementNamed(CollectionScreen.routeName);
+       Navigator.of(context).pushNamed(
+              CollectionScreen.routeName,
+              arguments: widget.collection.collection_id);
       Toast.show("Updated Successfully!", context,
           duration: 7, gravity: Toast.BOTTOM);
     }).catchError((errorMessage) {
@@ -135,7 +143,10 @@ class _EditCollectionState extends State<EditCollection> {
       Navigator.of(context).pop();
       // pop dialog box and stay on page
       // Navigator.of(context).pushReplacementNamed(EditCollection.routeName);
-      Toast.show(errorMessage, context, duration: 7, gravity: Toast.BOTTOM);
+       displayDialog(
+                          context,"Error",
+                          errorMessage,
+                        );
     });
   }
 
