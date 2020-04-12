@@ -72,6 +72,42 @@ class Articles with ChangeNotifier {
     }
   }
 
+  // Update Article
+  Future<String> updateArticle(Map<String, dynamic> data, File image) async {
+    String url = baseUrl + "articles/" + data["article_id"];
+    final token = await storage.read(key: "token");
+
+    DateFormat dateFormatter = new DateFormat('yyyy-MM-dd');
+    String dateUpdated = dateFormatter.format(DateTime.now());
+
+    var request = http.MultipartRequest('PATCH', Uri.parse(url));
+    request.headers["Authorization"] = token;
+    if (image != null) {
+      String filename = image.path;
+      request.files.add(await http.MultipartFile.fromPath('image', filename));
+    }
+    request.fields["title"] = data["title"];
+    request.fields["content"] = data["content"];
+    request.fields["image_path"] = data["image_path"];
+    request.fields["date_updated"] = dateUpdated;
+    request.fields["tags"] = data["tags"];
+    try {
+      dynamic response = await request.send();
+      response = await response.stream.bytesToString();
+      final responseJson = json.decode(response);
+      if (responseJson["error"] == false) {
+        print("Updated");
+        return data["article_id"];
+      } else {
+        print(responseJson["message"]);
+        throw "Failed to update article";
+      }
+    } catch (error) {
+      print(error);
+      throw "Failed to update article";
+    }
+  }
+
   // Get article by ID
   Future<Article> getArticleById(String articleId) async {
     final token = await storage.read(key: "token");

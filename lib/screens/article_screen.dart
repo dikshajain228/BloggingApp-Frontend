@@ -93,129 +93,133 @@ class _ArticleScreenState extends State<ArticleScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Article..."),
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color(0xff191654),
-                    Color(0xff43c6ac),
-                    Color(0xff6dffe1),
-                  ]),
-            ),
+      appBar: AppBar(
+        title: Text("Article..."),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xff191654),
+                  Color(0xff43c6ac),
+                  Color(0xff6dffe1),
+                ]),
           ),
-          actions: <Widget>[
-            _article.is_author?PopupMenuButton(
-              onSelected: (int selectedValue) {
-                if (selectedValue == 0) {
-                  showAlert(context, _article.article_id);
-                } else {
-                  Navigator.of(context).pushNamed(ArticleEditScreen.routeName);
-                }
-              },
-              icon: Icon(
-                Icons.more_vert,
-              ),
-              itemBuilder: (_) => [
-                PopupMenuItem(child: Text('Delete Article'), value: 0),
-                PopupMenuItem(child: Text('Edit Article'), value: 1),
-              ],
-            ):null,
-          ],
-          
         ),
-        body: (_error == true
-            ? Center(
-                child: Text("Some error occured"),
-              )
-            : (_loading == true
-                ? SpinKitChasingDots(
-                    color: Colors.teal,
-                  )
-                : SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          padding: const EdgeInsets.only(
-                            bottom: 10,
-                            top: 10,
-                          ),
-                          child: Center(
-                            child: Text(
-                              _article.title,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 35.0,
-                              ),
-                              textAlign: TextAlign.center,
+        actions: <Widget>[
+          _article.is_author
+              ? PopupMenuButton(
+                  onSelected: (int selectedValue) {
+                    if (selectedValue == 0) {
+                      showAlert(context, _article.article_id);
+                    } else {
+                      Navigator.of(context).pushNamed(
+                          ArticleEditScreen.routeName,
+                          arguments: _article);
+                    }
+                  },
+                  icon: Icon(
+                    Icons.more_vert,
+                  ),
+                  itemBuilder: (_) => [
+                    PopupMenuItem(child: Text('Delete Article'), value: 0),
+                    PopupMenuItem(child: Text('Edit Article'), value: 1),
+                  ],
+                )
+              : null,
+        ],
+      ),
+      body: (_error == true
+          ? Center(
+              child: Text("Some error occured"),
+            )
+          : (_loading == true
+              ? SpinKitChasingDots(
+                  color: Colors.teal,
+                )
+              : SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.only(
+                          bottom: 10,
+                          top: 10,
+                        ),
+                        child: Center(
+                          child: Text(
+                            _article.title,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 35.0,
                             ),
+                            textAlign: TextAlign.center,
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            left: 10,
-                            right: 10,
-                            bottom: 5,
-                          ),
-                          child: Container(
-                            height: 200,
-                            width: double.infinity,
-                            child: CachedNetworkImage(
-                              imageUrl: _article.image_path,
-                              placeholder: (context, url) => Image.network(
-                                "http://via.placeholder.com/640x360",
-                                fit: BoxFit.cover,
-                                height: 200,
-                                width: double.infinity,
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  Image.network(
-                                "http://via.placeholder.com/640x360",
-                                fit: BoxFit.cover,
-                                height: 200,
-                                width: double.infinity,
-                              ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 10,
+                          right: 10,
+                          bottom: 5,
+                        ),
+                        child: Container(
+                          height: 200,
+                          width: double.infinity,
+                          child: CachedNetworkImage(
+                            imageUrl: _article.image_path,
+                            placeholder: (context, url) => Image.network(
+                              "http://via.placeholder.com/640x360",
                               fit: BoxFit.cover,
                               height: 200,
                               width: double.infinity,
                             ),
+                            errorWidget: (context, url, error) => Image.network(
+                              "http://via.placeholder.com/640x360",
+                              fit: BoxFit.cover,
+                              height: 200,
+                              width: double.infinity,
+                            ),
+                            fit: BoxFit.cover,
+                            height: 200,
+                            width: double.infinity,
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.all(10),
-                          child: ZefyrView(
-                            document: _content,
-                          ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(10),
+                        child: ZefyrView(
+                          document: _content,
                         ),
-                        // Padding(
-                        //   padding: const EdgeInsets.only(right: 10),
-                        //   child: Row(
-                        //     mainAxisAlignment: MainAxisAlignment.end,
-                        //     children: <Widget>[
-                        //       Text("Published on  "),
-                        //       Text(DateFormat("dd-MM-yyyy")
-                        //           .format(_article.date_created)),
-                        //     ],
-                        //   ),
-                        // ),
-                        Authorcard(),
-                      ],
-                    ),
-                  ))),
+                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.only(right: 10),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.end,
+                      //     children: <Widget>[
+                      //       Text("Published on  "),
+                      //       Text(DateFormat("dd-MM-yyyy")
+                      //           .format(_article.date_created)),
+                      //     ],
+                      //   ),
+                      // ),
+                      Authorcard(),
+                    ],
+                  ),
+                ))),
     );
-        // floatingActionButton: (_error || _loading)
-        //     ? null
-        //     : (_article.is_author ? plusFloatingButton() : null));
+    // floatingActionButton: (_error || _loading)
+    //     ? null
+    //     : (_article.is_author ? plusFloatingButton() : null));
   }
 
-  Widget Authorcard(){
-        return new Card(
-          color : Colors.teal[50],
-          shape : RoundedRectangleBorder(borderRadius : BorderRadius.circular(10.0),),
+  Widget Authorcard() {
+    return new Card(
+      color: Colors.teal[50],
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
       //elevation: 8.0,
       //margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
       child: Container(
@@ -246,7 +250,7 @@ class _ArticleScreenState extends State<ArticleScreen>
               fontSize: 16,
             ),
             softWrap: true,
-          ),         
+          ),
           onTap: () {
             Navigator.of(context).pushNamed(ProfileScreen.routeName,
                 arguments: _article.user_id);
@@ -256,7 +260,7 @@ class _ArticleScreenState extends State<ArticleScreen>
     );
   }
 
-    showAlert(BuildContext context, article_id) {
+  showAlert(BuildContext context, article_id) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -280,8 +284,7 @@ class _ArticleScreenState extends State<ArticleScreen>
               ),
             ),
           ),
-          content: Text(
-              "Delete article "),
+          content: Text("Delete article "),
           actions: <Widget>[
             FlatButton(
               shape: RoundedRectangleBorder(
@@ -293,14 +296,16 @@ class _ArticleScreenState extends State<ArticleScreen>
               child: Text("DELETE"),
               textColor: Theme.of(context).colorScheme.error,
               onPressed: () {
-                _article.deleteArticle(article_id).then((_){
+                _article.deleteArticle(article_id).then((_) {
                   print("Article deleted");
                 });
-                Provider.of<Articles>(context).deleteArticle(article_id).then((_) {
+                Provider.of<Articles>(context)
+                    .deleteArticle(article_id)
+                    .then((_) {
                   print("Deleted from list article");
                 });
                 Navigator.of(context).pop();
-                },
+              },
             ),
             FlatButton(
               shape: RoundedRectangleBorder(

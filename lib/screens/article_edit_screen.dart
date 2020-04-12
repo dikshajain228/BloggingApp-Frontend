@@ -1,9 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:quill_delta/quill_delta.dart';
-import 'package:toast/toast.dart';
-import 'package:zefyr/zefyr.dart';
 import 'dart:io';
 import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:toast/toast.dart';
+import 'package:zefyr/zefyr.dart';
+
+import '../screens/article_screen.dart';
 
 // widgets
 import '../widgets/tags_input.dart';
@@ -14,7 +17,7 @@ import '../providers/article.dart';
 
 class ArticleEditScreen extends StatefulWidget {
   static const routeName = "/article/edit";
-   Article article;
+  Article article;
   ArticleEditScreen(this.article);
   @override
   ArticleEditScreenState createState() => ArticleEditScreenState();
@@ -24,25 +27,20 @@ class ArticleEditScreenState extends State<ArticleEditScreen> {
   ZefyrController _controller;
   TextEditingController _titleController;
   FocusNode _focusNode;
-  List<dynamic> tags = ["haha", "tag1", "tag2"];
-  String content = "Article content\n";
-  String title = "Article Title\n";
-
-  Article article;
+  List<dynamic> _tags = [];
 
   File uploadedImage;
-  String image_url = "https://picsum.photos/200";
 
   @override
   void initState() {
     super.initState();
-
-    final Delta delta = Delta()..insert(content);
-    final document = NotusDocument.fromDelta(delta);
-    _controller = ZefyrController(document);
+    _controller = ZefyrController(_loadContent());
     _focusNode = FocusNode();
     _titleController = TextEditingController();
-    _titleController.text = title;
+    _titleController.text = widget.article.title;
+    setState(() {
+      _tags = widget.article.tags.split(",");
+    });
   }
 
   void setImage(File image) {
@@ -53,15 +51,25 @@ class ArticleEditScreenState extends State<ArticleEditScreen> {
 
   void setTags(List<dynamic> tagsData) {
     setState(() {
-      tags = [...tagsData];
+      _tags = [...tagsData];
     });
   }
 
-  void displayDialog(context, title, text) => showDialog(
-        context: context,
-        builder: (context) =>
-            AlertDialog(title: Text(title), content: Text(text)),
-      );
+  NotusDocument _loadContent() {
+    var data = jsonDecode(widget.article.content);
+    print("data");
+    print(data);
+    print(NotusDocument.fromJson(data));
+    return NotusDocument.fromJson(data);
+  }
+
+  void displayDialog(context, title, text) {
+    showDialog(
+      context: context,
+      builder: (context) =>
+          AlertDialog(title: Text(title), content: Text(text)),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,19 +118,13 @@ class ArticleEditScreenState extends State<ArticleEditScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.cancel),
-          onPressed: () {
-            Navigator.pop(context, "4"); // Change to article id
-          },
-        ),
         title: Text("Edit Article"),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.save),
             color: Colors.white,
-            onPressed: () => _saveDocument(context),
+            onPressed: _showSaveDialog,
           ),
         ],
       ),
@@ -132,49 +134,42 @@ class ArticleEditScreenState extends State<ArticleEditScreen> {
     );
   }
 
-  void _saveDocument(BuildContext context) {
-    // final content = jsonEncode(_controller.document);
-    String contentString = _controller.document.toString();
-    final String title = _titleController.text;
-    _showSaveDialog();
-  }
-
   void _submitArticle() {
-    final content = jsonEncode(_controller.document);
-    String contentString = content.toString();
-    final String title = _titleController.text;
-
-    print(contentString);
-
     if (uploadedImage != null) {
       print(uploadedImage.path);
     } else {
       print("no upload");
     }
+    String title = _titleController.text;
+    final content = jsonEncode((_controller.document));
 
-     final data = {
-     
+    String tags = _tags.join(",");
+    final data = {
+      "article_id": widget.article.article_id,
+      "title": title,
+      "content": content,
+      // edit
+      "image_path":
+          widget.article.image_path != "" ? widget.article.image_path : " ",
+      "tags": tags,
     };
 
-    /** Provider.of<Articles>(context)
+    Provider.of<Articles>(context)
         .updateArticle(data, uploadedImage)
-        .then((message) {
-      print(message);
+        .then((articleId) {
+      print(articleId);
       Navigator.of(context).pop();
-      Navigator.of(context).pushNamed(
-              ArticleEditScreen.routeName,
-              arguments: widget.article.article_id);
-      Toast.show("Updated Successfully!", context,
+      Navigator.of(context).pop();
+      Toast.show("Article updated!", context,
           duration: 7, gravity: Toast.BOTTOM);
     }).catchError((errorMessage) {
       print(errorMessage);
-       Navigator.of(context).pop();
       displayDialog(
-                          context,"Error",
-                          errorMessage,
-                        );
+        context,
+        "Error",
+        errorMessage,
+      );
     });
-    **/
   }
 
   // Save alert dialog
@@ -195,8 +190,8 @@ class ArticleEditScreenState extends State<ArticleEditScreen> {
             scrollDirection: Axis.vertical,
             child: Column(
               children: <Widget>[
-                TagsInput(tags, setTags),
-                ImageInput(uploadedImage, setImage, image_url),
+                TagsInput(_tags, setTags),
+                ImageInput(uploadedImage, setImage, widget.article.image_path),
               ],
             ),
           ),
@@ -215,8 +210,8 @@ class ArticleEditScreenState extends State<ArticleEditScreen> {
               splashColor: Colors.tealAccent,
               onPressed: () {
                 _submitArticle();
-                print("tags");
-                print(tags);
+                print("_tags");
+                print(_tags);
               },
             ),
           ],

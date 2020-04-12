@@ -54,11 +54,13 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
     });
   }
 
-  void displayDialog(context, title, text) => showDialog(
-        context: context,
-        builder: (context) =>
-            AlertDialog(title: Text(title), content: Text(text)),
-      );
+  void displayDialog(context, title, text) {
+    showDialog(
+      context: context,
+      builder: (context) =>
+          AlertDialog(title: Text(title), content: Text(text)),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -212,6 +214,7 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
       "content": content,
       "tags": tags,
     };
+    print(data["content"]);
     Provider.of<Articles>(context)
         .addArticle(data, uploadedImage)
         .then((articleId) {
@@ -219,17 +222,18 @@ class ArticleInsertScreenState extends State<ArticleInsertScreen> {
       Navigator.of(context).pop();
       Navigator.of(context).pop();
       Navigator.of(context).pushNamed(
-              ArticleScreen.routeName,
-              arguments: articleId,
-            );
+        ArticleScreen.routeName,
+        arguments: articleId,
+      );
       Toast.show("New article added!", context,
           duration: 7, gravity: Toast.BOTTOM);
     }).catchError((errorMessage) {
-       print(errorMessage);
-         displayDialog(
-                          context,"Error",
-                          errorMessage,
-                        );
+      print(errorMessage);
+      displayDialog(
+        context,
+        "Error",
+        errorMessage,
+      );
     });
   }
 }
