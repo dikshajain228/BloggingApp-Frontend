@@ -31,13 +31,15 @@ class _ProfileScreenState extends State<ProfileScreen>
   bool _errorArticle = false;
   bool _errorCollections = false;
   User _user;
-  TabController _tabController;
+ TabController _tabController;
+  ScrollController _scrollViewController;
 
   final routeObserver = route_observer.routeObserver;
 
   @override
   void initState() {
     _tabController = new TabController(vsync: this, length: 2);
+    _scrollViewController = ScrollController(initialScrollOffset: 0.0);
     super.initState();
     print("I am in profile page");
   }
@@ -58,6 +60,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   @override
   void dispose() {
     _tabController.dispose();
+     _scrollViewController.dispose();
     super.dispose();
   }
 
@@ -113,7 +116,8 @@ class _ProfileScreenState extends State<ProfileScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
+      
+      appBar: AppBar(
           title: Text("Profile"),
           flexibleSpace: Container(
             decoration: BoxDecoration(
@@ -147,7 +151,8 @@ class _ProfileScreenState extends State<ProfileScreen>
             ),
           ],
         ),
-        body: (_errorProfile == true
+
+      body:(_errorProfile == true
             ? Center(
                 child: Text("An error occured"),
               )
@@ -155,12 +160,28 @@ class _ProfileScreenState extends State<ProfileScreen>
                 ? SpinKitChasingDots(
                     color: Colors.teal,
                   )
-                : Column(
-                    children: <Widget>[
-                      Row(
+                : NestedScrollView(
+        controller: _scrollViewController,
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
+              expandedHeight: 60,
+              floating: false,
+              pinned: true,
+              backgroundColor: Color(0xfff3f7f6),
+              leading: new Container(),
+               bottom: PreferredSize(                      
+                preferredSize: Size.fromHeight(80.0),      
+                child: Text(''),                           
+              ),
+
+              flexibleSpace: FlexibleSpaceBar(
+                  centerTitle: false,
+                   title: Row(
                         children: <Widget>[
                           Container(
-                            padding: EdgeInsets.all(10),
+                            //  padding: EdgeInsets.all(10),
+                            padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
                             child: CircleAvatar(
                               backgroundColor: Color(0xee191654),
                               backgroundImage:
@@ -172,17 +193,18 @@ class _ProfileScreenState extends State<ProfileScreen>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Container(
-                                padding: EdgeInsets.fromLTRB(10, 10, 10, 2),
+                                padding: EdgeInsets.fromLTRB(0, 40, 0, 2),
                                 child: Text(
                                   _user.username,
                                   style: TextStyle(
                                     fontSize: 25.0,
                                     fontWeight: FontWeight.bold,
+                                    color: Colors.black
                                   ),
                                 ),
                               ),
                               Container(
-                                padding: EdgeInsets.fromLTRB(10, 2, 10, 10),
+                                padding: EdgeInsets.fromLTRB(0, 2, 10, 10),
                                 child: Text(
                                   _user.email,
                                   style: TextStyle(
@@ -195,7 +217,15 @@ class _ProfileScreenState extends State<ProfileScreen>
                           )
                         ],
                       ),
-                      Padding(
+              )
+            )
+          ];
+        },
+        body: Column(
+
+          children: <Widget>[
+
+              Padding(
                         padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
                         child: Text(
                           _user.about??' ',
@@ -203,6 +233,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                           style: TextStyle(fontSize: 18.0),
                         ),
                       ),
+              
                       Container(
                         child: Padding(
                           padding: EdgeInsets.all(16.0),
@@ -244,7 +275,8 @@ class _ProfileScreenState extends State<ProfileScreen>
                           ),
                         ),
                       ),
-                      new Container(
+
+                    new Container(
                         decoration: new BoxDecoration(
                             color: Theme.of(context).colorScheme.primary),
                         child: new TabBar(
@@ -259,6 +291,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                           ],
                         ),
                       ),
+
                       new Expanded(
                         child: TabBarView(
                             controller: _tabController,
@@ -283,12 +316,16 @@ class _ProfileScreenState extends State<ProfileScreen>
                                       : CollectionList())),
                             ]),
                       )
-                    ],
-                  ))));
+            //),
+          ],
+        )
+       )
+      )
+     )
+    );
   }
 }
 
-//Choice class
 class Choice {
   Choice({this.title, this.icon});
   String title;
