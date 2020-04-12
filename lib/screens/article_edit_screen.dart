@@ -38,9 +38,15 @@ class ArticleEditScreenState extends State<ArticleEditScreen> {
     _focusNode = FocusNode();
     _titleController = TextEditingController();
     _titleController.text = widget.article.title;
-    setState(() {
-      _tags = widget.article.tags.split(",");
-    });
+    if (widget.article.tags == "") {
+      setState(() {
+        _tags = [];
+      });
+    } else {
+      setState(() {
+        _tags = widget.article.tags.split(",");
+      });
+    }
   }
 
   void setImage(File image) {
@@ -119,6 +125,18 @@ class ArticleEditScreenState extends State<ArticleEditScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Edit Article"),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xff191654),
+                  Color(0xff43c6ac),
+                  Color(0xff6dffe1),
+                ]),
+          ),
+        ),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
@@ -134,7 +152,7 @@ class ArticleEditScreenState extends State<ArticleEditScreen> {
     );
   }
 
-  void _submitArticle() {
+  void _updateArticle() {
     if (uploadedImage != null) {
       print(uploadedImage.path);
     } else {
@@ -179,11 +197,22 @@ class ArticleEditScreenState extends State<ArticleEditScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(
-            "Publish changes...",
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          titlePadding: EdgeInsets.all(0),
+          title: Container(
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.secondary,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            child: Text(
+              'Update Article...',
+              style:
+                  TextStyle(color: Theme.of(context).colorScheme.onSecondary),
             ),
           ),
           content: SingleChildScrollView(
@@ -197,21 +226,19 @@ class ArticleEditScreenState extends State<ArticleEditScreen> {
           ),
           actions: [
             FlatButton(
+              child: Text("Cancel"),
+              textColor: Theme.of(context).colorScheme.error,
+              splashColor: Theme.of(context).colorScheme.error,
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text("Close"),
-              color: Colors.red,
-              splashColor: Colors.redAccent,
             ),
             FlatButton(
-              child: Text("Post"),
-              color: Colors.teal,
-              splashColor: Colors.tealAccent,
+              child: Text("Update"),
+              textColor: Theme.of(context).colorScheme.primary,
+              splashColor: Theme.of(context).colorScheme.primary,
               onPressed: () {
-                _submitArticle();
-                print("_tags");
-                print(_tags);
+                _updateArticle();
               },
             ),
           ],
