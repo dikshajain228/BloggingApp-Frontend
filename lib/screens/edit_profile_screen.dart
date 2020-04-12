@@ -49,7 +49,7 @@ class _EditProfileState extends State<EditProfile> {
                 colors: [
                   Color(0xff191654),
                   Color(0xff43c6ac),
-                  Color(0xff6dffe1),
+                  // Color(0xff6dffe1),
                 ]),
           ),
         ),
@@ -117,12 +117,13 @@ class _EditProfileState extends State<EditProfile> {
       print(message);
       Navigator.of(context).pop();
       Navigator.of(context).pop();
-      Toast.show("Updated successfully!", context, duration: 7, gravity: Toast.BOTTOM);
+      Toast.show("Updated successfully!", context,
+          duration: 7, gravity: Toast.BOTTOM);
     }).catchError((errorMessage) {
       print(errorMessage);
       // use pop
-            Navigator.of(context).pop();
-      
+      Navigator.of(context).pop();
+
       Toast.show("Profile could not be edited.Please try again.", context,
           duration: 7, gravity: Toast.BOTTOM);
     });

@@ -11,7 +11,7 @@ import '../app_theme.dart';
 import '../screens/home_screen.dart';
 
 class LoginScreenState extends State<LoginScreen> {
-  final formKey = new GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   String formType = "login";
 
   final storage = FlutterSecureStorage();
@@ -60,17 +60,29 @@ class LoginScreenState extends State<LoginScreen> {
   //Design
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("Flutter Blog App"),
+    return Scaffold(
+      appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xff191654),
+                  Color(0xff43c6ac),
+                  // Color(0xff6dffe1),
+                ]),
+          ),
+        ),
+        title: Text("Flutter Blog App"),
       ),
       body: SingleChildScrollView(
-        child: new Container(
+        child: Container(
           margin: EdgeInsets.all(25.0),
-          child: new Form(
+          child: Form(
             key: formKey,
             autovalidate: true,
-            child: new Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: createInputs() + createButtons(),
             ),
@@ -83,15 +95,15 @@ class LoginScreenState extends State<LoginScreen> {
   List<Widget> createInputs() {
     return [
       logo(),
-      new TextFormField(
+      TextFormField(
         controller: _emailController,
-        decoration: new InputDecoration(labelText: 'Email'),
+        decoration: InputDecoration(labelText: 'Email'),
         validator: (value) {
           if (value.isEmpty)
             return 'Email required';
           else {
             Pattern pattern = r"[A-Za-z0-9]*@[A-Za-z]+.[a-zA-Z]{2,}";
-            RegExp regex = new RegExp(pattern);
+            RegExp regex = RegExp(pattern);
             if (!regex.hasMatch(value))
               return 'Enter valid Email';
             else
@@ -100,11 +112,11 @@ class LoginScreenState extends State<LoginScreen> {
           return null;
         },
       ),
-      new Padding(
+      Padding(
         padding: EdgeInsets.symmetric(vertical: 20.0),
         child: TextFormField(
           controller: _passwordController,
-          decoration: new InputDecoration(labelText: 'Password'),
+          decoration: InputDecoration(labelText: 'Password'),
           obscureText: true,
           validator: (value) {
             var err = null;
@@ -120,8 +132,8 @@ class LoginScreenState extends State<LoginScreen> {
   List<Widget> createButtons() {
     if (formType == "login") {
       return [
-        new RaisedButton(
-          child: new Text("Login", style: TextStyle(fontSize: 20.0)),
+        RaisedButton(
+          child: Text("Login", style: TextStyle(fontSize: 20.0)),
           textColor: Colors.white,
           color: Theme.of(context).colorScheme.primary,
           onPressed: () async {
@@ -132,7 +144,8 @@ class LoginScreenState extends State<LoginScreen> {
 
               var token = await Provider.of<Authentication>(context)
                   .attemptLogin(email, password);
-              String username = Provider.of<Authentication>(context).getUsername();
+              String username =
+                  Provider.of<Authentication>(context).getUsername();
               //print("hello" + username);
               if (token != null) {
                 _writeToken(token);
@@ -144,24 +157,24 @@ class LoginScreenState extends State<LoginScreen> {
             }
           },
         ),
-        new FlatButton(
-          child: new Text("Dont have an account? Create Account?",
-              style: new TextStyle(fontSize: 14.0)),
+        FlatButton(
+          child: Text("Dont have an account? Create Account?",
+              style: TextStyle(fontSize: 14.0)),
           textColor: Colors.deepPurple,
           onPressed: moveToRegister,
         )
       ];
     } else {
       return [
-        new TextFormField(
+        TextFormField(
           controller: _usernameController,
-          decoration: new InputDecoration(labelText: 'Username'),
+          decoration: InputDecoration(labelText: 'Username'),
           validator: (value) {
             return value.isEmpty ? 'Username required' : null;
           },
         ),
-        new RaisedButton(
-          child: new Text("Create account", style: TextStyle(fontSize: 20.0)),
+        RaisedButton(
+          child: Text("Create account", style: TextStyle(fontSize: 20.0)),
           textColor: Colors.white,
           color: Theme.of(context).colorScheme.primary,
           onPressed: () async {
@@ -186,9 +199,9 @@ class LoginScreenState extends State<LoginScreen> {
             }
           },
         ),
-        new FlatButton(
-          child: new Text("Have an account? Login",
-              style: new TextStyle(fontSize: 14.0)),
+        FlatButton(
+          child:
+              Text("Have an account? Login", style: TextStyle(fontSize: 14.0)),
           textColor: Colors.deepPurple,
           onPressed: moveToLogin,
         )
@@ -197,7 +210,7 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   Widget logo() {
-    return new Padding(
+    return Padding(
       padding: EdgeInsets.all(10.0),
       child: CircleAvatar(
         radius: 110.0,

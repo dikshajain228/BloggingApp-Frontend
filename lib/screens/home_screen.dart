@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
                 colors: [
                   Color(0xff191654),
                   Color(0xff43c6ac),
-                  Color(0xff6dffe1),
+                  // Color(0xff6dffe1),
                 ]),
           ),
         ),

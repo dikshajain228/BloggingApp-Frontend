@@ -61,7 +61,7 @@ class _EditCollectionState extends State<EditCollection> {
                 colors: [
                   Color(0xff191654),
                   Color(0xff43c6ac),
-                  Color(0xff6dffe1),
+                  // Color(0xff6dffe1),
                 ]),
           ),
         ),
@@ -133,9 +133,8 @@ class _EditCollectionState extends State<EditCollection> {
       print(message);
       Navigator.of(context).pop();
       Navigator.of(context).pop();
-       Navigator.of(context).pushNamed(
-              CollectionScreen.routeName,
-              arguments: widget.collection.collection_id);
+      Navigator.of(context).pushNamed(CollectionScreen.routeName,
+          arguments: widget.collection.collection_id);
       Toast.show("Updated Successfully!", context,
           duration: 7, gravity: Toast.BOTTOM);
     }).catchError((errorMessage) {
@@ -143,10 +142,11 @@ class _EditCollectionState extends State<EditCollection> {
       Navigator.of(context).pop();
       // pop dialog box and stay on page
       // Navigator.of(context).pushReplacementNamed(EditCollection.routeName);
-       displayDialog(
-                          context,"Error",
-                          errorMessage,
-                        );
+      displayDialog(
+        context,
+        "Error",
+        errorMessage,
+      );
     });
   }
 

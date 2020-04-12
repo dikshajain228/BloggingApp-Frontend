@@ -14,8 +14,6 @@ class CollectionInsertScreen extends StatefulWidget {
   static const routeName = "/collection/insert";
   @override
   CollectionInsertScreenState createState() => CollectionInsertScreenState();
-  //String collectionId;
-  //CollectionInsertScreen(this.collectionId);
 }
 
 class CollectionInsertScreenState extends State<CollectionInsertScreen> {
@@ -57,7 +55,7 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
                 colors: [
                   Color(0xff191654),
                   Color(0xff43c6ac),
-                  Color(0xff6dffe1),
+                  // Color(0xff6dffe1),
                 ]),
           ),
         ),
@@ -131,21 +129,23 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
       Provider.of<Collections>(context)
           .addCollection(data, uploadedImage)
           .then((collectionId) {
-        print("CollectionId "+ collectionId);
-      Navigator.of(context).pop();
-      Navigator.of(context).pop();
+        print("CollectionId " + collectionId);
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
         Navigator.of(context).pushNamed(
-              CollectionScreen.routeName,
-              arguments: collectionId,
-            );
-            Toast.show("New collection added!", context,duration: 7, gravity: Toast.BOTTOM);
-        }).catchError((errorMessage) {
+          CollectionScreen.routeName,
+          arguments: collectionId,
+        );
+        Toast.show("New collection added!", context,
+            duration: 7, gravity: Toast.BOTTOM);
+      }).catchError((errorMessage) {
         print(errorMessage);
-         displayDialog(
-                          context,"Error",
-                          errorMessage,
-                        );
-    });
+        displayDialog(
+          context,
+          "Error",
+          errorMessage,
+        );
+      });
     }
   }
 }

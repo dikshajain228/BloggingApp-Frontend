@@ -123,7 +123,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                   colors: [
                     Color(0xff191654),
                     Color(0xff43c6ac),
-                    Color(0xff6dffe1),
+                    // Color(0xff6dffe1),
                   ]),
             ),
           ),
@@ -198,7 +198,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                       Padding(
                         padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
                         child: Text(
-                          _user.about??' ',
+                          _user.about ?? ' ',
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 18.0),
                         ),

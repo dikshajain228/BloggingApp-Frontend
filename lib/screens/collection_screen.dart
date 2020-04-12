@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import '../route_observer.dart' as route_observer;
 
 import '../screens/collection_edit_screen.dart';
 import '../screens/article_delete_screen.dart';
 import '../screens/article_insert_screen.dart';
-import '../screens/profile_screen.dart';
 
 // Widgets
 import '../widgets/collection_details_card.dart';
@@ -37,16 +35,12 @@ class _CollectionScreenState extends State<CollectionScreen>
   bool _loadingArticles = true;
   bool _errorCollection = false;
   bool _errorArticles = false;
-  List<dynamic> authors = [];
   List<dynamic> _authors = [];
-  //should be deleted
-  List<bool> inputs = new List<bool>();
 
   final routeObserver = route_observer.routeObserver;
 
   @override
   void initState() {
-    print("I am in collection screen");
     super.initState();
   }
 
@@ -66,6 +60,12 @@ class _CollectionScreenState extends State<CollectionScreen>
   void didPopNext() {
     _loadData();
     super.didPopNext();
+  }
+
+  void _setAuthors(List<dynamic> authors) {
+    setState(() {
+      _authors = [...authors];
+    });
   }
 
   void _loadData() {
@@ -111,46 +111,47 @@ class _CollectionScreenState extends State<CollectionScreen>
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Text("Collection..."),
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color(0xff191654),
-                  Color(0xff43c6ac),
-                  Color(0xff6dffe1),
-                ]),
+          title: Text("Collection..."),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xff191654),
+                    Color(0xff43c6ac),
+                    // Color(0xff6dffe1),
+                  ]),
+            ),
           ),
-        ),
-        actions: <Widget>[
-          PopupMenuButton(
-              onSelected: (int selectedValue){
-                if(selectedValue==0){
+          actions: <Widget>[
+            PopupMenuButton(
+              onSelected: (int selectedValue) {
+                if (selectedValue == 0) {
                   _showDeleteCollectionDialog(context);
-                }else if(selectedValue==1){
-                  Navigator.of(context).pushNamed(EditCollection.routeName,arguments: _collection,);
-                }else if(selectedValue==2){
-                  Navigator.of(context).pushNamed(ArticleDeleteScreen.routeName);
-                }else if(selectedValue==3){
+                } else if (selectedValue == 1) {
+                  Navigator.of(context).pushNamed(
+                    EditCollection.routeName,
+                    arguments: _collection,
+                  );
+                } else if (selectedValue == 2) {
+                  Navigator.of(context)
+                      .pushNamed(ArticleDeleteScreen.routeName);
+                } else if (selectedValue == 3) {
                   _showEditAuthorDialog();
                 }
               },
-              icon : Icon(Icons.more_vert,),
-              itemBuilder : (_) => [
+              icon: Icon(
+                Icons.more_vert,
+              ),
+              itemBuilder: (_) => [
                 PopupMenuItem(child: Text('Delete Collection'), value: 0),
                 PopupMenuItem(child: Text('Edit Collection'), value: 1),
                 PopupMenuItem(child: Text('Delete Article'), value: 2),
                 PopupMenuItem(child: Text('Authors'), value: 3),
               ],
-
-              
             ),
-
-        ]        
-
-      ),
+          ]),
       body: (_errorCollection == true
           ? Center(
               child: Text("An error occured"),
@@ -180,23 +181,21 @@ class _CollectionScreenState extends State<CollectionScreen>
                 ))),
       floatingActionButton: (_loadingCollection == true
           ? null
-          :FloatingActionButton(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      foregroundColor: Colors.white,
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(
-                            ArticleInsertScreen.routeName,
-                            arguments: _collection.collection_id);
-                      },
-                      child: Icon(Icons.add),
-                      tooltip: "Add Articles",
-                    )
-                  ),
+          : (_collection.is_author == true || _collection.is_owner == true
+              ? FloatingActionButton(
+                  backgroundColor: Theme.of(context).primaryColor,
+                  foregroundColor: Colors.white,
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(
+                        ArticleInsertScreen.routeName,
+                        arguments: _collection.collection_id);
+                  },
+                  child: Icon(Icons.add),
+                  tooltip: "Add Articles",
+                )
+              : null)),
     );
   }
-
-// Floating button for owners
-
 
   _showEditAuthorDialog() {
     showDialog(
@@ -224,7 +223,10 @@ class _CollectionScreenState extends State<CollectionScreen>
             scrollDirection: Axis.vertical,
             child: Column(
               children: <Widget>[
-                AuthorInput(_authors, widget.collectionId),
+                AuthorInput(
+                  _authors,
+                  widget.collectionId,
+                ),
               ],
             ),
           ),
@@ -298,11 +300,5 @@ class _CollectionScreenState extends State<CollectionScreen>
         );
       },
     );
-  }
-
-  void setAuthors(List<dynamic> authorsData) {
-    setState(() {
-      authors = [...authorsData];
-    });
   }
 }

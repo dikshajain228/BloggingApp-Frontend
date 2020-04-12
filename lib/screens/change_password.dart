@@ -38,8 +38,20 @@ class ChangePasswordState extends State<ChangePassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: new AppBar(
-          title: new Text("Change Password"),
+        appBar: AppBar(
+          title: Text("Change Password"),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xff191654),
+                    Color(0xff43c6ac),
+                    // Color(0xff6dffe1),
+                  ]),
+            ),
+          ),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.done),
@@ -55,8 +67,8 @@ class ChangePasswordState extends State<ChangePassword> {
               child: Column(children: <Widget>[
                 TextFormField(
                   controller: _oldPasswordController,
-                  decoration: new InputDecoration(
-                      labelText: '   Enter current Password'),
+                  decoration:
+                      InputDecoration(labelText: '   Enter current Password'),
                   validator: (value) {
                     if (value.length == 0) {
                       return 'This feild cannot be empty ';
@@ -66,8 +78,7 @@ class ChangePasswordState extends State<ChangePassword> {
                 ),
                 TextFormField(
                   controller: _newPassword1Controller,
-                  decoration:
-                      new InputDecoration(labelText: '   Enter new Password'),
+                  decoration: InputDecoration(labelText: '   Enter  Password'),
                   validator: (value1) {
                     if (value1.length == 0) {
                       return 'This feild cannot be empty';
@@ -80,8 +91,8 @@ class ChangePasswordState extends State<ChangePassword> {
                 ),
                 TextFormField(
                   controller: _newPassword2Controller,
-                  decoration: new InputDecoration(
-                      labelText: '   Re-enter new Password'),
+                  decoration:
+                      InputDecoration(labelText: '   Re-enter  Password'),
                   //hintText: "Enter current Password",
                   keyboardType: TextInputType.text,
                   validator: (value2) {
