@@ -316,7 +316,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                       : CollectionList())),
                             ]),
                       )
-            //),
+          
           ],
         )
        )
