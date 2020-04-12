@@ -43,9 +43,6 @@ class MyApp extends StatelessWidget {
           value: Users(),
         ),
         ChangeNotifierProvider.value(
-          value: User(),
-        ),
-        ChangeNotifierProvider.value(
           value: Articles(),
         ),
         ChangeNotifierProvider.value(
@@ -84,7 +81,7 @@ class MyApp extends StatelessWidget {
                 CollectionScreen(settings.arguments),
             EditCollection.routeName: (context) =>
                 EditCollection(settings.arguments),
-            ArticleEditScreen.routeName:(context)=>
+            ArticleEditScreen.routeName: (context) =>
                 ArticleEditScreen(settings.arguments),
             ArticleScreen.routeName: (context) =>
                 ArticleScreen(settings.arguments),

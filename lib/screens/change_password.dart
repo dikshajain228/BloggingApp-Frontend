@@ -4,7 +4,7 @@ import 'package:toast/toast.dart';
 
 import '../screens/profile_screen.dart';
 
-import '../providers/user.dart';
+import '../providers/users.dart';
 
 class ChangePassword extends StatefulWidget {
   static const routeName = "/profile/change-password";
@@ -33,7 +33,6 @@ class ChangePasswordState extends State<ChangePassword> {
   @override
   void initState() {
     super.initState();
-    print("I am Change Password page");
   }
 
   @override
@@ -104,7 +103,7 @@ class ChangePasswordState extends State<ChangePassword> {
     if (_formKey.currentState.validate()) {
       String oldPassword = _oldPasswordController.text;
       String newPassword = _newPassword1Controller.text;
-      Provider.of<User>(context)
+      Provider.of<Users>(context)
           .changePassword(oldPassword, newPassword)
           .then((message) {
         Navigator.of(context).pushReplacementNamed(ProfileScreen.routeName);
@@ -112,11 +111,12 @@ class ChangePasswordState extends State<ChangePassword> {
             duration: 7, gravity: Toast.BOTTOM);
       }).catchError((errorMessage) {
         print(errorMessage);
-         displayDialog(
-                          context,"Error",
-                          errorMessage,
-                        );
-    });
+        displayDialog(
+          context,
+          "Error",
+          errorMessage,
+        );
+      });
     }
   }
 

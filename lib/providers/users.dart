@@ -52,6 +52,27 @@ class Users with ChangeNotifier {
     }
   }
 
+  // Change password
+  Future<String> changePassword(String oldPassword, String newPassword) async {
+    String url = baseUrl + "user/password";
+    final token = await storage.read(key: "token");
+    try {
+      var response = await http.patch(
+        url,
+        body: {"oldPassword": oldPassword, "newPassword": newPassword},
+        headers: {HttpHeaders.authorizationHeader: token},
+      );
+      final responseJson = json.decode(response.body);
+      if (responseJson["error"] == false) {
+        return "Changed password successfully";
+      } else {
+        throw responseJson["message"];
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
   Future<User> fetchUserById(String userId) async {
     print("what is the about error");
     final token = await storage.read(key: "token");
@@ -62,7 +83,7 @@ class Users with ChangeNotifier {
         url,
         headers: {HttpHeaders.authorizationHeader: token},
       );
-      if(response.statusCode == 200){
+      if (response.statusCode == 200) {
         final responseJson = json.decode(response.body);
         print(responseJson);
         final userData = responseJson["user"];
@@ -77,11 +98,11 @@ class Users with ChangeNotifier {
           is_following: userData["is_following"] == 0 ? false : true,
         );
         return user;
-    }else if(response.statusCode == 404){
-      throw "User not found";
-    }else{
-      throw "Failed to load user";
-    }
+      } else if (response.statusCode == 404) {
+        throw "User not found";
+      } else {
+        throw "Failed to load user";
+      }
     } catch (error) {
       print(error);
       throw "error";
