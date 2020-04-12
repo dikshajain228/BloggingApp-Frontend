@@ -63,7 +63,6 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
           IconButton(
             icon: Icon(
               Icons.done,
-              color: Theme.of(context).colorScheme.primary,
             ),
             onPressed: _insertCollection,
           )
