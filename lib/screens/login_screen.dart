@@ -144,8 +144,8 @@ class LoginScreenState extends State<LoginScreen> {
 
               var token = await Provider.of<Authentication>(context)
                   .attemptLogin(email, password);
-              String username =
-                  Provider.of<Authentication>(context).getUsername();
+              // String username =
+              //     Provider.of<Authentication>(context).getUsername();
               //print("hello" + username);
               if (token != null) {
                 _writeToken(token);

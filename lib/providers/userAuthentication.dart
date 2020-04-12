@@ -14,15 +14,15 @@ class Authentication with ChangeNotifier {
 
   String _username, _email, _profile_image_url;
 
-  String getUsername() {
+  String get username {
     return _username;
   }
 
-  String getEmail() {
+  String get email {
     return _email;
   }
 
-  String getProfileImage() {
+  String get profileImageUrl {
     return _profile_image_url;
   }
 

@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../screens/collection_insert_screen.dart';
 import '../screens/bookmarks_screen.dart';
 import '../screens/explore_screen.dart';
 import '../screens/home_screen.dart';
-
-// Screens
 import '../screens/profile_screen.dart';
+
+import '../providers/userAuthentication.dart';
 
 class MainDrawer extends StatelessWidget {
   final storage = FlutterSecureStorage();
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<Authentication>(context);
+    final username = user.username;
+    final email = user.email;
+    final profileImageUrl = user.profileImageUrl;
+
     return Drawer(
       child: ListView(
         children: <Widget>[
@@ -21,8 +27,22 @@ class MainDrawer extends StatelessWidget {
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
             ),
-            accountEmail: null,
-            accountName: null,
+            // currentAccountPicture: CircleAvatar(
+            //   backgroundColor: Theme.of(context).colorScheme.secondary,
+            //   backgroundImage: (profileImageUrl != null
+            //       ? NetworkImage(profileImageUrl)
+            //       : null),
+            // child: Text(
+            //   username[0].toUpperCase(),
+            //   // "A",
+            //   style: TextStyle(
+            //     fontSize: 30,
+            //     color: Theme.of(context).colorScheme.onSecondary,
+            //   ),
+            // ),
+            // ),
+            accountEmail: Text("email"),
+            accountName: Text("username"),
           ),
           ListTile(
               leading: Icon(Icons.person),
