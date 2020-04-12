@@ -8,16 +8,16 @@ import 'package:provider/provider.dart';
 import '../providers/user.dart';
 import '../providers/users.dart';
 
-class EditProfile extends StatefulWidget {
+class ProfileEditScreen extends StatefulWidget {
   static const routeName = '/edit-profile';
   User user;
-  EditProfile(this.user);
+  ProfileEditScreen(this.user);
 
   @override
-  _EditProfileState createState() => _EditProfileState();
+  _ProfileEditScreenState createState() => _ProfileEditScreenState();
 }
 
-class _EditProfileState extends State<EditProfile> {
+class _ProfileEditScreenState extends State<ProfileEditScreen> {
   final _formKey = new GlobalKey<FormState>();
   final _username = TextEditingController();
   final _about = TextEditingController();

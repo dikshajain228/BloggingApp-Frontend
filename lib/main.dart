@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 // Screens
 import './screens/home_screen.dart';
-import './screens/edit_profile_screen.dart';
+import './screens/profile_edit_screen.dart';
 import './screens/article_screen.dart';
 import './screens/collection_screen.dart';
 import './screens/bookmarks_screen.dart';
@@ -22,7 +22,6 @@ import './screens/change_password.dart';
 import './providers/articles.dart';
 import './providers/collections.dart';
 import './providers/users.dart';
-import './providers/user.dart';
 import './providers/userAuthentication.dart';
 
 import './route_observer.dart' as route_observer;
@@ -64,7 +63,7 @@ class MyApp extends StatelessWidget {
           LoginScreen.routeName: (context) => LoginScreen(),
           HomeScreen.routeName: (context) => HomeScreen(),
           ProfileScreen.routeName: (context) => ProfileScreen(),
-          //EditProfile.routeName: (context) => EditProfile(),
+          //ProfileEProfileEditScreen.routeName: (context) => ProfileEProfileEditScreen(),
           BookmarkScreen.routeName: (context) => BookmarkScreen(),
           ExploreScreen.routeName: (context) => ExploreScreen(),
           // ArticleInsertScreen.routeName: (context) => ArticleInsertScreen(),
@@ -87,7 +86,8 @@ class MyApp extends StatelessWidget {
                 ArticleScreen(settings.arguments),
             ArticleInsertScreen.routeName: (context) =>
                 ArticleInsertScreen(settings.arguments),
-            EditProfile.routeName: (context) => EditProfile(settings.arguments),
+            ProfileEditScreen.routeName: (context) =>
+                ProfileEditScreen(settings.arguments),
             UserScreen.routeName: (context) => UserScreen(settings.arguments),
           };
           WidgetBuilder builder = routes[settings.name];

@@ -3,7 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import '../route_observer.dart' as route_observer;
 
-import '../screens/edit_profile_screen.dart';
+import '../screens/profile_edit_screen.dart';
 import '../screens/change_password.dart';
 
 import '../widgets/collection_list.dart';
@@ -132,7 +132,7 @@ class _ProfileScreenState extends State<ProfileScreen>
               onSelected: (int selectedValue) {
                 if (selectedValue == 0) {
                   Navigator.of(context)
-                      .pushNamed(EditProfile.routeName, arguments: _user);
+                      .pushNamed(ProfileEditScreen.routeName, arguments: _user);
                 } else {
                   Navigator.of(context).pushNamed(ChangePassword.routeName);
                 }
