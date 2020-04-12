@@ -12,8 +12,7 @@ class ArticlesDeleteList extends StatelessWidget {
       itemCount: articles.length,
       itemBuilder: (ctx, index) => ChangeNotifierProvider.value(
         value: articles[index],
-//        builder: (c) => articles[index],
-        child:ArticleDeleteCard(),
+        child: ArticleDeleteCard(),
       ),
     );
   }
