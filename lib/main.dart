@@ -52,42 +52,32 @@ class MyApp extends StatelessWidget {
         navigatorObservers: <NavigatorObserver>[routeObserver],
         title: "Blogging App",
         theme: AppTheme.lightTheme,
-        // ThemeData(
-        //   // primaryColor: Colors.teal,
-        //   // accentColor: Colors.white60,
-        //   // primarySwatch: Colors.purple,
-        // ),
         home: LoginScreen(),
-        routes: {
-          ChangePassword.routeName: (context) => ChangePassword(),
-          LoginScreen.routeName: (context) => LoginScreen(),
-          HomeScreen.routeName: (context) => HomeScreen(),
-          ProfileScreen.routeName: (context) => ProfileScreen(),
-          //ProfileEProfileEditScreen.routeName: (context) => ProfileEProfileEditScreen(),
-          BookmarkScreen.routeName: (context) => BookmarkScreen(),
-          ExploreScreen.routeName: (context) => ExploreScreen(),
-          // ArticleInsertScreen.routeName: (context) => ArticleInsertScreen(),
-          //ArticleEditScreen.routeName: (context) => ArticleEditScreen(),
-          //EditCollection.routeName: (context) => EditCollection(),
-          CollectionInsertScreen.routeName: (context) =>
-              CollectionInsertScreen(),
-          ArticleDeleteScreen.routeName: (context) => ArticleDeleteScreen()
-          // CollectionScreen.routeName: (context) => CollectionScreen(),
-        },
         onGenerateRoute: (RouteSettings settings) {
           var routes = <String, WidgetBuilder>{
+            HomeScreen.routeName: (context) => HomeScreen(),
+            BookmarkScreen.routeName: (context) => BookmarkScreen(),
+            // Collection routes
             CollectionScreen.routeName: (context) =>
                 CollectionScreen(settings.arguments),
+            CollectionInsertScreen.routeName: (context) =>
+                CollectionInsertScreen(),
             EditCollection.routeName: (context) =>
                 EditCollection(settings.arguments),
-            ArticleEditScreen.routeName: (context) =>
-                ArticleEditScreen(settings.arguments),
+            // Article routes
             ArticleScreen.routeName: (context) =>
                 ArticleScreen(settings.arguments),
             ArticleInsertScreen.routeName: (context) =>
                 ArticleInsertScreen(settings.arguments),
+            ArticleEditScreen.routeName: (context) =>
+                ArticleEditScreen(settings.arguments),
+            ArticleDeleteScreen.routeName: (context) => ArticleDeleteScreen(),
+            // Profile routes
+            ProfileScreen.routeName: (context) => ProfileScreen(),
             ProfileEditScreen.routeName: (context) =>
                 ProfileEditScreen(settings.arguments),
+            ChangePassword.routeName: (context) => ChangePassword(),
+
             UserScreen.routeName: (context) => UserScreen(settings.arguments),
           };
           WidgetBuilder builder = routes[settings.name];
