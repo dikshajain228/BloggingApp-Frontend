@@ -55,6 +55,7 @@ class MyApp extends StatelessWidget {
         home: LoginScreen(),
         onGenerateRoute: (RouteSettings settings) {
           var routes = <String, WidgetBuilder>{
+            LoginScreen.routeName: (context) => LoginScreen(),
             HomeScreen.routeName: (context) => HomeScreen(),
             BookmarkScreen.routeName: (context) => BookmarkScreen(),
             // Collection routes
