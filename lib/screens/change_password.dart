@@ -19,11 +19,6 @@ class ChangePasswordState extends State<ChangePassword> {
   final TextEditingController _newPassword1Controller = TextEditingController();
   final TextEditingController _newPassword2Controller = TextEditingController();
 
-  void displayDialog(context, title, text) => showDialog(
-        context: context,
-        builder: (context) =>
-            AlertDialog(title: Text(title), content: Text(text)),
-      );
 
   @override
   void dispose() {
@@ -143,11 +138,9 @@ class ChangePasswordState extends State<ChangePassword> {
             duration: 7, gravity: Toast.BOTTOM);
       }).catchError((errorMessage) {
         print(errorMessage);
-        displayDialog(
-          context,
-          "Error",
-          errorMessage,
-        );
+        Toast.show(errorMessage, context,
+            duration: 7, gravity: Toast.BOTTOM);
+        Navigator.of(context).pop();
       });
     }
   }
