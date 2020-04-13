@@ -24,11 +24,13 @@ class CollectionScreen extends StatefulWidget {
   CollectionScreen(this.collectionId);
   @override
   _CollectionScreenState createState() => _CollectionScreenState();
+  
 }
 
 class _CollectionScreenState extends State<CollectionScreen>
     with SingleTickerProviderStateMixin, RouteAware {
   Collection _collection;
+  ScrollController _controller;
 
   bool _isInit = true;
   bool _loadingCollection = true;
@@ -41,6 +43,7 @@ class _CollectionScreenState extends State<CollectionScreen>
 
   @override
   void initState() {
+    _controller = ScrollController();
     super.initState();
   }
 
@@ -110,7 +113,7 @@ class _CollectionScreenState extends State<CollectionScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
+     appBar: AppBar(
           title: Text("Collection..."),
           flexibleSpace: Container(
             decoration: BoxDecoration(
@@ -152,7 +155,42 @@ class _CollectionScreenState extends State<CollectionScreen>
               ],
             ),
           ]),
-      body: (_errorCollection == true
+      body: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return <Widget>[
+              SliverAppBar(
+                expandedHeight: 100.0,
+                leading: new Container(),
+                floating: false,
+                pinned: true,
+                backgroundColor: Color(0xfff3f7f6),
+                
+                bottom: PreferredSize(                      
+                preferredSize: Size.fromHeight(20.0),      
+                child: Text(''), 
+                                     
+              ),
+                flexibleSpace: LayoutBuilder(
+                     builder: (BuildContext context, BoxConstraints constraints) {
+                     return FlexibleSpaceBar(
+                    centerTitle: true,
+                    title: AnimatedOpacity(
+                        duration: Duration(milliseconds: 300),
+                        opacity: 1.0,
+                        child: Text(
+                          _collection.collection_name,
+                          style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25.0,
+                          color: Colors.black,
+                          ),
+                        )),
+                   );
+                },),
+              ),
+            ];
+          },
+          body: (_errorCollection == true
           ? Center(
               child: Text("An error occured"),
             )
@@ -160,11 +198,14 @@ class _CollectionScreenState extends State<CollectionScreen>
               ? SpinKitChasingDots(
                   color: Colors.teal,
                 )
-              : Column(
+              :
+                Column(
                   children: [
                     ChangeNotifierProvider.value(
                       value: _collection,
+                      //Flexible(child: CollectionDetailsCard()),
                       child: CollectionDetailsCard(),
+                      
                     ),
                     (_errorArticles == true
                         ? Center(
@@ -179,6 +220,7 @@ class _CollectionScreenState extends State<CollectionScreen>
                               ))),
                   ],
                 ))),
+        ),
       floatingActionButton: (_loadingCollection == true
           ? null
           : (_collection.is_author == true || _collection.is_owner == true

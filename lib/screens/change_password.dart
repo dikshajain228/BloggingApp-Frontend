@@ -52,33 +52,36 @@ class ChangePasswordState extends State<ChangePassword> {
                   ]),
             ),
           ),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.done),
-              onPressed: _showSaveDialog,
-            )
-          ],
         ),
-        body: Padding(
-            padding: const EdgeInsets.all(16.0),
+         body: Padding(
+            padding: const EdgeInsets.all(25.0),
             child: Form(
               key: _formKey,
               autovalidate: true,
+              
               child: Column(children: <Widget>[
+                 SizedBox(height: 20),
+                //new Text('Enter current password',style: new TextStyle( fontSize: 18.0),textAlign:TextAlign.start),
                 TextFormField(
                   controller: _oldPasswordController,
-                  decoration:
-                      InputDecoration(labelText: '   Enter current Password'),
-                  validator: (value) {
+                  decoration: new InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Enter current password',),
+                      validator: (value) {
                     if (value.length == 0) {
                       return 'This feild cannot be empty ';
                     }
                     return null;
                   },
                 ),
+
+                SizedBox(height: 20),
+                //new Text('Enter new password',style: new TextStyle( fontSize: 18.0),textAlign: TextAlign.left),
                 TextFormField(
                   controller: _newPassword1Controller,
-                  decoration: InputDecoration(labelText: '   Enter  Password'),
+                  decoration: new InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Enter new password',),
                   validator: (value1) {
                     if (value1.length == 0) {
                       return 'This feild cannot be empty';
@@ -89,11 +92,13 @@ class ChangePasswordState extends State<ChangePassword> {
                     return null;
                   },
                 ),
+                //new Text('Enter current password',style: new TextStyle( fontSize: 18.0),textAlign: TextAlign.left),
+                SizedBox(height: 20),
                 TextFormField(
                   controller: _newPassword2Controller,
-                  decoration:
-                      InputDecoration(labelText: '   Re-enter  Password'),
-                  //hintText: "Enter current Password",
+                  decoration:   new InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Re-enter new password',),
                   keyboardType: TextInputType.text,
                   validator: (value2) {
                     if (value2.length == 0) {
@@ -106,8 +111,24 @@ class ChangePasswordState extends State<ChangePassword> {
                     return null;
                   },
                 ),
+
+              SizedBox(height: 20),
+                ButtonTheme(
+                minWidth: 400.0,
+                height: 40.0,
+                child: RaisedButton(
+                onPressed: () {_showSaveDialog();},
+                child: new Text("Confirm", style: TextStyle(fontSize: 20.0)),
+                        textColor: Colors.white,
+                         color: Theme.of(context).colorScheme.primary,
+                    ),
+                ),
+
+                 
               ]),
-            )));
+            )
+            )
+            );
   }
 
   void _updatePassword() async {
