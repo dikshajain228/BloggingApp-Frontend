@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/widgets.dart';
+import 'package:progress_indicators/progress_indicators.dart';
 import 'dart:convert';
 
 import '../providers/userAuthentication.dart';
@@ -12,7 +13,10 @@ import '../screens/home_screen.dart';
 
 class LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
-  String formType = "login";
+  String formType = "login"; 
+
+  bool _loading;
+  bool _show;
 
   final storage = FlutterSecureStorage();
 
@@ -21,6 +25,8 @@ class LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   void initState() {
+     _loading = true;
+     _show = false;
     print("I am in login screen");
     super.initState();
   }
@@ -137,19 +143,25 @@ class LoginScreenState extends State<LoginScreen> {
           textColor: Colors.white,
           color: Theme.of(context).colorScheme.primary,
           onPressed: () async {
+            setState(() {
+              _loading = true;
+              _show = true;
+            });
             final form = formKey.currentState;
             if (form.validate()) {
               var email = _emailController.text;
               var password = _passwordController.text;
-
-              var token = await Provider.of<Authentication>(context)
-                  .attemptLogin(email, password);
-              // String username =
-              //     Provider.of<Authentication>(context).getUsername();
-              //print("hello" + username);
+              String token;
+              await Provider.of<Authentication>(context)
+                  .attemptLogin(email, password).then((data){
+                    setState(() {
+                      _loading = false;
+                      token = data;
+                    });
+                  });
               if (token != null) {
                 _writeToken(token);
-                Navigator.of(context).pushNamed(HomeScreen.routeName);
+                Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
               } else {
                 displayDialog(context, "Incorrect email or password",
                     "No account was found matching that email and password");
@@ -160,9 +172,11 @@ class LoginScreenState extends State<LoginScreen> {
         FlatButton(
           child: Text("Dont have an account? Create Account?",
               style: TextStyle(fontSize: 14.0)),
-          textColor: Colors.deepPurple,
+          textColor: Colors.indigo,
           onPressed: moveToRegister,
-        )
+        ),
+        (_show==true && _loading==true)?
+          JumpingDotsProgressIndicator(fontSize: 60.0,):Text(""),
       ];
     } else {
       return [
@@ -173,38 +187,61 @@ class LoginScreenState extends State<LoginScreen> {
             return value.isEmpty ? 'Username required' : null;
           },
         ),
-        RaisedButton(
+        Container(
+          // decoration: BoxDecoration(
+          //   gradient: LinearGradient(
+          //       begin: Alignment.topLeft,
+          //       end: Alignment.bottomRight,
+          //       colors: [
+          //         Color(0xff191654),
+          //         Color(0xff43c6ac),
+          //         // Color(0xff6dffe1),
+          //       ]),
+          // ),
+          child :
+           RaisedButton(
           child: Text("Create account", style: TextStyle(fontSize: 20.0)),
           textColor: Colors.white,
+          //color : Colors.teal[700],
           color: Theme.of(context).colorScheme.primary,
+          //color: Colors.transparent,
           onPressed: () async {
+            setState(() {
+              _loading = true;
+              _show = true;
+            });
             if (formKey.currentState.validate()) {
               var email = _emailController.text;
               var password = _passwordController.text;
               var username = _usernameController.text;
-
-              int res = await Provider.of<Authentication>(context)
-                  .attemptSignUp(email, password, username);
-              if (res == 400)
-                displayDialog(
-                    context, "Error", "Required information is incomplete");
-              else if (res == 200)
-                displayDialog(
-                    context, "Success", "The user was created. Log in now.");
-              else if (res == 409)
-                displayDialog(context, "Error",
-                    "Please try to sign up using another username or log in if you already have an account.");
-              else
-                displayDialog(context, "Error", "Unknown error");
+              List response;
+              await Provider.of<Authentication>(context)
+                  .attemptSignUp(email, password, username).then((data){
+                    setState(() {
+                      _loading = false;
+                      print(data);
+                      response = data;
+                    });
+                  });
+              String token = response[0];
+              if(token!=null){
+                _writeToken(token);
+                Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+              }else{
+                String error = response[1];
+                displayDialog(context, "Error", error);
+              }
             }
           },
-        ),
+        )),
         FlatButton(
           child:
               Text("Have an account? Login", style: TextStyle(fontSize: 14.0)),
-          textColor: Colors.deepPurple,
+          textColor: Colors.indigo,
           onPressed: moveToLogin,
-        )
+        ),
+        _show==true && _loading==true?
+          JumpingDotsProgressIndicator(fontSize: 60.0,):Text(""),
       ];
     }
   }

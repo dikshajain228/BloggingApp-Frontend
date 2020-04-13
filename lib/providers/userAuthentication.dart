@@ -26,10 +26,11 @@ class Authentication with ChangeNotifier {
     return _profile_image_url;
   }
 
-  Future<int> attemptSignUp(
+  Future<List> attemptSignUp(
       String email, String password, String username) async {
+    List<String> status = [];
     try {
-      var res = await http.post(
+      var response = await http.post(
         "$SERVER_IP/api/v1/signup",
         body: {
           "email": email,
@@ -39,7 +40,35 @@ class Authentication with ChangeNotifier {
           "profile_image_url": ""
         },
       );
-      return res.statusCode;
+      final responseJson = json.decode(response.body);
+      if(response.statusCode == 200){
+        String token = responseJson["token"];
+        final tokenPayload = token.split(".");
+        final payloadMap = jsonDecode(utf8
+            .decode(base64Url.decode(base64Url.normalize(tokenPayload[1]))));
+        _username = payloadMap["username"];
+        _email = payloadMap["email"];
+        _profile_image_url = payloadMap["profile_image_url"];
+        print("obtained token" + token);
+        status.add(token);
+        status.add(null);
+        return status;
+      }else{
+        print(response.body);
+        if(response.statusCode==409){
+          status.add(null);
+          status.add("Please try to sign up using another username or log in if you already have an account.");
+        }
+        else if(response.statusCode==400){
+          status.add(null);
+          status.add("Required information is incomplete");
+        }
+        else{
+          status.add(null);
+          status.add("Unknown error");
+        }
+        return status;
+      }
     } catch (error) {
       throw error;
     }
@@ -47,13 +76,15 @@ class Authentication with ChangeNotifier {
 
   Future<String> attemptLogin(String email, String password) async {
     try {
-      var res = await http.post(
+      var response = await http.post(
         "$SERVER_IP/api/v1/login",
         body: {"email": email, "password": password},
       );
-      final resJson = json.decode(res.body);
-      if (res.statusCode == 200) {
-        String token = resJson["token"];
+      final responseJson = json.decode(response.body);
+      print(responseJson);
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        String token = responseJson["token"];
         final tokenPayload = token.split(".");
         final payloadMap = jsonDecode(utf8
             .decode(base64Url.decode(base64Url.normalize(tokenPayload[1]))));
