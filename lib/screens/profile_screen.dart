@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:sticky_headers/sticky_headers.dart';
 import 'package:provider/provider.dart';
 import '../route_observer.dart' as route_observer;
 
@@ -31,7 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   bool _errorArticle = false;
   bool _errorCollections = false;
   User _user;
- TabController _tabController;
+  TabController _tabController;
   ScrollController _scrollViewController;
 
   final routeObserver = route_observer.routeObserver;
@@ -40,6 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   void initState() {
     _tabController = new TabController(vsync: this, length: 2);
     _scrollViewController = ScrollController(initialScrollOffset: 0.0);
+    _scrollViewController.addListener(() => setState(() {}));
     super.initState();
     print("I am in profile page");
   }
@@ -115,6 +117,64 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   @override
   Widget build(BuildContext context) {
+
+    var flexibleSpaceWidget = new SliverAppBar(
+       expandedHeight: 60,
+              floating: false,
+              pinned: true,
+              backgroundColor: Color(0xfff3f7f6),
+              leading: new Container(),
+               bottom: PreferredSize(                      
+                preferredSize: Size.fromHeight(80.0),      
+               child: Text(''),
+               ),
+
+
+              flexibleSpace: FlexibleSpaceBar(
+                  centerTitle: false,
+                   title: Row(
+                        children: <Widget>[
+                          Container(
+                            //  padding: EdgeInsets.all(10),
+                            padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
+                            child: CircleAvatar(
+                              backgroundColor: Color(0xee191654),
+                              backgroundImage:
+                                  NetworkImage(_user.profile_image_url),
+                              radius: 60,
+                            ),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.fromLTRB(0, 40, 0, 2),
+                                child: Text(
+                                  _user.username,
+                                  style: TextStyle(
+                                    fontSize: 25.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.fromLTRB(0, 2, 10, 10),
+                                child: Text(
+                                  _user.email,
+                                  style: TextStyle(
+                                      fontSize: 17.0,
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.grey),
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+              )
+    );
+
     return Scaffold(
       
       appBar: AppBar(
@@ -162,79 +222,30 @@ class _ProfileScreenState extends State<ProfileScreen>
                   )
                 : NestedScrollView(
         controller: _scrollViewController,
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return <Widget>[
-            SliverAppBar(
-              expandedHeight: 60,
-              floating: false,
-              pinned: true,
-              backgroundColor: Color(0xfff3f7f6),
-              leading: new Container(),
-               bottom: PreferredSize(                      
-                preferredSize: Size.fromHeight(80.0),      
-                child: Text(''),                           
-              ),
-
-              flexibleSpace: FlexibleSpaceBar(
-                  centerTitle: false,
-                   title: Row(
-                        children: <Widget>[
-                          Container(
-                            //  padding: EdgeInsets.all(10),
-                            padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
-                            child: CircleAvatar(
-                              backgroundColor: Color(0xee191654),
-                              backgroundImage:
-                                  NetworkImage(_user.profile_image_url),
-                              radius: 60,
-                            ),
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                padding: EdgeInsets.fromLTRB(0, 40, 0, 2),
-                                child: Text(
-                                  _user.username,
-                                  style: TextStyle(
-                                    fontSize: 25.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.fromLTRB(0, 2, 10, 10),
-                                child: Text(
-                                  _user.email,
-                                  style: TextStyle(
-                                      fontSize: 17.0,
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.grey),
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-              )
-            )
-          ];
-        },
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return <Widget>[
+              flexibleSpaceWidget,
+             ];
+          },
         body: Column(
 
           children: <Widget>[
 
-              Padding(
-                        padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
+                     Padding(padding: EdgeInsets.fromLTRB(5, 5, 5, 30),),
+
+                      Container(
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
                         child: Text(
                           _user.about ?? ' ',
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 18.0),
                         ),
+                        ),
                       ),
-              
-                      Container(
+
+                      StickyHeader(
+                      header:  Container(
                         child: Padding(
                           padding: EdgeInsets.all(16.0),
                           child: Row(
@@ -275,13 +286,15 @@ class _ProfileScreenState extends State<ProfileScreen>
                           ),
                         ),
                       ),
+                     content: Container(),
+                    ),
 
-                    new Container(
-                        decoration: new BoxDecoration(
+                     Container(
+                       decoration:  BoxDecoration(
                             color: Theme.of(context).colorScheme.primary),
-                        child: new TabBar(
+                        child:  TabBar(
                           indicatorColor:
-                              Theme.of(context).colorScheme.onPrimary,
+                           Theme.of(context).colorScheme.onPrimary,
                           controller: _tabController,
                           tabs: [
                             Tab(
@@ -293,7 +306,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                       ),
 
                       new Expanded(
-                        child: TabBarView(
+                      child:TabBarView(
                             controller: _tabController,
                             children: <Widget>[
                               (_errorArticle == true

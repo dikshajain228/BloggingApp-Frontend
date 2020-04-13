@@ -36,6 +36,7 @@ dependencies:
   cached_network_image: ^2.0.0
   toast: ^0.1.5
   progress_indicators: ^0.1.5
+  sticky_headers: "^0.1.8"
 
 dev_dependencies:
   flutter_test:
