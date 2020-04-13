@@ -43,9 +43,20 @@ class _CollectionScreenState extends State<CollectionScreen>
 
   @override
   void initState() {
-    _controller = ScrollController();
+    
     super.initState();
+    _controller = new ScrollController();
+    //_controller.addListener(() => setState(() {
+     // AppBar(
+     //     title: Text(_collection.collection_name));}));
   }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
 
   @override
   void didChangeDependencies() {
@@ -111,6 +122,7 @@ class _CollectionScreenState extends State<CollectionScreen>
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       resizeToAvoidBottomPadding: false,
      appBar: AppBar(
@@ -155,55 +167,25 @@ class _CollectionScreenState extends State<CollectionScreen>
               ],
             ),
           ]),
-      body: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return <Widget>[
-              SliverAppBar(
-                expandedHeight: 100.0,
-                leading: new Container(),
-                floating: false,
-                pinned: true,
-                backgroundColor: Color(0xfff3f7f6),
-                
-                bottom: PreferredSize(                      
-                preferredSize: Size.fromHeight(20.0),      
-                child: Text(''), 
-                                     
-              ),
-                flexibleSpace: LayoutBuilder(
-                     builder: (BuildContext context, BoxConstraints constraints) {
-                     return FlexibleSpaceBar(
-                    centerTitle: true,
-                    title: AnimatedOpacity(
-                        duration: Duration(milliseconds: 300),
-                        opacity: 1.0,
-                        child: Text(
-                          _collection.collection_name,
-                          style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25.0,
-                          color: Colors.black,
-                          ),
-                        )),
-                   );
-                },),
-              ),
-            ];
-          },
-          body: (_errorCollection == true
-          ? Center(
-              child: Text("An error occured"),
-            )
-          : (_loadingCollection == true
-              ? SpinKitChasingDots(
-                  color: Colors.teal,
-                )
-              :
-                Column(
-                  children: [
-                    ChangeNotifierProvider.value(
+        body:CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+            slivers: <Widget>[
+                    SliverToBoxAdapter(
+                    child: SizedBox(
+                    height: 1000,
+                    child: (_errorCollection == true
+                    ? Center(
+                          child: Text("An error occured"),
+                       )
+                   : (_loadingCollection == true
+                      ? SpinKitChasingDots(
+                               color: Colors.teal,
+                         )
+                       :
+                   Column(
+                      children: [
+                     ChangeNotifierProvider.value(
                       value: _collection,
-                      //Flexible(child: CollectionDetailsCard()),
                       child: CollectionDetailsCard(),
                       
                     ),
@@ -220,8 +202,12 @@ class _CollectionScreenState extends State<CollectionScreen>
                               ))),
                   ],
                 ))),
-        ),
-      floatingActionButton: (_loadingCollection == true
+      ),
+    ),
+  ],
+ ),
+  
+   floatingActionButton: (_loadingCollection == true
           ? null
           : (_collection.is_author == true || _collection.is_owner == true
               ? FloatingActionButton(
@@ -237,6 +223,7 @@ class _CollectionScreenState extends State<CollectionScreen>
                 )
               : null)),
     );
+    
   }
 
   _showEditAuthorDialog() {
