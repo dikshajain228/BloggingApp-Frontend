@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:bloggingapp/screens/article_delete_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -58,6 +60,7 @@ class MyApp extends StatelessWidget {
             LoginScreen.routeName: (context) => LoginScreen(),
             HomeScreen.routeName: (context) => HomeScreen(),
             BookmarkScreen.routeName: (context) => BookmarkScreen(),
+            ExploreScreen.routeName: (context) => ExploreScreen(),
             // Collection routes
             CollectionScreen.routeName: (context) =>
                 CollectionScreen(settings.arguments),
