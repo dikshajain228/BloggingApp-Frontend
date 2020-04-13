@@ -35,7 +35,7 @@ class CollectionDetailsCard extends StatelessWidget {
               top: 10,
               bottom: 10,
             ),
-            child: Center(
+            /**child: Center(
               child: Text(
                 _collection.collection_name,
                 style: TextStyle(
@@ -45,6 +45,7 @@ class CollectionDetailsCard extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ),
+            **/
           ),
           Padding(
             padding: const EdgeInsets.only(
