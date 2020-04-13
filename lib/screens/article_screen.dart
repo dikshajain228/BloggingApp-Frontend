@@ -107,9 +107,9 @@ class _ArticleScreenState extends State<ArticleScreen>
                 ]),
           ),
         ),
-        actions: <Widget>[
-          _article.is_author
-              ? PopupMenuButton(
+        actions:  _loading==true?null:_article.is_author
+              ?  <Widget>[
+         PopupMenuButton(
                   onSelected: (int selectedValue) {
                     if (selectedValue == 0) {
                       showAlert(context, _article.article_id);
@@ -126,9 +126,8 @@ class _ArticleScreenState extends State<ArticleScreen>
                     PopupMenuItem(child: Text('Delete Article'), value: 0),
                     PopupMenuItem(child: Text('Edit Article'), value: 1),
                   ],
-                )
-              : null,
-        ],
+                ),
+        ] : null,
       ),
       body: (_error == true
           ? Center(

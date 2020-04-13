@@ -139,7 +139,8 @@ class _CollectionScreenState extends State<CollectionScreen>
                   ]),
             ),
           ),
-          actions: <Widget>[
+          actions: _loadingCollection==true?null: _collection.is_owner?
+          <Widget>[ 
             PopupMenuButton(
               onSelected: (int selectedValue) {
                 if (selectedValue == 0) {
@@ -166,7 +167,7 @@ class _CollectionScreenState extends State<CollectionScreen>
                 PopupMenuItem(child: Text('Authors'), value: 3),
               ],
             ),
-          ]),
+          ]:null),
         body:CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
             slivers: <Widget>[
