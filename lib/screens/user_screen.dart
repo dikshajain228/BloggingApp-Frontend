@@ -93,6 +93,50 @@ class _UserScreenState extends State<UserScreen>
                 ]),
           ),
         ),
+        actions: _loadingUser == true ? null : <Widget>[
+          user.is_following
+                ? Padding(
+                  padding : EdgeInsets.all(10.0),
+                  child : FlatButton(
+                        color: Theme.of(context).colorScheme.primary,
+                        textColor: Theme.of(context).colorScheme.onPrimary,
+                        padding: EdgeInsets.all(10.0),
+                        onPressed: () {
+                          user.unfollowUser(user.user_id.toString()).then((_) {
+                            print("Unfollowed user");
+                          });
+                          setState(() {
+                            _loadData();
+                          });
+                        },
+                        child: Text("Following"),
+                      )
+                )
+              : Padding(
+                padding : EdgeInsets.all(10.0),
+                child : OutlineButton(
+                  
+                  //color: Colors.white,
+                  color: Theme.of(context).colorScheme.primary,
+                  borderSide: BorderSide(
+                    //color: Colors.white,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  //textColor: Colors.white,
+                  textColor: Theme.of(context).colorScheme.primary,
+                  padding: EdgeInsets.all(10.0),
+                  onPressed: () {
+                    user.followUser(user.user_id.toString()).then((_) {
+                      print("Followed user");
+                    });
+                    setState(() {
+                      _loadData();
+                    });
+                  },
+                  child: Text("Follow"),
+                ),
+              ),
+        ],
       ),
       body: (_loadingUser == true
           ? SpinKitChasingDots(
@@ -184,40 +228,6 @@ class _UserScreenState extends State<UserScreen>
                       ),
                     ),
                   ),
-                  user.is_following
-                      ? FlatButton(
-                          color: Theme.of(context).colorScheme.primary,
-                          textColor: Theme.of(context).colorScheme.onPrimary,
-                          padding: EdgeInsets.all(10.0),
-                          onPressed: () {
-                            user
-                                .unfollowUser(user.user_id.toString())
-                                .then((_) {
-                              print("Unfollowed user");
-                            });
-                            setState(() {
-                              _loadData();
-                            });
-                          },
-                          child: Text("Following"),
-                        )
-                      : OutlineButton(
-                          color: Theme.of(context).colorScheme.primary,
-                          borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          textColor: Theme.of(context).colorScheme.primary,
-                          padding: EdgeInsets.all(10.0),
-                          onPressed: () {
-                            user.followUser(user.user_id.toString()).then((_) {
-                              print("Followed user");
-                            });
-                            setState(() {
-                              _loadData();
-                            });
-                          },
-                          child: Text("Follow"),
-                        ),
                   new Container(
                     decoration: new BoxDecoration(
                         color: Theme.of(context).primaryColor),

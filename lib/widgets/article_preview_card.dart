@@ -22,7 +22,7 @@ class ArticlePreviewCard extends StatelessWidget {
         child : new Stack(
           children : <Widget>[
             Container(
-              margin : new EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+              margin : new EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 10.0),
             child :ClipOval(
               child: CachedNetworkImage(
                 imageUrl: article.image_path,
@@ -39,7 +39,7 @@ class ArticlePreviewCard extends StatelessWidget {
               ),
             )),
             Container(
-              margin : new EdgeInsets.fromLTRB(110.0, 10.0, 10.0, 10.0),
+              margin : new EdgeInsets.fromLTRB(100.0, 10.0, 10.0, 10.0),
               child:new Stack(
              
                 children : <Widget>[
