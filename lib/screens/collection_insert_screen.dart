@@ -36,12 +36,6 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
     });
   }
 
-  void displayDialog(context, title, text) => showDialog(
-        context: context,
-        builder: (context) =>
-            AlertDialog(title: Text(title), content: Text(text)),
-      );
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
