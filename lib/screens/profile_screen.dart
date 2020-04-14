@@ -118,7 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   @override
   Widget build(BuildContext context) {
 
-    var flexibleSpaceWidget = new SliverAppBar(
+    var flexibleSpaceWidget = _loadingProfile==true? null : new SliverAppBar(
        expandedHeight: 60,
               floating: false,
               pinned: true,
