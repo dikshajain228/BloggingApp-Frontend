@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import '../route_observer.dart' as route_observer;
@@ -30,7 +31,7 @@ class CollectionScreen extends StatefulWidget {
 class _CollectionScreenState extends State<CollectionScreen>
     with SingleTickerProviderStateMixin, RouteAware {
   Collection _collection;
-  ScrollController _controller;
+  ScrollController _controller = new ScrollController();
 
   bool _isInit = true;
   bool _loadingCollection = true;
@@ -39,22 +40,47 @@ class _CollectionScreenState extends State<CollectionScreen>
   bool _errorArticles = false;
   List<dynamic> _authors = [];
 
+   bool isScrollingDown = false;
+  bool _changeAppbarText = false;
+
   final routeObserver = route_observer.routeObserver;
 
-  @override
+   @override
   void initState() {
-    
     super.initState();
-    _controller = new ScrollController();
-    //_controller.addListener(() => setState(() {
-     // AppBar(
-     //     title: Text(_collection.collection_name));}));
+    myScroll();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
+    _controller.removeListener(() {});
+    super.dispose();
+  }
+
+   void myScroll() async {
+    _controller.addListener(() {
+      if (_controller.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (!isScrollingDown) {
+          isScrollingDown = true;
+           setState(() {
+              _changeAppbarText = true;
+           });
+            print("Scrolling down"); 
+        }
+      }
+      if (_controller.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        if (isScrollingDown) {
+          isScrollingDown = false;
+           setState(() {
+              _changeAppbarText = true;
+           });
+          print("Scrolling up");
+        }
+      }
+    });
   }
 
 
@@ -125,8 +151,9 @@ class _CollectionScreenState extends State<CollectionScreen>
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-     appBar: AppBar(
-          title: Text("Collection..."),
+     appBar:AppBar(
+          title:(_changeAppbarText==true
+          ? Text(_collection.collection_name):Text("Collection...")),
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -168,8 +195,11 @@ class _CollectionScreenState extends State<CollectionScreen>
               ],
             ),
           ]:null),
-        body:CustomScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
+        
+         
+            body:CustomScrollView(
+            //physics: const AlwaysScrollableScrollPhysics(),
+            controller: _controller,
             slivers: <Widget>[
                     SliverToBoxAdapter(
                     child: SizedBox(
