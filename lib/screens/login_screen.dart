@@ -188,16 +188,7 @@ class LoginScreenState extends State<LoginScreen> {
           },
         ),
         Container(
-          // decoration: BoxDecoration(
-          //   gradient: LinearGradient(
-          //       begin: Alignment.topLeft,
-          //       end: Alignment.bottomRight,
-          //       colors: [
-          //         Color(0xff191654),
-          //         Color(0xff43c6ac),
-          //         // Color(0xff6dffe1),
-          //       ]),
-          // ),
+
           child :
            RaisedButton(
           child: Text("Create account", style: TextStyle(fontSize: 20.0)),
