@@ -139,11 +139,8 @@ class CollectionInsertScreenState extends State<CollectionInsertScreen> {
             duration: 7, gravity: Toast.BOTTOM);
       }).catchError((errorMessage) {
         print(errorMessage);
-        displayDialog(
-          context,
-          "Error",
-          errorMessage,
-        );
+        Toast.show(errorMessage, context,
+            duration: 7, gravity: Toast.BOTTOM);
       });
     }
   }

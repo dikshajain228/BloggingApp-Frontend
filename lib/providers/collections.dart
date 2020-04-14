@@ -161,7 +161,7 @@ class Collections with ChangeNotifier {
       request.files.add(await http.MultipartFile.fromPath('image', filename));
     }
     request.fields["description"] = data["description"];
-    request.fields["image_url"] = data["imageUrl"];
+    request.fields["image_url"] = " ";
     request.fields["tags"] = data["tags"];
     try {
       dynamic response = await request.send();

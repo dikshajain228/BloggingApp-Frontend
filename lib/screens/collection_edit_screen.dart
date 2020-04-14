@@ -41,13 +41,6 @@ class _EditCollectionState extends State<EditCollection> {
       uploadedImage = image;
     });
   }
-
-  void displayDialog(context, title, text) => showDialog(
-        context: context,
-        builder: (context) =>
-            AlertDialog(title: Text(title), content: Text(text)),
-      );
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,12 +114,15 @@ class _EditCollectionState extends State<EditCollection> {
   void _updateCollection() {
     // String collectionName = _collectionName.text;
     String description = _collectionDescription.text;
+    print(description);
+    print(widget.collection.image_url);
     final data = {
       "collectionId": widget.collection.collection_id,
       "description": description,
       "imageUrl": widget.collection.image_url,
-      "tags": "",
+      "tags": " ",
     };
+    print(data);
     Provider.of<Collections>(context)
         .updateCollection(data, uploadedImage)
         .then((message) {
@@ -142,11 +138,8 @@ class _EditCollectionState extends State<EditCollection> {
       Navigator.of(context).pop();
       // pop dialog box and stay on page
       // Navigator.of(context).pushReplacementNamed(EditCollection.routeName);
-      displayDialog(
-        context,
-        "Error",
-        errorMessage,
-      );
+      Toast.show(errorMessage, context,
+          duration: 7, gravity: Toast.BOTTOM);
     });
   }
 
