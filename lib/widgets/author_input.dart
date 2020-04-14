@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_chips_input/flutter_chips_input.dart';
+import 'package:toast/toast.dart';
 
 import '../models/author.dart';
 
@@ -107,8 +108,8 @@ class _AuthorInputState extends State<AuthorInput> {
               textColor: Theme.of(context).colorScheme.primary,
               child: Text("Edit Authors"),
               onPressed: () {
-                _editAuthors();
-                Navigator.of(context).pop();
+                _editAuthors(context);
+                //Navigator.of(context).pop();
               },
             ),
             FlatButton(
@@ -124,7 +125,7 @@ class _AuthorInputState extends State<AuthorInput> {
     );
   }
 
-  void _editAuthors() {
+  void _editAuthors(BuildContext context) {
     List<Author> temp;
     // _newAuthors = _selectedAuthors - _initialAuthors
     temp = (_selectedAuthors
@@ -145,13 +146,25 @@ class _AuthorInputState extends State<AuthorInput> {
     if (_newAuthors.length != 0) {
       Author.addAuthors(_newAuthors, widget.collectionId).then((reply) {
         print("Added");
+        Toast.show("Added authors successfully!", context,
+            duration: 7, gravity: Toast.BOTTOM);
         print(reply);
+      }).catchError((errorMessage) {
+        print(errorMessage);
+        Navigator.of(context).pop();
+        Toast.show(errorMessage, context, duration: 7, gravity: Toast.BOTTOM);
       });
     }
     if (_deletedAuthors.length != 0) {
       Author.deleteAuthors(_deletedAuthors, widget.collectionId).then((reply) {
+        Toast.show("Removed authors successfully!", context,
+            duration: 7, gravity: Toast.BOTTOM);
         print("Deleted authors");
         print(reply);
+      }).catchError((errorMessage) {
+        print(errorMessage);
+        Navigator.of(context).pop();
+        Toast.show(errorMessage, context, duration: 7, gravity: Toast.BOTTOM);
       });
     }
   }
